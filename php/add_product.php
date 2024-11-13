@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 16px;
-        background-color: #f8f8f8;
+        background-color: black;
     }
 
     .form-box input[type="submit"] {
