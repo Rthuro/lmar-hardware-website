@@ -11,8 +11,13 @@
   }
   @font-face {
     font-family: "outfit";
+    src: url('/public/font/Outfit/static/Outfit-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "outfit";
     src: url('/public/font/Outfit/static/Outfit-Bold.ttf') format('truetype');
-    font-weight: bold;
+    font-weight: 700;
   }
 @tailwind base;
 @tailwind components;
@@ -27,19 +32,11 @@
     *{
         box-sizing: border-box;
     }
-    body{
-        background-color: #f5f5f5 ;
-        
-    }
     button{
         cursor:pointer;
     }
     input[type=submit]{
         cursor: pointer;
-    }
-    .clip-banner {
-        clip-path: polygon(0 0, 80% 0, 60% 100%, 0 100%);
-        background-color: #F05A28;
     }
     .sm-shadow{
         box-shadow: 0px 6px 2px 0px rgba(0, 0, 0, 0.00), 0px 4px 2px 0px rgba(0, 0, 0, 0.01), 0px 2px 1px 0px rgba(0, 0, 0, 0.05), 0px 1px 1px 0px rgba(0, 0, 0, 0.09), 0px 0px 1px 0px rgba(0, 0, 0, 0.10);
@@ -69,6 +66,25 @@
         grid-template-rows: repeat(6,280px );
        }
    }
+
+   .bxShadow{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    #scrollArea::-webkit-scrollbar {
+        height: 8px;
+    }
+    #scrollArea::-webkit-scrollbar {
+        background-color: #e7e7e7;
+        border-radius: 8px;
+    }
+    #scrollArea::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 8px;
+    }
+    .smShadow{
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    }
 
       
 }
@@ -108,38 +124,19 @@ section {
     @apply rounded-b-md;
 }
 .product{
-    @apply relative flex flex-col items-center bg-white pb-4 overflow-hidden  shadow-sm max-w-[280px] max-h-[500px]  border-transparent hover:border-[#C24E2E] ease-in border-[#d3d3d3] border;
-}
-.product .group1{
-    @apply flex flex-col ;
-}
-
-.product .Group1 .content{
-    @apply flex flex-col w-full justify-between gap-1 py-3 px-4;
-}
- .product .Group1 .content .header{
-    @apply flex flex-col gap-[4px];
+    @apply relative flex flex-col items-center bg-white pb-4 overflow-hidden  ease-in  ;
 }
   .heading{
-    @apply text-[14px] font-semibold text-wrap h-fit w-fit text-[#C24E2E] overflow-hidden max-[640px]:text-[12px];
+    @apply text-sm font-semibold text-wrap h-fit w-fit max-[640px]:text-xs truncate text-ellipsis;
 }
 .variant{
     @apply absolute text-[14px] top-3 left-0 px-3  py-[4px] w-fit  bg-[#fff3e4] text-[#FB951C] ;
 }
 
-.price{
-    @apply text-[18px] font-medium max-[640px]:text-[14px] ;
-}
 .sold{
     @apply text-[12px] text-gray-500;
 }
 
-.product .Group1 img{
-    @apply size-[280px] max-[640px]:size-[200px];
-}
-.product .Group1 .content .header .link{
-    @apply text-[14px] font-medium;
-}
 .product button{
     @apply py-[6px] w-[90%] max-[640px]:text-[14px] ;
 }
@@ -189,13 +186,13 @@ section {
     @apply size-4;
 }
 .categoryImg{
-    @apply w-[16rem] h-[12rem] object-cover transition ease-in-out max-[415px]:w-[12rem] max-[415px]:h-[8rem] max-[640px]:w-[13rem] max-[1030px]:h-[10rem];
+    @apply w-full h-[190px] object-cover transition ease-in-out  ;
 }
 .categoryCont{
-    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 ;
+    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 sm:basis-auto flex-grow  min-[375px]:h-[150px] ;
 }
 .categoryCont p{
-    @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg  max-[415px]:py-[3rem]  max-[640px]:text-xl max-[1030px]:py-[4rem];
+    @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg  min-[375px]:py-[3rem]  ;
 }
 footer p{
     @apply text-[0.9rem];
