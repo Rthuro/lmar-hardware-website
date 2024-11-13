@@ -29,3 +29,30 @@ categoryImgCont.forEach((p, index) => {
     })
 
 });
+
+const scrollArea = document.getElementById('scrollArea');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+scrollArea.addEventListener('mousedown', (e) => {
+  isDown = true;
+  startX = e.pageX - scrollArea.offsetLeft;
+  scrollLeft = scrollArea.scrollLeft;
+});
+
+scrollArea.addEventListener('mouseleave', () => {
+  isDown = false;
+});
+
+scrollArea.addEventListener('mouseup', () => {
+  isDown = false;
+});
+
+scrollArea.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - scrollArea.offsetLeft;
+  const walk = (x - startX) * 2; 
+  scrollArea.scrollLeft = scrollLeft - walk;
+});
