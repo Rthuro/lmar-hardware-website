@@ -33,8 +33,8 @@
         </button>
     </form>
 
-    <section id="banner" class="flex 2xl:w-full lg:h-screen min-[375px]:w-fit   ">
-        <div class=" flex items-center lg:flex-nowrap md:flex-wrap justify-center w-full h-full mx-12 lg:flex-row  min-[375px]:flex-col   min-[375px]:pt-11 ">
+    <section id="banner" class="flex 2xl:w-full lg:h-screen min-[375px]:w-fit lg:mt-[100px] min-[375px]:mt-6  ">
+        <div class=" flex items-center lg:flex-nowrap md:flex-wrap justify-center w-full h-full mx-12 lg:flex-row  min-[375px]:flex-col    ">
             <div class="flex flex-1 flex-col  gap-2 max-w-[950px] lg:items-start  min-[375px]:items-center ">
                 <p class="lg:text-start  min-[375px]:text-center text-wrap font-bold sm:text-8xl  min-[375px]:text-6xl text-[#1d1d1d] ">Welcome to <span class="text-[#FB951C]">LMAR</span> Hardware</p>
                 <p class="md:text-lg  min-[375px]:text-sm lg:text-start  min-[375px]:text-center text-wrap text-[#1d1d1d]">Browse and shop easily to your next door hardware.</p>
@@ -85,7 +85,7 @@
     </section>
         <section class="flex flex-col items-center justify-start justify-self-center px-10 py-6 h-fit mx-[10vw] w-[80vw]  max-[1030px]:px-3 ">
             <p  class="text-center w-full text-3xl font-bold ">Shop by Categories</p>
-            <div class="flex items-center justify-start flex-wrap h-fit w-full my-8 gap-1 mx-auto max-[640px]:gap-1 ">
+            <div id="categoryContainer" class="flex items-center justify-start flex-wrap h-fit w-full my-8 gap-1 mx-auto max-[640px]:gap-1 ">
                 <a href=""class="categoryCont "><img src="../assets/category img/10.png" alt="" class="categoryImg"><p class="absolute top-0 bottom-0 right-0 left-0">All Products</p></a>
                 <a href=""class=" categoryCont "><img src="../assets/category img/1.png" alt="" class="categoryImg "><p class="absolute top-0 bottom-0 right-0 left-0">Hand Tools</p></a>
                 <a href=""class="categoryCont "><img src="../assets/category img/2.png" alt="" class="categoryImg"><p class="absolute top-0 bottom-0 right-0 left-0">Measuring Tools</p></a>
@@ -102,7 +102,7 @@
        <p class="text-3xl text-center w-full font-semibold my-6">Top products</p>
     <section  id="scrollArea" class="flex flex-col items-start gap-1 mx-[10vw] w-[80vw] overflow-x-scroll  overflow-hidden  ">
         <div   class="w-screen flex justify-start cursor-default select-none gap-2 py-2 px-2  ">
-            <div class="product smShadow flex flex-col gap-2  w-[200px] hover:bxShadow cursor-pointer">
+            <div class="product smShadow border-[1px] border-[#d3d3d3] flex flex-col gap-2  w-[200px] hover:bxShadow cursor-pointer">
                 <a class="text variant">Building Materials</a>
                 <div class="flex flex-col px-2 " >
                     <img class="drag-none "  src="../assets/product_img/11.png" />
