@@ -5,13 +5,23 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-// Establish database connection
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=lmar_hardware", "root", ""); // Adjust the credentials as necessary
+    $pdo = new PDO("mysql:host=localhost;dbname=lmar_hardware", "root", ""); 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "Database connection failed: " . $e->getMessage();
     exit();
+}
+
+$error = $product_code = $name = $category = $price = $stocks = $data = $categoryId = "";
+try {
+    $stmt = $pdo->prepare("SELECT * FROM categories");
+    $data = null;
+    if($stmt -> execute()){
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch (PDOException $e) {
+    $error = "Error: " . $e->getMessage();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -19,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $category = $_POST['category'];
     $price = $_POST['price'];
+    $stocks = $_POST['stocks'];
 
     // Check if stocks is set and not empty
     if (isset($_POST['stocks']) && !empty($_POST['stocks'])) {
@@ -28,13 +39,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Error: Stocks cannot be null.";
     }
 
-    if (!isset($error)) {
+    if (empty($error)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO products (product_code, product_name, category, price, stocks) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$product_code, $name, $category, $price, $stocks]);
-            // Redirect only after successful insert
-            header("Location: inventory.php");
-            exit();
+            $stmt = $pdo->prepare("SELECT id from categories WHERE name=:category");
+            $stmt->bindParam(":category", $category);
+            if($stmt->execute()){
+                $row = $stmt->fetch(PDO::FETCH_ASSOC); 
+                 $categoryId = $row ? $row['id'] : null;
+            }
+
+            if(!empty($categoryId)){
+                  $stmt = $pdo->prepare("INSERT INTO products (product_code, product_name, category, price, stocks) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$product_code, $name, $categoryId, $price, $stocks]);
+
+                header("Location: inventory.php");
+                exit();
+            }
+
+            
         } catch (PDOException $e) {
             $error = "Error: " . $e->getMessage();
         }
@@ -55,23 +77,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         font-family: 'Arial', sans-serif;
         background-color: #f9f9f9;
     }
-
-    .container {
+    .contentContainer{
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        height: 100vh;
-        background-color: #f4f4f4;
-        margin-left: 350px;
+        gap:12px;
+        background-color: none;
     }
-
     .form-box {
         background-color: #fff;
         border-radius: 10px;
         padding: 30px;
         box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
         max-width: 500px;
-        width: 100%;
+        width: fit-content;
     }
 
     .form-box h1 {
@@ -121,6 +140,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     .form-box select {
         padding: 12px;
     }
+    .error{
+        text-align: center;
+        width: fit-content;
+        color:rgba(255,44,44);
+        background: rgba(255,44,44,0.1);
+        border: 1px solid rgba(255,44,44);
+        border-radius: 4px;
+        padding: 12px;
+    }
     </style>
 </head>
 
@@ -136,44 +164,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <li><a href="logout.php">Logout</a></li>
         </ul>
     </div>
-
-    <div class="container">
-        <div class="form-box">
+    <div class="contentContainer">
+    <p class="error"><?= (!empty($e))? $e:"" ?></p>
+    <div class="form-box">
+        <p class="error"><?= (!empty($error))? $error:"" ?></p>
+         <div class="form-box">
             <h1>Add New Product</h1>
             <form action="add_product.php" method="POST">
                 <label for="product_code">Product Code:</label>
-                <input type="text" name="product_code" required>
+                <input type="text" name="product_code"  value="<?= isset($product_code)? $product_code:"" ?>" required>
 
                 <label for="product_name">Name:</label>
-                <input type="text" name="name" required>
+                <input type="text" name="name" value="<?= isset($name)? $name:"" ?>" required>
 
                 <label for="category">Category:</label>
                 <select name="category" required>
-                    <option value="">Select Category</option>
-                    <option value="Hand Tools">Hand Tools</option>
-                    <option value="Power Tools">Power Tools</option>
-                    <option value="Fasteners">Fasteners</option>
-                    <option value="Building Materials">Building Materials</option>
-                    <option value="Electrical Supplies">Electrical Supplies</option>
-                    <option value="Plumbing Supplies">Plumbing Supplies</option>
-                    <option value="Paint and Supplies">Paint and Supplies</option>
-                    <option value="Garden and Outdoor Supplies">Garden and Outdoor Supplies</option>
-                    <option value="Safety Equipment">Safety Equipment</option>
-                    <option value="Storage and Organization">Storage and Organization</option>
-                    <option value="Seasonal Items">Seasonal Items</option>
-                    <option value="Miscellaneous Supplies">Miscellaneous Supplies</option>
+                    <?php foreach($data as $categoryName){ ?>
+
+                         <option value="<?= $categoryName['name'] ?>" <?= isset($category) && $category == $categoryName['name'] ? "selected" : "" ?>>
+                            <?= $categoryName['name'] ?>
+                        </option>
+
+                    <?php }  ?>
+
+                    </php>
                 </select>
 
                 <label for="price">Price:</label>
-                <input type="number" name="price" required>
+                <input type="number" name="price" value="<?= isset($price)? $price:"" ?>" required>
 
                 <label for="stocks">Stocks:</label>
-                <input type="number" name="stocks" required>
+                <input type="number" name="stocks" value="<?= isset($stocks)? $stocks:"" ?>" required>
 
-                <input type="submit" value="Add Product">
+                <input type="submit" value="Add Product" >
             </form>
         </div>
-    </div>
+     </div>
+       
 </body>
 
 </html>

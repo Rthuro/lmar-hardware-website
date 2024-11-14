@@ -18,16 +18,16 @@ $search_term = isset($_GET['search']) ? $_GET['search'] : '';
 $filter_category = isset($_GET['category']) ? $_GET['category'] : '';
 
 // Fetch categories for the filter dropdown
-$category_stmt = $pdo->query("SELECT DISTINCT category FROM products");
+$category_stmt = $pdo->query("SELECT * FROM categories ");
 $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Modify the SQL query to include search and filter
-$sql = "SELECT * FROM products WHERE 1";
+$sql = "SELECT products.id, products.product_code, products.product_name, categories.name AS category, products.price, products.stocks FROM products INNER JOIN categories ON products.category = categories.id WHERE 1";
 if ($search_term) {
-    $sql .= " AND product_name LIKE :search";
+    $sql .= " AND products.product_name LIKE :search";
 }
 if ($filter_category) {
-    $sql .= " AND category = :category";
+    $sql .= " AND categories.name = :category ";
 }
 
 $stmt = $pdo->prepare($sql);
@@ -113,9 +113,9 @@ $products = $stmt->fetchAll();
             <select name="category" class="search-input">
                 <option value="">All Categories</option>
                 <?php foreach ($categories as $category): ?>
-                <option value="<?= htmlspecialchars($category['category']) ?>"
-                    <?= $filter_category == $category['category'] ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($category['category']) ?>
+                <option value="<?= $category['name'] ?>"
+                    <?= $filter_category == $category['name'] ? 'selected' : '' ?>>
+                    <?= $category['name'] ?>
                 </option>
                 <?php endforeach; ?>
             </select>
