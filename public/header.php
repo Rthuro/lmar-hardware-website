@@ -1,4 +1,4 @@
-<header class="flex flex-col  fixed z-50 top-0 left-0 right-0  bg-[#FBF0F4] shadow-lg ">
+<header class="flex flex-col  fixed z-50 top-0 left-0 right-0  bg-[#FBF0F4] lg:border lg:border-b-[#d3d3d3]  min-[375px]:border-0     ">
         <nav class="flex items-center justify-between px-[5%] py-6 border border-b-[#d3d3d3] bg-white w-full max-[640px]:px-[2%] ">
             <div class="relative min-[1030px]:hidden"> 
                 <button id="burger_menuBttn" class="flex items-center "><img src="../assets/icons/menu-white.svg" alt=""></button>
