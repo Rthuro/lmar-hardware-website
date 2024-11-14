@@ -1,5 +1,15 @@
 <?php
     include_once 'header.php';
+    require_once "../php/database.php";
+
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM products");
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Error fetching orders: " . $e->getMessage();
+        exit();
+    }
 
 ?>
 
@@ -85,7 +95,7 @@
                 <img class=""  src="../assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
-                    <a class="heading font-poppins">Concrete Hollow Block</a>
+                    <a class="heading ">Concrete Hollow Block</a>
                     <p class="price" >PHP 19.00</p>
                     <p class="sold" >1k sold</p>
                 </div>
@@ -94,7 +104,7 @@
                 <img class=""  src="../assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
-                    <a class="heading font-poppins">Concrete Hollow Block</a>
+                    <a class="heading ">Concrete Hollow Block</a>
                     <p class="price" >PHP 19.00</p>
                     <p class="sold" >1k sold</p>
                 </div>
@@ -103,7 +113,7 @@
                 <img class=""  src="../assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
-                    <a class="heading font-poppins">Concrete Hollow Block</a>
+                    <a class="heading ">Concrete Hollow Block</a>
                     <p class="price" >PHP 19.00</p>
                     <p class="sold" >1k sold</p>
                 </div>
@@ -112,7 +122,7 @@
                 <img class=""  src="../assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
-                    <a class="heading font-poppins">Concrete Hollow Block</a>
+                    <a class="heading ">Concrete Hollow Block</a>
                     <p class="price" >PHP 19.00</p>
                     <p class="sold" >1k sold</p>
                 </div>
@@ -130,7 +140,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -139,7 +149,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -148,7 +158,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -158,7 +168,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -167,7 +177,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -176,7 +186,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -185,7 +195,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -195,7 +205,16 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
+                        <p class="price" >PHP 19.00</p>
+                        <p class="sold" >1k sold</p>
+                    </div>
+                </div>
+                <div class="productPageContainer ">
+                    <img class=""  src="../assets/product_img/11.png" />
+                    <a class="variant">Building Materials</a> 
+                    <div class="productPageDetails" >
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
@@ -213,16 +232,7 @@
                     <img class=""  src="../assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
+                        <a class="heading ">Concrete Hollow Block</a>
                         <p class="price" >PHP 19.00</p>
                         <p class="sold" >1k sold</p>
                     </div>
