@@ -1,22 +1,22 @@
 
 @font-face {
     font-family: "outfit";
-    src: url('/public/font/Outfit/static/Outfit-Regular.ttf') format('truetype');
+    src: url('/frontend/assets/font/Outfit/static/Outfit-Regular.ttf') format('truetype');
     font-weight: 400;
   }
   @font-face {
     font-family: "outfit";
-    src: url('/public/font/Outfit/static/Outfit-Medium.ttf') format('truetype');
+    src: url('/frontend/assets/font/Outfit/static/Outfit-Medium.ttf') format('truetype');
     font-weight: 500;
   }
   @font-face {
     font-family: "outfit";
-    src: url('/public/font/Outfit/static/Outfit-SemiBold.ttf') format('truetype');
+    src: url('/frontend/assets/font/Outfit/static/Outfit-SemiBold.ttf') format('truetype');
     font-weight: 600;
   }
   @font-face {
     font-family: "outfit";
-    src: url('/public/font/Outfit/static/Outfit-Bold.ttf') format('truetype');
+    src: url('/frontend/assets/font/Outfit/static/Outfit-Bold.ttf') format('truetype');
     font-weight: 700;
   }
 @tailwind base;
@@ -186,10 +186,10 @@ section {
     @apply size-4;
 }
 .categoryImg{
-    @apply w-full h-[190px] object-cover transition ease-in-out  ;
+    @apply size-full object-cover transition ease-in-out  ;
 }
 .categoryCont{
-    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 sm:basis-auto flex-grow  min-[375px]:h-[150px] ;
+    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 max-w-[300px] w-[255px] h-[150px] flex-grow;
 }
 .categoryCont p{
     @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg  min-[375px]:py-[3rem]  ;

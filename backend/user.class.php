@@ -1,4 +1,5 @@
 <?php
+require_once "database.php";
 
 try {
     $pdo = new PDO("mysql:host=localhost;dbname=lmar_hardware", "root", ""); // Adjust the credentials as necessary
@@ -19,9 +20,9 @@ class User{
     public $email = '';
     public $password = '';
     public $role = 'customer';
-  
-
+    
     function addUsers(){
+        
         $sql = "INSERT INTO users (email,password,role) VALUES (:email,:password,:role); ";
         $query = $pdo-> prepare ($sql);
       }

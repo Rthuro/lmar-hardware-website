@@ -1,14 +1,14 @@
 <header class="flex flex-col  fixed z-50 top-0 left-0 right-0  bg-[#FBF0F4] lg:border lg:border-b-[#d3d3d3]  min-[375px]:border-0     ">
         <nav class="flex items-center justify-between px-[5%] py-6 border border-b-[#d3d3d3] bg-white w-full max-[640px]:px-[2%] ">
             <div class="relative min-[1030px]:hidden"> 
-                <button id="burger_menuBttn" class="flex items-center "><img src="../assets/icons/menu-white.svg" alt=""></button>
+                <button id="burger_menuBttn" class="flex items-center "><img src="./assets/icons/menu-white.svg" alt=""></button>
                   <div id="burger_menu" class="hidden fixed top-[88px] bottom-0 left-0 right-0 ">
                      <ul class="menu_items flex flex-col items-start justify-start py-3 px-4 bg-white w-full h-full">
                          <li><a href="landing_page.php">Home</a></li>
                          <li><a href="products.php">All Products</a></li>
                          <li><a href="bulk_page.php">Bulk Order</a></li>
                          <li class="relative cursor-pointer">
-                            <p id="burger_category" class="flex items-center justify-between">Category <img id="iconDown" src="../assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-4">
+                            <p id="burger_category" class="flex items-center justify-between">Category <img id="iconDown" src="./assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-4">
                             </p>
                             <div id="burger_categoryList" class="hidden flex-col items-start justify-start mt-1 w-full">
                                 <a href="">Hand Tools</a>
@@ -22,18 +22,18 @@
                                 <a href="">Building Materials</a>
                             </div>
                          </li>
-                         <li class="flex items-center  gap-1"><img src="../assets/icons/circle-user-round (1).svg" alt=""><a href="login_page.html" class="text-[#F05A28]">Login</a> </li>
+                         <li class="flex items-center  gap-1"><img src="./assets/icons/circle-user-round (1).svg" alt=""><a href="login_page.html" class="text-[#F05A28]">Login</a> </li>
                      </ul>
                  </div>
              </div>
             <div  id="logo" class="flex items-center cursor-pointer basis-1/5 max-[1030px]:basis-0">
-                        <img src="../assets/img/lmar_logo_black_nobg.png" alt="" class=" w-[58px] object-contain max-[640px]:w-[48px]">
+                        <img src="./assets/img/lmar_logo_black_nobg.png" alt="" class=" w-[58px] object-contain max-[640px]:w-[48px]">
                      <p class="text-2xl font-bold ml-[-7px] text-[#1d1d1d]  max-[640px]:text-[18px] ">LMARHardware</p>
                 </div>
                     <form action="" method="get" class="flex items-center justify-end justify-self-center basis-1/2 w-full  max-[1030px]:hidden ">
                         <input type="text" name="" id="" placeholder="Search..." class="  w-[70%] px-[1.6rem] py-[0.5rem] text-[1rem] rounded-l smShadow bg-white focus:outline-none focus:bg-slate-50 focus:shadow-none focus:border focus:border-[#d3d3d3]   ">
                         <button type="submit" value="" class="px-[1.6rem] py-[0.6rem] bg-[#FB951C] rounded-r ml-[-2px] ">
-                            <img src="../assets/icons/magnifying-glass.png" alt="search icon by Taufik Glyph on flaticon" class="size-6 ">
+                            <img src="./assets/icons/magnifying-glass.png" alt="search icon by Taufik Glyph on flaticon" class="size-6 ">
                         </button>
                     </form>
                 <!-- <a href="products.php" class=" font-poppins text-[14px] font-medium  ">Products</a> -->
@@ -41,7 +41,7 @@
                       <div class="flex items-center justify-end gap-6 basis-1/4">
                             <div id="cart" class="relative flex items-end gap-2 cursor-pointer">
                                 <p class="text-xl font-bold text-[#1d1d1d] max-[1030px]:hidden">Cart</p>
-                                <img src="../assets/icons/tool-box (1).png" alt="" class="size-9 mr-2 max-[640px]:size-8">
+                                <img src="./assets/icons/tool-box (1).png" alt="" class="size-9 mr-2 max-[640px]:size-8">
                                 <div id="cart_items_count" class="absolute top-[-5px] right-0 bg-black/80 px-2 py-1 rounded-[50%]">
                                     <p class="text-white text-[10px]" >0</p>
                                 </div>
@@ -67,7 +67,7 @@
              </a>
             <div id="categoryDropdown"  class="relative flex items-center gap-2 cursor-pointer">
                 Category
-                 <img id="iconDown" src="../assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-3">
+                 <img id="iconDown" src="./assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-3">
 
                 <div id="categoryDropdownContainer" class=" hidden absolute bottom-[-350px] right-0 pt-2 bg-white w-[200px] h-fit flex-col justify-start items-start rounded-b-md shadow-md">
                     <a href="">Hand Tools</a>
@@ -84,7 +84,7 @@
            
         </nav>
     </header>
-    <script src="../script/nav_functions.js"></script>
+    <script src="./utils/nav_functions.js"></script>
     <script>
         const homeTextClr = document.getElementById('homeTextClr');
         const allProdTextClr = document.getElementById('allProdTextClr');

@@ -1,6 +1,6 @@
 <?php
     include_once 'header.php';
-    require_once "../php/database.php";
+    require_once "../backend/database.php";
 
     try {
         $stmt = $pdo->prepare("SELECT * FROM products");
@@ -20,14 +20,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Products | LMAR Hardware</title>
     <link rel="stylesheet" href="./tailwind.css?v=<?php echo time(); ?>">
-    <link rel="shortcut icon" href="../assets/img/lmar_logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/img/lmar_logo.png" type="image/x-icon">
 </head>
 <body >
    
 
     <div class="hidden gap-1 items-center justify-center justify-self-center w-full mt-[110px] max-[1380px]:flex min-[1030px]:mt-[180px] min-[1030px]:justify-start min-[1030px]:pl-[22%] ">
         <div class="">
-            <button id="filter_Bttn" class="flex items-center gap-1 bg-white px-3 py-2 rounded-sm border border-black "><img src="../assets/icons/filter (1).svg" alt="" class="size-5"><p class="font-medium">Filters</p></button>
+            <button id="filter_Bttn" class="flex items-center gap-1 bg-white px-3 py-2 rounded-sm border border-black "><img src="./assets/icons/filter (1).svg" alt="" class="size-5"><p class="font-medium">Filters</p></button>
             <form id="filter_mobileCont" action="" method="get" class="hidden flex-col fixed top-0 left-0 w-[50%] max-w-[355px] bottom-0 filter border-[1px] bg-white p-4 z-50 ">
                 <div  class="flex items-center justify-between pb-2">
                     <p class="text-[28px] ">Filters</p>
@@ -60,7 +60,7 @@
         <form action="" method="get" class="flex  items-center justify-center  w-[65%] min-[1030px]:hidden ">
             <input type="text" name="" id="" placeholder="Search..." class=" w-full px-[1.6rem] py-[0.5rem] text-[1rem] rounded-l bg-white ">
             <button type="submit" value="" class="px-[1.6rem] py-[0.6rem] bg-[#FB951C] rounded-r ml-[-2px] ">
-                <img src="../assets/icons/magnifying-glass.png" alt="search icon by Taufik Glyph on flaticon" class="size-auto">
+                <img src="./assets/icons/magnifying-glass.png" alt="search icon by Taufik Glyph on flaticon" class="size-auto">
             </button>
         </form>
     </div>
@@ -92,7 +92,7 @@
         </form>
         <section class="productGrid grid-flow-col-dense grid gap-2 w-fit max-[640px]:gap-1 ">
             <div class="productPageContainer ">
-                <img class=""  src="../assets/product_img/11.png" />
+                <img class=""  src="./assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
                     <a class="heading ">Concrete Hollow Block</a>
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="productPageContainer ">
-                <img class=""  src="../assets/product_img/11.png" />
+                <img class=""  src="./assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
                     <a class="heading ">Concrete Hollow Block</a>
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <div class="productPageContainer ">
-                <img class=""  src="../assets/product_img/11.png" />
+                <img class=""  src="./assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
                     <a class="heading ">Concrete Hollow Block</a>
@@ -119,7 +119,7 @@
                 </div>
             </div>
             <div class="productPageContainer ">
-                <img class=""  src="../assets/product_img/11.png" />
+                <img class=""  src="./assets/product_img/11.png" />
                 <a class="variant">Building Materials</a> 
                 <div class="productPageDetails" >
                     <a class="heading ">Concrete Hollow Block</a>
@@ -128,7 +128,7 @@
                 </div>
             </div>
                 <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
+                    <img class=""  src="./assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
                         <a class="heading font-poppins">Concrete Hollow Block</a>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
                 <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
+                    <img class=""  src="./assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
                         <a class="heading ">Concrete Hollow Block</a>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
                 <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
+                    <img class=""  src="./assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
                         <a class="heading ">Concrete Hollow Block</a>
@@ -155,7 +155,7 @@
                     </div>
                 </div>
                 <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
+                    <img class=""  src="./assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
                         <a class="heading ">Concrete Hollow Block</a>
@@ -165,71 +165,7 @@
                 </div>
 
                 <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading ">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
-                    <a class="variant">Building Materials</a> 
-                    <div class="productPageDetails" >
-                        <a class="heading font-poppins">Concrete Hollow Block</a>
-                        <p class="price" >PHP 19.00</p>
-                        <p class="sold" >1k sold</p>
-                    </div>
-                </div>
-                <div class="productPageContainer ">
-                    <img class=""  src="../assets/product_img/11.png" />
+                    <img class=""  src="./assets/product_img/11.png" />
                     <a class="variant">Building Materials</a> 
                     <div class="productPageDetails" >
                         <a class="heading ">Concrete Hollow Block</a>
@@ -243,7 +179,7 @@
     <footer class=" flex flex-col  justify-center items-center self-center w-full  max-w-[1450px] h-fit mb-10 mx-auto px-6 ">
         <div class="flex flex-col justify-center gap-[16px] border-b-2 border-black w-full h-[300px] px-2">
             <div class="flex items-center">
-                 <img src="../assets/img/lmar_logo_black_nobg.png" alt="" class="ml-[-12px] w-[64px] object-contain">
+                 <img src="./assets/img/lmar_logo_black_nobg.png" alt="" class="ml-[-12px] w-[64px] object-contain">
                  <p class="text-[18px]  font-poppins font-bold leading-4 ml-[-9px]">LMAR <br> Hardware</p>
             </div>
            
@@ -265,6 +201,6 @@
             </div>
         </div>
     </footer>
-    <script src="../script/products.js"></script>
+    <script src="./utils/products.js"></script>
 </body>
 </html>

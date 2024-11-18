@@ -49,7 +49,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in | LMAR Hardware</title>
     <link rel="stylesheet" href="./tailwind.css?v=<?php echo time(); ?>">
-    <link rel="shortcut icon" href="../assets/img/lmar_logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/img/lmar_logo.png" type="image/x-icon">
 </head>
 <style>
     .err{
@@ -72,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
 </style>
 <body>
     <div id="logoCont" class="flex items-center justify-center gap-1 self-center mt-[50px] font-semibold cursor-pointer ">
-        <img src="../assets/img/lmar_logo_black_nobg.png" alt="" class="h-12">
+        <img src="./assets/img/lmar_logo_black_nobg.png" alt="" class="h-12">
         <p class="font-outfit font-bold text-[32px] ">LMAR Hardware</p>
     </div>
     <p class="text-center font-outfit font-semibold text-[24px] mt-2">Welcome back!</p>
@@ -105,8 +105,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
 
         const passInput = document.getElementById("passInput");
         const passIconImg = document.getElementById('passIconImg');
-        const eyeOff = "../assets/icons/eye-off.svg";
-        const eye = "../assets/icons/eye.svg";
+        const eyeOff = "./assets/icons/eye-off.svg";
+        const eye = "./assets/icons/eye.svg";
 
         passIconImg.addEventListener('click', ()=>{
             if(passIconImg.src.includes("eye-off.svg"))

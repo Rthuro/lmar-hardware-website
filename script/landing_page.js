@@ -56,3 +56,4 @@ scrollArea.addEventListener('mousemove', (e) => {
   const walk = (x - startX) * 2; 
   scrollArea.scrollLeft = scrollLeft - walk;
 });
+
