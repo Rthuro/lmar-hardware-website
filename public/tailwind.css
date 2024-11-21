@@ -1122,6 +1122,7 @@ html{
 
 *{
   box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
 }
 
 button{
@@ -1141,12 +1142,6 @@ input[type=submit]{
 #scrollArea::-webkit-scrollbar-thumb {
   background-color: #888;
   border-radius: 8px;
-}
-
-* {
-  margin: 0px;
-  padding: 0px;
-  font-family: outfit;
 }
 
 nav a {
