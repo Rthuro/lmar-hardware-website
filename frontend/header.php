@@ -6,7 +6,6 @@
                      <ul class="menu_items flex flex-col items-start justify-start py-3 px-4 bg-white w-full h-full">
                          <li><a href="landing_page.php">Home</a></li>
                          <li><a href="products.php">All Products</a></li>
-                         <li><a href="bulk_page.php">Bulk Order</a></li>
                          <li class="relative cursor-pointer">
                             <p id="burger_category" class="flex items-center justify-between">Category <img id="iconDown" src="./assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-4">
                             </p>
@@ -62,9 +61,6 @@
         <nav class="bg-white px-52 py-5 flex items-center justify-center gap-5 max-[1030px]:hidden">
             <a href="landing_page.php" id="homeTextClr" class="">Home</a>
             <a href="products.php" id="allProdTextClr" class="">All Products</a>
-            <a href="bulk_page.php" id="bulkOrderTextClr" class="flex items-center gap-2">
-                Bulk Order
-             </a>
             <div id="categoryDropdown"  class="relative flex items-center gap-2 cursor-pointer">
                 Category
                  <img id="iconDown" src="./assets/icons/down.png" alt="down icon by ilham on flaticon" class=" size-3">
