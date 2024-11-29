@@ -90,16 +90,11 @@
       
 }
 
-nav a{
-    @apply text-[#1d1d1d];
-}
 body{
     @apply  bg-white ;
     
 }
-section {
-    @apply w-full;
-}
+
 /* BURGER MENU */
 .menu_items li{
     @apply py-4 text-[18px] w-full  font-medium ;
@@ -185,10 +180,10 @@ section {
     @apply size-full object-cover transition ease-in-out  ;
 }
 .categoryCont{
-    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 max-w-[300px] w-[255px] h-[150px] flex-grow;
+    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 max-w-[300px] min-w-[255px] h-[150px] ;
 }
 .categoryCont p{
-    @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg  min-[375px]:py-[3rem]  ;
+    @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg xs:py-[3rem]  ;
 }
 footer p{
     @apply text-[0.9rem];
@@ -219,7 +214,7 @@ footer a{
 .loginForm label{
     @apply my-1;
 }
-.loginForm input{
+.loginForm input:not(.loginForm input[type = "checkbox"]){
     @apply border-[1px] border-[#1d1d1d] rounded py-2 pl-2 w-[300px] mt-1;
 }
 .loginForm input[type = "submit"]{
