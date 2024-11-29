@@ -3,7 +3,7 @@ module.exports = {
     plugins: [
       require('flowbite/plugin')
   ],
-  content: ["./public/**/*.{html,js,php}",
+  content: ["./frontend/**/*.{html,js,php}",
      "./node_modules/flowbite/**/*.js"
   ],
   presets: [],
@@ -21,6 +21,15 @@ module.exports = {
       fontFamily:{
         outfit: ['outfit'],
         poppins: ['Poppins', 'sans-serif']
+      },
+      screens: {
+        "xs": "320px",
+      },
+      colors: {
+        "customOrange": "#FB951C",
+      },
+      fontSize: {
+        "xxs": "10px",
       }
     },
     animation: {
