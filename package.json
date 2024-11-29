@@ -55,6 +55,7 @@
     "lines-and-columns": "^1.2.4",
     "lmar_hardware": "file:",
     "lru-cache": "^10.4.3",
+    "lucide": "^0.462.0",
     "merge2": "^1.4.1",
     "micromatch": "^4.0.8",
     "minimatch": "^9.0.5",
@@ -109,8 +110,8 @@
     "yaml": "^2.5.1"
   },
   "scripts": {
-    "build": "tailwindcss -i ./Tailwind/main.css -o public/tailwind.css",
-    "watch": "tailwindcss -i ./Tailwind/main.css -o public/tailwind.css --watch"
+    "build": "tailwindcss -i ./Tailwind/main.css -o frontend/tailwind.css",
+    "watch": "tailwindcss -i ./Tailwind/main.css -o frontend/tailwind.css --watch"
   },
   "keywords": [],
   "author": "",
