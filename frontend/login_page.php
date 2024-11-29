@@ -1,44 +1,47 @@
 <?php
+    require_once "../backend/classes/account.class.php";
+    require_once('../backend/tools/functions.php');
+    session_start();
 
-session_start();
+    $accountObj = new Account();
 
-$host = 'localhost';
-$dbname = 'lmar_hardware';
-$user = 'root';
-$pass = '';
-$pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-function clean_input($input){
-    $input = trim($input);
-    $input = stripslashes($input);
-    $input = htmlspecialchars($input);
-    return $input;
-}
+     $email = $password = '';
+     $errAcc=$emailErr = $passwordErr = '';
 
-$email = $password = '';
-$errAcc=$emailErr = $passwordErr = '';
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
+        $email = clean_input($_POST['email']);
+        $password = clean_input($_POST['password']);
+        if(empty($email)){
+            $emailErr = 'Please enter your email';
+        }
+        if(empty($password)){
+            $passwordErr = 'Please enter your password';
+        }
 
-if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
-    $email = clean_input($_POST['email']);
-    $password = clean_input($_POST['password']);
-    if(empty($email)){
-        $emailErr = 'Please enter your email';
-    }
-    if(empty($password)){
-        $passwordErr = 'Please enter your password';
-    }
+        if(empty($emailErr) && empty($passwordErr)){
+            $checkIfUserExists = $accountObj->fetch($email);
 
-    if(empty($emailErr) && empty($passwordErr)){
-        $checkIfUserExists = $pdo->query("SELECT * FROM users WHERE email='$email' AND password = '$password';");
-        $accExists = $checkIfUserExists ->fetchAll(PDO::FETCH_ASSOC);
-        if(empty($accExists)){
-            echo "<p class='err'>Account doesn't exists! Sign up to create an account.</p>";
-        } else {
-            header("Location: landing_page.php");
+            if(empty($checkIfUserExists)){
+                echo "<p class='err'>Account doesn't exists! Sign up to create an account.</p>";
+            } else {
+                if($accountObj->login($email,$password)){
+                    $_SESSION['account'] = $checkIfUserExists;
+                    header("Location: landing_page.php");
+                } else {
+                    echo "<p class='err'>The password you entered is incorrect. Please try again.</p>";
+                }
+            }
+        }
+    } else {
+        if(isset($_SESSION['account'])){
+            if($_SESSION['account']['role'] == 'customer'){
+                header("Location: landing_page.php");
+            } else {
+                header("Location: ../backend/dashboard.php");
+            }
         }
     }
-}
 
 ?>
 
@@ -82,14 +85,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
             <input type="text" name="email" id="" value="<?= (isset($email))? $email:''; ?>">
             <?php if(!empty($emailErr)){ echo "<p class='err_input'>$emailErr</p>"; } ?>
             <label for="password">Password:</label>
-            <div class="flex items-center relative">
                 <input type="password" name="password" id="passInput" value="<?= (isset($password))? $password:'' ?>" >
-             <img id="passIconImg" class="absolute right-2  cursor-pointer" src="../assets/icons/eye-off.svg" alt="">
-            </div>
-            
+                <div class="flex items-center justify-start gap-1">
+                    <input type="checkbox" name="showPass" id="showPass" class="size-4">
+                    <label for="showPass"  >Show password</label>
+                </div>
 
             <?php if(!empty($passwordErr)){ echo "<p class='err_input'>$passwordErr</p>"; } ?>
-            <input type="submit" name='login' value="Login">
+            <input type="submit" name='login' value="Login" >
         </form>
         
     </div>
@@ -97,6 +100,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
         <p>Don't have an account? </p>
         <a href="signin_page.php" class="text-[#C24E2E]">Sign up</a>
     </div>
+    
     <script>
         const logoCont  = document.getElementById('logoCont');
         logoCont.addEventListener('click', ()=>{
@@ -104,22 +108,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
         })
 
         const passInput = document.getElementById("passInput");
-        const passIconImg = document.getElementById('passIconImg');
-        const eyeOff = "./assets/icons/eye-off.svg";
-        const eye = "./assets/icons/eye.svg";
+        const showPass = document.getElementById("showPass");
 
-        passIconImg.addEventListener('click', ()=>{
-            if(passIconImg.src.includes("eye-off.svg"))
-            {
-                passIconImg.src = eye;
-                passInput.type = "text";
+        showPass.addEventListener("change", () => {
+            passInput.type = showPass.checked ? "text" : "password";
+        });
 
-            }
-            else {
-                passIconImg.src = eyeOff;
-                passInput.type = "password";
-            };
-        })
+        
 
     </script>
 </body>
