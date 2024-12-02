@@ -180,7 +180,8 @@ body{
     @apply size-full object-cover transition ease-in-out  ;
 }
 .categoryCont{
-    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 max-w-[300px] min-w-[255px] h-[150px] ;
+    @apply flex flex-col items-center justify-start relative overflow-hidden rounded shadow-lg shadow-black/10 flex-grow min-w-[150px] max-w-[350px] 
+    h-[150px] ;
 }
 .categoryCont p{
     @apply text-center py-[5rem] bg-black/20 text-2xl font-semibold text-[#FBF0F4] drop-shadow-lg xs:py-[3rem]  ;
