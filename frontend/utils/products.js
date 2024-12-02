@@ -15,6 +15,7 @@ document.addEventListener('click', (e) => {
   if (filter_mobileCont.style.position === 'fixed' || !filter_mobileCont.contains(e.target) ) {
         filter_mobileCont.style.display = 'none';
     }
+    e.stopPropagation();
 });
 
 let priceRange = document.getElementById('priceRange');
