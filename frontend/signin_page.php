@@ -34,6 +34,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signup'])){
             $checkAccDuplicate  = $accountObj->fetch($email);
             if(empty($checkAccDuplicate)){
                 $accountObj->email = $email;
+                $accountObj->username = $username;
                 $accountObj->password = $password;
                 $accountObj->role = $role;
 
