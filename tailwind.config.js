@@ -4,7 +4,8 @@ module.exports = {
       require('flowbite/plugin')
   ],
   content: ["./frontend/**/*.{html,js,php}",
-     "./node_modules/flowbite/**/*.js"
+     "./node_modules/flowbite/**/*.js", 
+     "./backend/**/*.{html,js,php}"
   ],
   presets: [],
   darkMode: 'media', // or 'class'
