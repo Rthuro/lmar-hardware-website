@@ -5,6 +5,7 @@ require_once 'database.php';
 class Account{
     public $id = '';
     public $email = '';
+    public $username = '';
     public $password = '';
     public $role = '';
 
@@ -16,10 +17,11 @@ class Account{
     }
 
     function add(){
-        $sql = "INSERT INTO users (email, password, role) VALUES (:email, :password, :role);";
+        $sql = "INSERT INTO users (email,username, password, role) VALUES (:email, :username, :password, :role);";
         $query = $this->db->connect()->prepare($sql);
 
         $query->bindParam(':email', $this->email);
+        $query->bindParam(':username', $this->username);
         $hashpassword = password_hash($this->password, PASSWORD_DEFAULT);
         $query->bindParam(':password', $hashpassword);
         $query->bindParam(':role', $this->role);
@@ -81,6 +83,14 @@ class Account{
         }
 
         return $data;
+    }
+
+    function delete(){
+        $sql = "DELETE FROM users WHERE email = :email";
+        $query = $this->db->connect()->prepare($sql);
+
+        $query->bindParam('email', $this->email);
+        return $query->execute();
     }
 }
 
