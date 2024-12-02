@@ -26,7 +26,10 @@ class Product {
     }
 
     function showAll($keyword='', $category='') {
-        $sql = "SELECT i.*, p.*, c.name as category_name, SUM(IF(s.status='in', quantity, 0)) as stock_in, SUM(IF(s.status='out', quantity, 0)) as stock_out FROM products p INNER JOIN categories c ON p.category_id = c.id LEFT JOIN product_image i ON p.id = i.product_id AND i.image_role = 'main' LEFT JOIN stocks s ON p.id = s.product_id WHERE (p.code LIKE CONCAT('%', :keyword, '%') OR p.name LIKE CONCAT('%', :keyword, '%')) AND (c.id LIKE CONCAT('%', :category, '%')) GROUP BY p.id ORDER BY p.name ASC;";
+        $sql = "SELECT i.*, p.*, c.name as category_name, SUM(IF(s.change_type='addition', quantity, 0)) as stock_in, SUM(IF(s.change_type='subtraction', quantity, 0)) as stock_out FROM products p 
+        INNER JOIN categories c ON p.category = c.id 
+        LEFT JOIN product_image i ON p.id = i.product_id LEFT JOIN stock_transactions s ON p.id = s.product_id WHERE (p.product_code LIKE CONCAT('%', :keyword, '%') OR p.product_name LIKE CONCAT('%', :keyword, '%')) AND (c.name LIKE CONCAT('%', :category, '%')) GROUP BY p.id ORDER BY p.product_name ASC;";
+
         $query = $this->db->connect()->prepare($sql);
         $query->bindParam(':keyword', $keyword);
         $query->bindParam(':category', $category);
@@ -81,7 +84,7 @@ class Product {
         return $count > 0;
     }
 
-    public function fetchCategory() {
+     function fetchCategory() {
         $sql = "SELECT * FROM categories ORDER BY name ASC;";
         $query = $this->db->connect()->prepare($sql);
         $data = null;
@@ -90,4 +93,16 @@ class Product {
         }
         return $data;
     }
+
+    function fetchRecentOrders(){
+        $sql = "SELECT orders.*, products.product_name FROM orders LEFT JOIN products ON orders.product_id = products.id ORDER BY orders.order_date DESC LIMIT 5;";
+        $query = $this->db->connect()->prepare($sql);
+        $data = null;
+        if ($query->execute()) {
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $data;
+    }
+
+   
 }
