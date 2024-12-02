@@ -1,6 +1,6 @@
 <?php
     require_once "../backend/classes/account.class.php";
-    require_once('../backend/tools/functions.php');
+    require_once "../backend/tools/functions.php";
     session_start();
 
     $accountObj = new Account();
