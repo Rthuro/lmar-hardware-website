@@ -22,7 +22,6 @@ burger_category.addEventListener('click' , ()=>{
 
 const categoryDropdown = document.getElementById('categoryDropdown');
 const categoryDropdownContainer = document.getElementById('categoryDropdownContainer');
-const iconDown = document.getElementById('iconDown');
 
 categoryDropdownContainer.style.display = "none";
 
@@ -30,18 +29,17 @@ categoryDropdownContainer.style.display = "none";
 categoryDropdown.addEventListener("click", () => {
     if (categoryDropdownContainer.style.display === "none") {
         categoryDropdownContainer.style.display = "flex";
-        iconDown.style.transform = "rotate(180deg)";
+      
     } else {
         categoryDropdownContainer.style.display = "none";
-        iconDown.style.transform = "rotate(0deg)";
+        
     }
 })
 
 
-document.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
     if (!categoryDropdownContainer.contains(e.target)&&!categoryDropdown.contains(e.target) ) {
         categoryDropdownContainer.style.display = "none";
-        iconDown.style.transform = "rotate(0deg)";
     }
 });
 categoryDropdownContainer.addEventListener('click', (e) =>{
@@ -50,9 +48,12 @@ categoryDropdownContainer.addEventListener('click', (e) =>{
 
 const loginBtn = document.getElementById('loginBtn');
 
-loginBtn.addEventListener("click", ()=> {
-    window.location.href = "login_page.php";
-})
+if(loginBtn !== null){
+    loginBtn.addEventListener("click", ()=> {
+        window.location.href = "login_page.php";
+    })
+}
+
 
 const cart = document.getElementById('cart');
 const cartContainer = document.getElementById('cartContainer');
@@ -60,11 +61,12 @@ const cartContainer = document.getElementById('cartContainer');
 cartContainer.style.display = 'none';
 
 cart.addEventListener('click', (e)=>{
-
-if(  cartContainer.style.display === 'none'){
+    if(  cartContainer.style.display === 'none'){
             cartContainer.style.display = 'flex';
         } else {
             cartContainer.style.display = 'none';
         }
+        e.stopPropagation();
+        
 })
 
