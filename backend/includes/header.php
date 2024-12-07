@@ -1,3 +1,12 @@
+<?php
+     session_start();
+
+     if (!isset($_SESSION['admin_logged_in'])) {
+         header("Location: ../account/login.php");
+         exit();
+     }   
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +17,5 @@
     <link rel="stylesheet" href="/frontend/tailwind.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="/frontend/assets/img/lmar_logo.png" type="image/x-icon">
-    <style>
-    .err{
-        color:red;
-        background-color: rgb(255, 238, 238);
-        padding: 16px 12px;
-        text-align: center;
-    }
-    </style>
+
 </head>
