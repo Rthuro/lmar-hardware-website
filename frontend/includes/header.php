@@ -11,16 +11,15 @@
     <link rel="shortcut icon" href="./assets/img/lmar_logo.png" type="image/x-icon">
     <title>LMAR Hardware</title>
     <script src="../node_modules/lucide/dist/umd/lucide.js"></script>
-
     <style>
-        .drag-none{
-            -webkit-user-drag: none;
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
+        .product:hover img {
+            transform: scale(1.05);
+            transition: transform 1s;
         }
-        
+
+        .product:hover div .prodName{
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -71,38 +70,25 @@
                      </ul>
                  </div>
              </div>
-            <div  id="logo" class="flex items-center cursor-pointer lg:basis-1/5 xs:basis-0">
+                <div  id="logo" class="flex items-center cursor-pointer basis-1/4 xs:basis-0">
                         <img src="./assets/img/lmar_logo_black_nobg.png" alt="" class=" object-contain sm:size-14 xs:size-12">
                         <p class="text-2xl font-bold -ml-2 text-[#1d1d1d]  ">LMARHardware</p>
                 </div>
-                    <form action="" method="get" class="flex items-center justify-end justify-self-center basis-1/2 w-full  max-[1030px]:hidden ">
-                        <input type="text" name="" id="" placeholder="Search..." class=" w-9/12 px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
+                    <form action="" method="get" class="flex items-center justify-end  basis-1/2   max-[1000px]:hidden ">
+                        <input type="text" name="" id="" placeholder="Search..." class=" w-[500px] px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
                         <button type="submit" value="" class="px-6 py-2 bg-gray-950 rounded-r -ml-1 ">
                             <i data-lucide="search" class="size-6 text-white"></i>
                         </button>
                     </form>
-                <!-- <a href="products.php" class=" font-poppins text-[14px] font-medium  ">Products</a> -->
-
-                      <div class="flex items-center justify-end gap-6 basis-1/4">
-                            <div id="cart" class="relative flex items-end gap-2 cursor-pointer">
-                                <p class="text-xl font-bold text-gray-950 lg:flex xs:hidden">Cart</p>
-                                <i data-lucide="shopping-cart" class=" text-customOrange mr-2"></i>
-                                <div id="cart_items_count" class="absolute -top-1 right-0 bg-black/80 px-2 py-1 rounded-full">
-                                    <p class="text-white text-xxs" >0</p>
+ 
+                       <div class="flex items-center justify-end gap-3 basis-1/4" >
+                            <a href="cart.php" id="cart" class="relative flex items-end gap-2 cursor-pointer">
+                                <i data-lucide="shopping-cart" class=" size-8 text-customOrange"></i>
+                                <div id="cart_items_count" class="absolute -top-1 right-0 bg-black/80 px-1 rounded-full">
+                                    <p class="text-white text-xs" >0</p>
                                 </div>
-                                <div id="cartContainer" class="fixed hidden flex-col  justify-center items-center shadow-md top-[80px] right-[5%] min-w-[250px] max-w-[400px] h-[200px] bg-white border rounded-lg py-4 px-3">
-                                    <p>Empty cart... </p> 
-                                    <!-- <div id="productCart" class="flex border-b-2 w-full h-fit  my-4 items-start justify-between">
-                                        <img src="../assets/img/huhuh 1.png" alt="" class="size-11">
-                                        <p>wswe</p>
-                                        <p>210</p>
-                                    </div> --> 
-                                    <button id="addToCart" class="fill-btn py-2 px-3 my-1 ">Shop Now</button>
-                                       
-                                </div>
-                            </div>
-                        
-                        <?php
+                            </a>
+                            <?php
                          if(!isset($_SESSION['account'])){
                          ?> <button id="loginBtn" class=" rounded bg-gray-950 text-white  px-4 py-1 text-lg lg:flex xs:hidden">Log in</button>  <?php
                         } else {
@@ -113,6 +99,9 @@
                             <?php
                         }
                          ?>
+                     </div>
+                        
+                       
                 </div>
         </nav>
         <nav class="bg-white px-52 py-5 flex items-center justify-center gap-5 border-b lg:flex xs:hidden">
