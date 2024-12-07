@@ -55,18 +55,3 @@ if(loginBtn !== null){
 }
 
 
-const cart = document.getElementById('cart');
-const cartContainer = document.getElementById('cartContainer');
-
-cartContainer.style.display = 'none';
-
-cart.addEventListener('click', (e)=>{
-    if(  cartContainer.style.display === 'none'){
-            cartContainer.style.display = 'flex';
-        } else {
-            cartContainer.style.display = 'none';
-        }
-        e.stopPropagation();
-        
-})
-
