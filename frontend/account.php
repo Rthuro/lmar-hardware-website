@@ -2,8 +2,16 @@
    
     require_once "../backend/classes/cart.class.php";
     require_once "../backend/classes/orders.class.php";
+    require_once "../backend/classes/account.class.php";
+    require_once "../backend/classes/product.class.php";
+    require_once "../backend/classes/product-image.class.php";
 
+
+    $productObj = new Product();
+    $productImgObj = new ProductImage();
+    $accountObj = new Account();
     $cartObj = new Cart();
+    $orderObj = new Order();
 
     session_start();
 
@@ -14,6 +22,8 @@
         header('location: landing_page.php');
         exit();
      }
+
+     $userId = $accountObj->fetch($email);
 
      include_once "./includes/header.php";
 ?>
@@ -40,8 +50,6 @@
         <div class="flex flex-col lg:w-3/5 border shadow-md h-screen xs:w-11/12">
                 <form action="" method="get" class="flex items-center w-full justify-around shadow-sm border-b xs:flex-wrap lg:flex-nowrap">
 
-                    <input type="submit" name="type" value="Cart" class=" basis-2/6 p-3 <?= (isset($_GET['type']) && $_GET['type'] == "Cart")? 'text-white bg-customOrange': '' ?> ">
-
                     <input type="submit" name="type" value="Pick Up" class="basis-2/6 p-3 <?= (isset($_GET['type']) && $_GET['type'] == "Pick Up")? 'text-white bg-customOrange': '' ?>" >
 
                     <input type="submit" name="type"  value="To Deliver" class="basis-2/6 p-3 <?= (isset($_GET['type']) && $_GET['type'] == "To Deliver")? 'text-white bg-customOrange': '' ?>" >
@@ -58,23 +66,28 @@
                      if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['type'])){
 
                         switch($_GET['type']){
-                            case "Cart":
-                                $array = $cartObj ->fetchCart();
-                                    if(!empty($array)){
-                                       echo " not empty ";
-                                    } else {
-                                        ?>      
-                                        <div class="flex flex-col items-center justify-center h-full">
-                                            <img src="./assets/img/out-of-stock.png" alt="" srcset="">
-                                            <p class="text-lg">Cart is empty</p>
-                                        </div>
-                                      <?php
-                                    }
-                                break;
                             case "Pick Up":
-                                    $array = $cartObj ->fetchCart();
+                                    $orderObj->customer_id = $userId['id'];
+                                    $array = $orderObj ->getPickUpOrderCustomer();
                                         if(!empty($array)){
-                                           echo " not empty ";
+                                            foreach($array as $pickUp){ 
+                                                $getProd = $productObj->fetchRecord( $pickUp['product_id']);
+                                                $getProdImg = $productImgObj->fetchImage( $pickUp['product_id']); 
+                                                $getSize = $productObj->getSizesBySizeId( $pickUp['size_id']);
+                                                ?>
+                                                <div class="flex items-center justify-around w-full py-2 border-b">
+                                                  <img src="/backend/product/<?=$getProdImg['img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                                  <a href="product.php?id=<?=$prod['product_id']?>" >
+                                                   <?=$pickUp['quantity']?>X 
+                                                    <?=$getProd['product_name']?> 
+                                                    <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?> </a>
+                                                  <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
+                                                    <?=  $pickUp['status']?>
+                                                  </p>
+                                                    <p class="text-lg font-medium">PHP <?=$pickUp['payment']?> </p>
+                                                    
+                                                </div>
+                                         <?php   } 
                                         } else {
                                             ?>      
                                             <div class="flex flex-col items-center justify-center h-full">
@@ -85,9 +98,27 @@
                                         }
                                     break;
                             case "To Deliver":
-                                    $array = $cartObj ->fetchCart();
-                                        if(!empty($array)){
-                                           echo " not empty ";
+                                $orderObj->customer_id = $userId['id'];
+                                $array = $orderObj ->getDeliveryCustomer();
+                                    if(!empty($array)){
+                                        foreach($array as $pickUp){ 
+                                            $getProd = $productObj->fetchRecord( $pickUp['product_id']);
+                                            $getProdImg = $productImgObj->fetchImage( $pickUp['product_id']); 
+                                            $getSize = $productObj->getSizesBySizeId( $pickUp['size_id']);
+                                            ?>
+                                            <div class="flex items-center justify-around w-full py-2 border-b">
+                                              <img src="/backend/product/<?=$getProdImg['img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                              <a href="product.php?id=<?=$prod['product_id']?>" >
+                                               <?=$pickUp['quantity']?>X 
+                                                <?=$getProd['product_name']?> 
+                                                <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?> </a>
+                                              <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
+                                                <?=  $pickUp['status']?>
+                                              </p>
+                                                <p class="text-lg font-medium">PHP <?=$pickUp['payment']?> </p>
+                                                
+                                            </div>
+                                     <?php   } 
                                         } else {
                                             ?>      
                                             <div class="flex flex-col items-center justify-center h-full">
