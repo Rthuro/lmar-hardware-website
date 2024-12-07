@@ -1,15 +1,15 @@
 <?php
 
     require_once "../classes/product.class.php";
+    require_once "../classes/product-image.class.php";
     require_once "../tools/functions.php";
-    session_start();
+    require_once "../backend/classes/product-image.class.php";
 
-    if (!isset($_SESSION['admin_logged_in'])) {
-        header("Location: index.php");
-        exit();
-    }
+
+    include_once "../includes/header.php";
 
     $productObj = new Product();
+    $productImageObj = new ProductImage();
 
     $search_term = isset($_GET['search']) ? clean_input($_GET['search']): '';
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
@@ -17,7 +17,7 @@
     $categories = $productObj->fetchCategory();
     $products = $productObj->showAll($search_term, $filter_category);
 
-    include_once "../includes/header.php";
+    
 ?>
 
 <style>
@@ -61,11 +61,23 @@
 </style>
 
 <body>
+<?php if (isset($_SESSION['outputMsg']['error'])) { 
+            ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $_SESSION['outputMsg']['error'] ?></p> <?php 
+            unset($_SESSION['outputMsg']['error']);
+            }
+        ?>
+         <?php if (isset($_SESSION['outputMsg']['success'])) { 
+            ?> <p id="succ" class="succ flex justify-center fixed top-0 left-0 right-0 py-5 bg-green-600 text-white z-50">
+                <?= $_SESSION['outputMsg']['success'] ?>
+            </p> <?php 
+            unset($_SESSION['outputMsg']['success']);
+         }
+        ?>
     <?php include_once "../includes/sidebar.php" ?>
     <div class="main-content">
         <div class="flex justify-between items-end my-4">
                 <p class="text-4xl">Inventory Management</p>
-                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='orders.php'">Add Product</button>
+                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='../product/add_product.php'">Add Product / Add Size</button>
         </div>
 
         <form method="GET" action="" class="search-bar">
@@ -86,6 +98,7 @@
         <table border="1">
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Product Code</th>
                     <th>Name</th>
                     <th>Category</th>
@@ -96,13 +109,16 @@
             </thead>
             <tbody>
                 <?php if (count($products) > 0): ?>
-                <?php foreach ($products as $product): ?>
+                <?php foreach ($products as $product): 
+                    $img = $productImageObj->fetchImage($product['id']);
+                    ?>
                 <tr>
-                    <td><?= htmlspecialchars($product['product_code']) ?></td>
-                    <td><?= htmlspecialchars($product['product_name']) ?></td>
-                    <td><?= htmlspecialchars($product['category_name']) ?></td>
-                    <td><?= htmlspecialchars($product['price']) ?></td>
-                    <td><?= htmlspecialchars($product['stocks']) ?></td>
+                    <td><img src="../product/<?= $img['img'] ?>" alt="" srcset="" class=" size-16 "></td>
+                    <td><?= $product['product_code'] ?></td>
+                    <td><?= $product['product_name'] ?></td>
+                    <td><?= $product['category_name'] ?></td>
+                    <td><?= $product['price'] ?></td>
+                    <td><?= $product['stocks'] ?></td>
                     <td>
                         <a href="../product/edit_product.php?id=<?= $product['id'] ?>">Edit</a>
                         <a href="../product/delete_product.php?id=<?= $product['id'] ?>"
@@ -111,7 +127,7 @@
                     </td>
                 </tr>
                 <?php endforeach; ?>
-                <?php else: ?>
+                <?php else: ?>  
                 <tr>
                     <td colspan="6">No products found.</td>
                 </tr>
@@ -120,5 +136,22 @@
         </table>
     </div>
 
+    <script>
+        const err = document.getElementById('err');
+        const succ = document.getElementById('succ');
+
+        if(err !== null){
+            err.addEventListener( ('click'), ()=>{
+            err.classList.replace("flex", "hidden");
+        } )
+        }
+       
+
+        if(succ !== null){
+            succ.addEventListener( ('click'), ()=>{
+            succ.classList.replace("flex", "hidden");
+             } )
+        }  
+    </script>
 </body>
 </html>
