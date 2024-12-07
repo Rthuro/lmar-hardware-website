@@ -8,7 +8,13 @@
      } 
 
      include_once './includes/header.php';
-     
+
+     require_once "../backend/classes/product.class.php";
+
+     $productObj = new Product();
+     $topProducts = $productObj->displayTopProd();
+
+    
 ?>
     <form action="" method="get" class=" mt-8 mb-6 items-center justify-center justify-self-center w-full py-3 lg:hidden  xs:flex ">
         <input type="text" name="" id="" placeholder="Search..." class=" w-9/12 px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
@@ -74,20 +80,24 @@
        </section>
 
        <p class="text-3xl text-center mx-auto max-w-[1050px] font-semibold my-3">Top products</p>
-        <div class="flex items-start max-w-[1050px] mx-auto">
-            <div class="product smShadow border-[1px] border-[#d3d3d3] flex flex-col gap-2  w-[200px] hover:bxShadow cursor-pointer">
-                    <a class="text variant">Building Materials</a>
-                    <div class="flex flex-col px-2 " >
-                        <img class="drag-none "  src="./assets/product_img/11.png" />
-                        <div class="flex flex-col items-start " >
-                            <a class="heading  font-poppins">Concrete Hollow Block</a>
-                            <p class="price" >PHP 19.00</p>
-                            <p class="sold" >1k sold</p>
-                        </div>
-                    </div>
-                <button class=" orange-btn">Add to cart</button>
-            </div> 
+
+        <div class="flex items-start justify-evenly max-w-[1050px] flex-wrap mx-auto mb-7 h-fit">
+            <?php if(empty($topProducts)){ ?>
+                <p class="text-xl text-gray-500 text-center w-full my-32"> Products not found</p>
+            <?php } else { ?>
+            <?php foreach ($topProducts as $product): ?>
+                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  w-[250px] hover:shadow-lg cursor-pointer overflow-hidden">
+                                <img class="size-[250px]"  src="/backend/product/<?= $product['img'] ?>" alt="<?=$product['product_name']?>">
+                                <div class="py-2 px-3 flex flex-col gap-1">
+                                    <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
+                                     <span class="prodName text-lg "><?= $product['product_name'] ?></span>
+                                     <span class=" text-sm text-gray-700" >PHP <?= $product['price'] ?></span>
+                                </div>
+                    </a>  
+                <?php endforeach; ?>
+             <?php }  ?>
         </div>
+     
             
     <div class="flex justify-end max-w-[1050px] mx-auto my-3">
         <button id="view_allBtn" class="text-white bg-[#1d1d1d] rounded py-2 px-4 gap-2 flex items-center">View all</button>
