@@ -114,23 +114,7 @@ body{
 #categoryDropdownContainer a:last-of-type{
     @apply rounded-b-md;
 }
-.product{
-    @apply relative flex flex-col items-center bg-white pb-4 overflow-hidden  ease-in  ;
-}
-  .heading{
-    @apply text-sm font-semibold text-wrap h-fit w-fit max-[640px]:text-xs truncate text-ellipsis;
-}
-.variant{
-    @apply absolute text-[14px] top-3 left-0 px-3  py-[4px] w-fit  bg-[#fff3e4] text-[#FB951C] ;
-}
 
-.sold{
-    @apply text-[12px] text-gray-500;
-}
-
-.product button{
-    @apply py-[6px] w-[90%] max-[640px]:text-[14px] ;
-}
 
 .outline-btn{
     @apply bg-transparent border-[1px] border-black text-black rounded-[0.2rem];
