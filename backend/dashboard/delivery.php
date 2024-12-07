@@ -1,13 +1,6 @@
 <?php
 
-    require_once "../classes/product.class.php";
-
-    session_start();
-
-    if (!isset($_SESSION['admin_logged_in'])) {
-        header("Location: index.php");
-        exit();
-    }    
+    require_once "../classes/product.class.php";   
 
     include_once "../includes/header.php";
 
@@ -51,7 +44,11 @@
 
     <?php include_once "../includes/sidebar.php" ?>
 
-    <div class="main-container">
+    
+    <div class="main-content">
+        <div class="header ">
+                <h1 >Deliveries</h1>
+        </div>
         <form id="delivery-form" method="GET" action="" class="">
             <input type="text" name="search" class="search-input" placeholder="Search by Customer Name"
                 value="<?= htmlspecialchars($search_term) ?>">
