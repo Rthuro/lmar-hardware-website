@@ -8,7 +8,7 @@
     $accountObj = new Account();
 
     if (isset($_SESSION['admin_logged_in'])) {
-        header("Location: dashboard.php");
+        header("Location: /backend/dashboard/dashboard.php");
         exit();
     } else {
         $email = $password = '';
@@ -38,9 +38,25 @@
         }
     }
     
-    include_once "../includes/header.php";
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/frontend/tailwind.css?v=<?php echo time(); ?>">
+    <link rel="shortcut icon" href="/frontend/assets/img/lmar_logo.png" type="image/x-icon">
+    <style>
+    .err{
+        color:red;
+        background-color: rgb(255, 238, 238);
+        padding: 16px 12px;
+        text-align: center;
+    }
+    </style>
+</head>
 <body class=" bg-[#1d1d1d]">
     <div class="flex items-center justify-center h-screen ">
         <div class="bg-white rounded-lg px-6 py-7 w-[400px] flex flex-col gap-3 items-center">
