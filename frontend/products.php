@@ -1,6 +1,6 @@
 <?php
    
-    require_once '../backend/classes/product.class.php';
+   require_once "../backend/classes/product.class.php";
 
     $productObj = new Product();
     $products = $productObj->showAll('','');
@@ -10,6 +10,13 @@
         $username = $_SESSION['account']['username'];
         $email = $_SESSION['account']['email'];
      } 
+   
+    $search_term = isset($_GET['search']) ? clean_input($_GET['search']): '';
+    $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
+
+    $categories = $productObj->fetchCategory();
+    $products = $productObj->showAll($search_term, $filter_category);
+
      include_once 'includes/header.php';
 ?>
 
@@ -240,6 +247,11 @@
 
         </div>
     </div>
+
+
+
+    
+
    
     <?php
         include_once './includes/footer.php';
