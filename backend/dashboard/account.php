@@ -1,13 +1,6 @@
 <?php
 
-    require_once "../classes/product.class.php";
-
-    session_start();
-
-    if (!isset($_SESSION['admin_logged_in'])) {
-        header("Location: index.php");
-        exit();
-    }    
+    require_once "../classes/product.class.php"; 
 
     include_once "../includes/header.php";
     
@@ -22,9 +15,10 @@
 
 <body>
     <?php include_once "../includes/sidebar.php" ?>
-    <div class="main-content">
-        <div class="flex justify-between items-end my-4">
-                <p class="text-4xl">Account</p>
+
+    <div class="main-content w-full">
+        <div class="header">
+                <h1 >Account</h1>
         </div>
     </div>
 </body>
