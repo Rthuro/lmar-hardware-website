@@ -1,63 +1,41 @@
 <?php
 
     require_once "../classes/product.class.php";
-    require_once "../classes/product-image.class.php";
+    require_once "../classes/product_size.class.php";
     require_once "../tools/functions.php";
     include_once "../includes/header.php";
 
     $productObj = new Product();
+    $productSizeObj = new ProductSize();
 
-    $error = $success = $e = $product_code = $product_name = $size = $category = $price = $stocks = $data = $categoryId = $image = $imageTemp = $imageErr = "";
-
+    $error = $success = $e =  $product_name = $size = $category = $price = $stocks = $data = $categoryId = $image = $imageTemp = $imageErr = "";
+    $prodId =  $size = $stock = $sizePrice = "";
     $categories = $productObj->fetchCategory();
    
-    $productImgObj = new ProductImage();
 
-    if($_SERVER['REQUEST_METHOD'] == "POST" ){
+    if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_prod'])){
 
-    
-        if(isset($_POST['add_prod'])){
-
-            $product_code = clean_input($_POST['product_code']);
             $product_name = clean_input($_POST['product_name']);
             $category = clean_input($_POST['category']);
-            $price = clean_input($_POST['price']);
-            $stocks = clean_input($_POST['stocks']);
-
             $image = $_FILES['product_image']['name'];
             $imageTemp = $_FILES['product_image']['tmp_name'];
             $folder = "productImages/";
             $target = $folder. uniqid() . $image;
 
-            if($price <= 0){
-                $error = "Price should be greater than 0";
-            }
-    
-            if($stocks <= 0){
-                $error = "Stocks should be greater than 0";
-            }
-
             try{
-                $productInfo = $productObj->codeExists($product_code);
+                $productInfo = $productObj->checkProductDup($product_name);
     
                 if($productInfo){
-                    $error = "Product code: ". $product_code . " - " . $productInfo['product_name'] . " already exist";
+                    $error = "Product name: ". $product_name . " already exist";
                 } else {
-                    $productObj->product_code = $product_code;
+                    move_uploaded_file($imageTemp,  $target);
+                    $productObj->product_img = $target;
                     $productObj->product_name = $product_name;
                     $productObj->category = $category;
-                    $productObj->price = $price;
-                    $productObj->stocks = $stocks;
     
                     try{
                         $addProd =$productObj->add();
-                        $insertedId = $productObj->getLastInsertedId() ?? 0;
-    
-                        move_uploaded_file($imageTemp,  $target);
-                        $productImgObj->file_path = $target;
-                        $productImgObj->addImage($insertedId['id']);
-    
-                        $success = "Successfully add product ". $product_name . " - [ ". $product_code ." ] ";
+                        $success = "Successfully add product ". $product_name ;
                         
                     }  catch (PDOException $e) {
                         $error = "Error: " . $e->getMessage();
@@ -67,45 +45,46 @@
             }  catch (PDOException $e) {
                 $error = "Error: " . $e->getMessage();
             }
-        } else if (isset($_POST['add_size'])){
-            
-            $productName_size = clean_input($_POST['productName_size']);
-            $size = clean_input($_POST['size']);
-            $sizePrice = clean_input($_POST['sizePrice']);
-            $productObj->size = $size;
-            $productObj->sizePrice = $sizePrice;
-            if( $sizePrice <=0 ){
-             $error = "Size price should be greater than 0";
-            }
-            try{
 
-                $checkDup = $productObj->checkSizeDup($productName_size);
+    }
 
-                if(empty($checkDup)){
-                    $addSize = $productObj->addProductSize($productName_size);
+    if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_size'])){
+        $prodId = clean_input($_POST['productName_size']);
+        $size= clean_input($_POST['size']);
+        $price = clean_input($_POST['sizePrice']);
+        $stock = clean_input($_POST['stock']); 
 
-                    if($addSize){
-                        $success= "Successfully add product size ";
-                    }
+        $productSizeObj->product_id = $prodId;
+        $productSizeObj->size = $size;
+        $productSizeObj->stock= $stock;
+        $productSizeObj->price = $price;
 
-                } else {
-                    $error = "Size: ". $size . " for the product already exists.";
+        try{
+
+            $checkDup = $productSizeObj->checkSizeDup($prodId);
+            if(empty($checkDup)){
+
+                $addSize = $productSizeObj->addSize();
+
+                if($addSize){
+                    $success= "Successfully add product size ";
                 }
 
-            }  catch (PDOException $e) {
-                $error = "Error: " . $e->getMessage();
+            } else {
+                $error = "Size: ". $size . " for the product already exists.";
             }
-        }
 
+        }  catch (PDOException $e) {
+            $e = "Error: " . $e->getMessage();
+        }
     }
 
 ?>
 
 <body>
     
-        <?php if (!empty($error)) { 
-            ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $error ?></p> <?php }
-        ?>
+        <?php if (!empty($error)) { ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $error ?></p> 
+        <?php } ?>
          <?php if (!empty($e)) { 
             ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40">
                 <?= $e ?>
@@ -126,9 +105,6 @@
                 <label for="product_image" >Image:</label>
                 <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required>
 
-                <label for="product_code">Product Code:</label>
-                <input type="text" name="product_code"  value="<?= (isset($product_code))? $product_code:"" ?>" required>
-
                 <label for="product_name">Name:</label>
                 <input type="text" name="product_name" value="<?= (isset($product_name))? $product_name:"" ?>" required>
 
@@ -145,19 +121,13 @@
                     </php>
                 </select>
 
-                <label for="price">Price:</label>
-                <input type="number" name="price" value="<?= (isset($price))? $price:"" ?>" required>
-
-                <label for="stocks">Stocks:</label>
-                <input type="number" name="stocks" value="<?= (isset($stocks))? $stocks:"" ?>" required>
-
                 <input type="submit" value="Add Product" name="add_prod" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md" >
             </form>
-
+            
             <form method="POST">
                 <p class="text-lg font-medium mb-2">Add product size</p>
                 <label for="productName_size">Select product:</label>
-                <?php  $products = $productObj->fetchProdNames()  ?>
+                <?php  $products = $productObj->showAll()  ?>
                 <select name="productName_size" required>
                     <?php foreach($products as $arr){ ?>
 
@@ -173,8 +143,13 @@
                 <input type="text" name="size" value="<?= (isset($size))? $size:" " ?>" required>
                 
                 <label for="sizePrice">Size Price:</label>
-                <input type="text" name="sizePrice" value="<?= (isset($sizePrice))? $sizePrice:" " ?>" required>
-                <input type="submit" value="Add Product Size" name="add_size" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md" >
+                <input type="text" name="sizePrice" value="<?= (isset($price))? $price:" " ?>"min="1" required>
+
+                <label for="stock">Stocks:</label>
+                <input type="number" name="stock" value="<?= (isset($stock))? $stock:"" ?>" min="1" required>
+
+                <input type="submit" value="Add Product Size" name="add_size" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md"  >
+    
             </form>
         </div>
 
