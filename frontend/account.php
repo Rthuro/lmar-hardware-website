@@ -4,11 +4,11 @@
     require_once "../backend/classes/orders.class.php";
     require_once "../backend/classes/account.class.php";
     require_once "../backend/classes/product.class.php";
-    require_once "../backend/classes/product-image.class.php";
+    require_once "../backend/classes/product_size.class.php";
 
 
     $productObj = new Product();
-    $productImgObj = new ProductImage();
+    $productSizeObj = new ProductSize();
     $accountObj = new Account();
     $cartObj = new Cart();
     $orderObj = new Order();
@@ -72,15 +72,15 @@
                                         if(!empty($array)){
                                             foreach($array as $pickUp){ 
                                                 $getProd = $productObj->fetchRecord( $pickUp['product_id']);
-                                                $getProdImg = $productImgObj->fetchImage( $pickUp['product_id']); 
-                                                $getSize = $productObj->getSizesBySizeId( $pickUp['size_id']);
+                                                $productSizeObj->size_id =  $pickUp['size_id'];
+                                                $getSize = $productSizeObj->fetchProdSizeBySizeId();
                                                 ?>
                                                 <div class="flex items-center justify-around w-full py-2 border-b">
-                                                  <img src="/backend/product/<?=$getProdImg['img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                                  <a href="product.php?id=<?=$prod['product_id']?>" >
+                                                  <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                                  <a href="product.php?id=<?=$getProd['id']?>" >
                                                    <?=$pickUp['quantity']?>X 
                                                     <?=$getProd['product_name']?> 
-                                                    <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?> </a>
+                                                    <?=  $getSize[0]['size']?> </a>
                                                   <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
                                                     <?=  $pickUp['status']?>
                                                   </p>
@@ -101,21 +101,21 @@
                                 $orderObj->customer_id = $userId['id'];
                                 $array = $orderObj ->getDeliveryCustomer();
                                     if(!empty($array)){
-                                        foreach($array as $pickUp){ 
-                                            $getProd = $productObj->fetchRecord( $pickUp['product_id']);
-                                            $getProdImg = $productImgObj->fetchImage( $pickUp['product_id']); 
-                                            $getSize = $productObj->getSizesBySizeId( $pickUp['size_id']);
+                                        foreach($array as $delivery){ 
+                                            $getProd = $productObj->fetchRecord( $delivery['product_id']);
+                                            $productSizeObj->size_id =  $delivery['size_id'];
+                                            $getSize = $productSizeObj->fetchProdSizeBySizeId();
                                             ?>
                                             <div class="flex items-center justify-around w-full py-2 border-b">
-                                              <img src="/backend/product/<?=$getProdImg['img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                              <a href="product.php?id=<?=$prod['product_id']?>" >
-                                               <?=$pickUp['quantity']?>X 
+                                              <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                              <a href="product.php?id=<?=$getProd['id']?>" >
+                                               <?=$delivery['quantity']?>X 
                                                 <?=$getProd['product_name']?> 
-                                                <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?> </a>
+                                                <?=  $getSize[0]['size']?> </a>
                                               <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
-                                                <?=  $pickUp['status']?>
+                                                <?=  $delivery['status']?>
                                               </p>
-                                                <p class="text-lg font-medium">PHP <?=$pickUp['payment']?> </p>
+                                                <p class="text-lg font-medium">PHP <?=$delivery['payment']?> </p>
                                                 
                                             </div>
                                      <?php   } 
