@@ -1,13 +1,12 @@
 
 <?php
 
-    require_once "../classes/product.class.php";
-
+    require_once "../classes/orders.class.php";
     include_once "../includes/header.php";
 
-    $productObj = new Product();
+    $orderObj = new Order();
 
-    $recent_orders = $productObj->fetchRecentOrders();
+    $recent_orders = $orderObj->displayOnDashboard();
 ?>
 
 <style>
@@ -61,10 +60,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Order ID</th>
                         <th>Customer Name</th>
+                        <th>Contact</th>
                         <th>Product</th>
+                        <th>Size</th>
                         <th>Quantity</th>
+                        <th>Delivery Option</th>
                         <th>Status</th>
                         <th>Order Date</th>
                         <th>Actions</th>
@@ -74,13 +75,14 @@
                     <?php if (count($recent_orders) > 0){
                            foreach ($recent_orders as $order){ ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($order['id']); ?></td>
-                        <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
-                        <td><?php echo htmlspecialchars($order['product_id']); ?>
-                        </td>
-                        <td><?php echo htmlspecialchars($order['quantity']); ?></td><td><?php echo htmlspecialchars($order['delivery_option']); ?></td>
-                        <td><?php echo htmlspecialchars(ucfirst($order['status'])); ?></td>
-                        <td><?php echo htmlspecialchars($order['order_date']); ?></td>
+                        <td><?= $order['username'] ?></td>
+                        <td><?= $order['contact_num'] ?></td>
+                        <td><?= $order['product_name'] ?></td>
+                        <td><?= $order['size'] ?></td>
+                        <td><?= $order['quantity'] ?></td>
+                        <td><?= $order['delivery_option'] ?></td>
+                        <td><?= $order['status'] ?></td>
+                        <td><?= $order['order_date'] ?></td>
                         <td><a href="../order/view_order.php?id=<?= $order['id'];?>">View</a></td>
                     </tr>
                     <?php } } else { ?>
