@@ -1,15 +1,15 @@
 <?php
 
     require_once "../backend/classes/product.class.php";
+    require_once "../backend/classes/product_size.class.php";
     require_once "../backend/classes/cart.class.php";
-    require_once "../backend/classes/product-image.class.php";
     require_once "../backend/classes/account.class.php";
 
 
     session_start();
 
     $productObj = new Product();
-    $productImgObj = new ProductImage();
+    $productSizeObj = new ProductSize();
     $cartObj = new Cart();
     $accountObj = new Account();
 
@@ -21,8 +21,6 @@
         $email = $_SESSION['account']['email'];
         $userId = $accountObj->fetch($email);
         
-
-
         $cartObj->user_id = $userId['id'];
         $userCart = $cartObj->fetchCart();
 
@@ -62,13 +60,14 @@
             <?php } else { ?>
 
         <form action="" method="post" class="w-full  flex flex-col gap-3">
-            <table>
+            <table class=" table-fixed w-full">
                 <thead>
                     <tr class="pb-2">
-                        <td colspan="2">Product</td>
-                        <td>Price</td>
-                        <td>Quantity</td>
-                        <td>Total</td>
+                        <td >Product</td>
+                        <td ></td>
+                        <td class="text-center">Price</td>
+                        <td class="text-center">Quantity</td>
+                        <td class="text-center">Total</td>
                     </tr>
                 </thead>
                  <tbody>
@@ -76,37 +75,38 @@
                     
                     foreach($userCart as $prod){        
                     $getProd = $productObj->fetchRecord( $prod['product_id']);
-                    $getProdImg = $productImgObj->fetchImage( $prod['product_id']); 
-                    $getSize = $productObj->getSizesBySizeId( $prod['size_id']);
+                    $productSizeObj->size_id = $prod['size_id'];
+                    $getSize = $productSizeObj->fetchProdSizeBySizeId();
                     ?>
                         <tr class="border-y">
                             <td class="py-1" >
-                                <img src="/backend/product/<?=$getProdImg['img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
                             </td>
                             <td class="">
                                 <a href="product.php?id=<?=$prod['product_id']?>" >
                                             <?=$getProd['product_name']?> 
-                                        <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?></a>
+                                    <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?></a>
                              <a href="cart.php?id=<?=$prod['id']?>" class=" block text-xs text-red-500 hover:underline ">Remove</a>
 
                             </td>
                             <td class="text-gray-500">
-                            <?= (!empty($getSize[0]['price']))? $getSize[0]['price']: $getProd['price']  ;?>
+                           
+                            <p class="text-center"> <?= $prod['price'] ?></p>
                             </td>
-                            <td >
-                            <input type="number" name="quantity" value="<?=
-                            $prod['quantity'] ?>" min="1" max="<?=$getProd['stocks']?>" placeholder="Quantity" class=" p-2 select-none focus:outline-none text-center"  readonly>
+                            <td class="" >
+                            
+                            <p class="text-center"><?= $prod['quantity'] ?></p>
                               <input type="hidden" name="cart_id" value="<?=$prod['id']?>" >
-
                             </td>
                             <td class="text-gray-500">
-                            <?php 
-                            $price =  (!empty($getSize[0]['price']))? $getSize[0]['price']: $getProd['price'];
-                            $quant =  $prod['quantity'];
-                            $subtotal += intval($price) * intval($quant);
+                            <p class="text-center">
+                                <?php 
+                                $subtotal += intval($prod['price']) * $prod['quantity'];
 
-                            echo "PHP " . number_format($subtotal, 2);
-                            ?>
+                                echo "PHP " . number_format($subtotal, 2);
+                                ?>
+                            </p>
+                            
                             </td>
 
                         </tr>
@@ -125,7 +125,11 @@
             </div>
             <div class="flex w-full justify-end gap-3">
                 <!-- <input class=" rounded-sm bg-black px-3 py-1 text-white" type="submit" value="Update" name="update"> -->
-                <input class=" rounded-sm bg-customOrange px-3 py-1 text-white" type="submit" value="Check Out" name="placeorder">
+                 <?php if($cartIsEmpty){ ?>
+                     <input class=" rounded-sm bg-gray-400 px-3 py-1 text-white" type="submit" value="Check Out" name="placeorder" disabled> 
+                <?php } else { ?>
+                     <input class=" rounded-sm bg-customOrange px-3 py-1 text-white" type="submit" value="Check Out" name="placeorder">
+                <?php } ?>
             </div>
         </form>       
     <?php }  ?>
