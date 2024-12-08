@@ -37,7 +37,7 @@
                             <p id="burger_category" class="flex items-center justify-between">Category 
                                 <i data-lucide="chevron-down" class="size-4" id="iconDown"></i> 
                             </p>
-                            <div id="burger_categoryList" class="hidden flex-col items-start justify-start mt-1 w-full">
+                            <div id="burger_categoryList" class="hidden flex-col items-start z-50 justify-start mt-1 w-full">
                                 <a href="">Hand Tools</a>
                                 <a href="">Measuring Tools</a>
                                 <a href="">Cutting Tools</a>
@@ -75,7 +75,7 @@
                         <p class="text-2xl font-bold -ml-2 text-[#1d1d1d]  ">LMARHardware</p>
                 </div>
                     <form action="" method="get" class="flex items-center justify-end  basis-1/2   max-[1000px]:hidden ">
-                        <input type="text" name="" id="" placeholder="Search..." class=" w-[500px] px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
+                        <input type="text" name="search" id="" placeholder="Search..." class=" w-[500px] px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
                         <button type="submit" value="" class="px-6 py-2 bg-gray-950 rounded-r -ml-1 ">
                             <i data-lucide="search" class="size-6 text-white"></i>
                         </button>
@@ -104,22 +104,21 @@
                        
                 </div>
         </nav>
-        <nav class="bg-white px-52 py-5 flex items-center justify-center gap-5 border-b lg:flex xs:hidden">
+        <nav class="bg-white px-52 py-5 flex items-center justify-center gap-5 border-b lg:flex xs:hidden z-50">
             <a href="/frontend/landing_page.php" id="homeTextClr" class="">Home</a>
             <a href="/frontend/products.php" id="allProdTextClr" class="">All Products</a>
             <div id="categoryDropdown"  class="relative flex items-center gap-2 cursor-pointer">
                 Category
                 <i data-lucide="chevron-down" id="iconDown" class=" size-4"></i>
-                <div id="categoryDropdownContainer" class=" hidden absolute bottom-[-350px] right-0 pt-2 bg-white w-[200px] h-fit flex-col justify-start items-start rounded-b-md shadow-md">
-                    <a href="">Hand Tools</a>
-                    <a href="">Measuring Tools</a>
-                    <a href="">Cutting Tools</a>
-                    <a href="">Fastening Tools</a>
-                    <a href="">Grinding Tools</a>
-                    <a href="">Clamping Tools</a>
-                    <a href="">Finishing Tools</a>
-                    <a href="">Wood Materials</a>
-                    <a href="">Building Materials</a>
+                <div id="categoryDropdownContainer" class=" hidden absolute bottom-[-350px] top-10 right-0 pt-2 bg-white w-[200px] h-fit flex-col justify-start items-start rounded-b-md shadow-md">
+                    <a href="products.php?category=Hand%20Tools">Hand Tools</a>
+                    <a href="products.php?category=Measuring%20Tools">Measuring Tools</a>
+                    <a href="products.php?category=Cutting%20Tools">Cutting Tools</a>
+                    <a href="products.php?category=Fastening%20Tools">Fastening Tools</a>
+                    <a href="products.php?category=Grinding%20Tools">Grinding Tools</a>
+                    <a href="products.php?category=Clamping%20Tools">Clamping Tools</a>
+                    <a href="products.php?category=Finishing%20Tools">Finishing Tools</a>
+                    <a href="products.php?category=Building%20Materials">Building Materials</a>
                 </div>
             </div>
            

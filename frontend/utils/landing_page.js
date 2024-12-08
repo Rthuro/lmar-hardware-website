@@ -15,47 +15,52 @@ view_allBtn.addEventListener('click',function (){
 
 const category = [
   {
-    link: "",
+    link: "products.php?category=",
     img: "/frontend/assets/category_img/10.png",
-    name:"All Products",
-  },{
-    link: "",
+    name: "All Products",
+  },
+  {
+    link: "products.php?category=Hand%20Tools",
     img: "/frontend/assets/category_img/1.png",
-    name:"Hand Tools",
-  },{
-    link: "",
+    name: "Hand Tools",
+  },
+  {
+    link: "products.php?category=Measuring%20Tools",
     img: "/frontend/assets/category_img/2.png",
-    name:"Measuring Tools",
-  },{
-    link: "",
+    name: "Measuring Tools",
+  },
+  {
+    link: "products.php?category=Cutting%20Tools",
     img: "/frontend/assets/category_img/3.png",
-    name:"Cutting Tools",
-  },{
-    link: "",
+    name: "Cutting Tools",
+  },
+  {
+    link: "products.php?category=Fastening%20Tools",
     img: "/frontend/assets/category_img/4.png",
-    name:"Fastening Tools",
-  },{
-    link: "",
+    name: "Fastening Tools",
+  },
+  {
+    link: "products.php?category=Grinding%20Tools",
     img: "/frontend/assets/category_img/5.png",
-    name:"Grinding Tools",
-  },{
-    link: "",
+    name: "Grinding Tools",
+  },
+  {
+    link: "products.php?category=Clamping%20Tools",
     img: "/frontend/assets/category_img/6.png",
-    name:"Clamping  Tools",
-  },{
-    link: "",
+    name: "Clamping Tools",
+  },
+  {
+    link: "products.php?category=Finishing%20Tools",
     img: "/frontend/assets/category_img/7.png",
-    name:"Finishing  Tools",
-  },{
-    link: "",
-    img: "/frontend/assets/category_img/8.png",
-    name:"Wood Materials",
-  },{
-    link: "",
+    name: "Finishing Tools",
+  },
+  {
+    link: "products.php?category=Building%20Materials",
     img: "/frontend/assets/category_img/9.png",
-    name:"Building Materials",
+    name: "Building Materials",
   },
 ];
+
 
 const categoryContainer = document.getElementById('categoryContainer');
 

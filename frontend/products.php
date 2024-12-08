@@ -2,6 +2,7 @@
    
    require_once "../backend/classes/product.class.php";
    require_once "../backend/classes/product_size.class.php";
+   require_once "../backend/tools/functions.php";
 
     $productObj = new Product();
     $productSizeObj = new ProductSize();
@@ -25,7 +26,7 @@
     $totalProducts = $productObj->getTotalProducts();
     $totalPages = ceil($totalProducts / $productsPerPage);
 
-    $products = $productObj->getProducts($start, $productsPerPage);
+    $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category);
 
      include_once 'includes/header.php';
 ?>
@@ -99,10 +100,11 @@
                                 </div>
         </form>
    
-        <div class="grid  grid-cols-3 grid-rows-3 gap-2  mb-7 h-fit">
+       
             <?php if(empty($products)){ ?>
                 <p class="text-xl text-gray-500 text-center w-full my-32"> Products not found</p>
             <?php } else { ?>
+            <div class="grid  grid-cols-3 grid-rows-3 gap-2  mb-7 h-fit z-0">
             <?php foreach ($products as $product):
                 $productSizeObj->product_id = $product['id']; 
                 $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
@@ -116,8 +118,8 @@
                                 </div>
                     </a>  
                 <?php endforeach; ?>
+               </div>
              <?php }  ?>
-        </div>
     </div>
     <div class="flex items-center justify-center mx-auto max-w-[1050px]">
         <?php if ($totalPages >= 1){ ?>
