@@ -96,11 +96,14 @@ class Product {
         return $data;
     }
 
-    function getProducts($start, $limit) {
-        $sql = "SELECT p.*,c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id  LIMIT :start, :limit";
+    function getProducts($start, $limit, $search = '',  $filter_category= '') {
+        $sql = "SELECT p.*,c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id  WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%') LIMIT :start, :limit";
         $query = $this->db->connect()->prepare($sql);
         $query->bindParam(':start', $start, PDO::PARAM_INT);
         $query->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $query->bindParam(':search', $search);
+        $query->bindParam(':category', $filter_category);
+
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
