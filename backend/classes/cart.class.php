@@ -7,6 +7,7 @@
         public $product_id = " ";
         public $size_id = " ";
         public $quantity = " ";
+        public $price = " ";
 
         protected $db;
 
@@ -16,7 +17,7 @@
 
         function add(){
 
-            $sql = "INSERT INTO cart (user_id, product_id, size_id, quantity) VALUES (:user_id, :product_id, :size_id, :quantity);";
+            $sql = "INSERT INTO cart (user_id, product_id, size_id, quantity, price) VALUES (:user_id, :product_id, :size_id, :quantity, :price);";
             $query = $this->db->connect()->prepare($sql);
 
             $query->bindParam(':user_id', $this->user_id);
@@ -24,6 +25,18 @@
             $query->bindParam(':size_id', $this->size_id);
             $query->bindParam(':quantity', $this->quantity);
 
+            $getSizePrice = "SELECT price FROM product_size WHERE size_id =:size_id";
+            $result = $this->db->connect()->prepare($getSizePrice);
+            $result->bindParam(':size_id', $this->size_id);
+
+            $data=null;
+            if($result->execute()){
+                $data = $result->fetch();
+                $this->price = $data['price'];
+            }
+
+            $query->bindParam(':price', $this->price);
+            
             return $query->execute();
         }
 
@@ -60,26 +73,11 @@
             $data = null;
 
             if ($query->execute()) {
-                $data = $query->fetch(PDO::FETCH_ASSOC);
+                $data = $query->fetchAll();
             }
             return $data;
         }
 
-        function checkNoSize(){
-            $sql = "SELECT * FROM cart WHERE user_id = :user_id AND product_id = :product_id;";
-            $query = $this->db->connect()->prepare($sql);
-
-            $query->bindParam(':user_id', $this->user_id);
-            $query->bindParam(':product_id', $this->product_id);
-            $data = null;
-
-            if ($query->execute()) {
-                $data = $query->fetch(PDO::FETCH_ASSOC);
-            }
-            return $data;
-        }
-
-        
 
 
         function update() {
