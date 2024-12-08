@@ -1,15 +1,12 @@
 <?php
 
     require_once "../classes/product.class.php";
-    require_once "../classes/product-image.class.php";
     require_once "../tools/functions.php";
-    require_once "../backend/classes/product-image.class.php";
 
 
     include_once "../includes/header.php";
 
     $productObj = new Product();
-    $productImageObj = new ProductImage();
 
     $search_term = isset($_GET['search']) ? clean_input($_GET['search']): '';
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
@@ -99,31 +96,23 @@
             <thead>
                 <tr>
                     <th>Image</th>
-                    <th>Product Code</th>
                     <th>Name</th>
                     <th>Category</th>
-                    <th>Price</th>
-                    <th>Stocks</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($products) > 0): ?>
                 <?php foreach ($products as $product): 
-                    $img = $productImageObj->fetchImage($product['id']);
                     ?>
                 <tr>
-                    <td><img src="../product/<?= $img['img'] ?>" alt="" srcset="" class=" size-16 "></td>
-                    <td><?= $product['product_code'] ?></td>
+                    <td><img src="../product/<?= $product['product_img'] ?>" alt="" srcset="" class=" size-16 "></td>
                     <td><?= $product['product_name'] ?></td>
                     <td><?= $product['category_name'] ?></td>
-                    <td><?= $product['price'] ?></td>
-                    <td><?= $product['stocks'] ?></td>
                     <td>
                         <a href="../product/edit_product.php?id=<?= $product['id'] ?>">Edit</a>
                         <a href="../product/delete_product.php?id=<?= $product['id'] ?>"
                             onclick="return confirm('Are you sure?')">Delete</a>
-                        <a href="../product/update_stock.php?id=<?= $product['id'] ?>">Update Stock</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
