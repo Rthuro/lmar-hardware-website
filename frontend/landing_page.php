@@ -8,10 +8,11 @@
      } 
 
      include_once './includes/header.php';
-
      require_once "../backend/classes/product.class.php";
+     require_once "../backend/classes/product_size.class.php";
 
      $productObj = new Product();
+     $productSizeObj = new ProductSize();
      $topProducts = $productObj->displayTopProd();
 
     
@@ -85,13 +86,16 @@
             <?php if(empty($topProducts)){ ?>
                 <p class="text-xl text-gray-500 text-center w-full my-32"> Products not found</p>
             <?php } else { ?>
-            <?php foreach ($topProducts as $product): ?>
+            <?php foreach ($topProducts as $product):
+                $productSizeObj->product_id = $product['id']; 
+                $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
+                ?>
                     <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  w-[250px] hover:shadow-lg cursor-pointer overflow-hidden">
-                                <img class="size-[250px]"  src="/backend/product/<?= $product['img'] ?>" alt="<?=$product['product_name']?>">
+                                <img class="size-[250px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
                                 <div class="py-2 px-3 flex flex-col gap-1">
                                     <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
                                      <span class="prodName text-lg "><?= $product['product_name'] ?></span>
-                                     <span class=" text-sm text-gray-700" >PHP <?= $product['price'] ?></span>
+                                     <span class=" text-sm text-gray-700" >PHP <?= $prodPrice['minPrice'] ?></span>
                                 </div>
                     </a>  
                 <?php endforeach; ?>
