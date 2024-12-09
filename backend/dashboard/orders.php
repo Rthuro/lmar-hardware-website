@@ -27,7 +27,18 @@
 <body>
 
     <?php include_once "../includes/sidebar.php" ?>
-
+    <?php if (isset($_SESSION['outputMsg']['error'])) { 
+            ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $_SESSION['outputMsg']['error'] ?></p> <?php 
+            unset($_SESSION['outputMsg']['error']);
+            }
+        ?>
+         <?php if (isset($_SESSION['outputMsg']['success'])) { 
+            ?> <p id="succ" class="succ flex justify-center fixed top-0 left-0 right-0 py-5 bg-green-600 text-white z-50">
+                <?= $_SESSION['outputMsg']['success'] ?>
+            </p> <?php 
+            unset($_SESSION['outputMsg']['success']);
+         }
+        ?>
     <div class="main-content">
         <div class="header">
             <h1>Admin Dashboard</h1>
@@ -83,7 +94,7 @@
                         <td><?= $order['delivery_option'] ?></td>
                         <td><?= $order['status'] ?></td>
                         <td><?= $order['order_date'] ?></td>
-                        <td><a href="../order/view_order.php?id=<?= $order['id'];?>">View</a></td>
+                        <td><a href="view_order.php?id=<?= $order['id'];?>">View</a></td>
                     </tr>
                     <?php } } else { ?>
                     <tr>
