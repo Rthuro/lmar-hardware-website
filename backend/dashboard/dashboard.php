@@ -83,7 +83,7 @@
                         <td><?= $order['delivery_option'] ?></td>
                         <td><?= $order['status'] ?></td>
                         <td><?= $order['order_date'] ?></td>
-                        <td><a href="../order/view_order.php?id=<?= $order['id'];?>">View</a></td>
+                        <td><a href="view_order.php?id=<?= $order['id'];?>">View</a></td>
                     </tr>
                     <?php } } else { ?>
                     <tr>
