@@ -147,6 +147,8 @@ form label {
 
 form input[type="text"],
 form input[type="number"],
+form input[type="tel"],
+form input[type="date"],
 form select {
     width: 100%;
     padding: 12px 15px;
