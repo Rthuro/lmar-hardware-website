@@ -55,6 +55,43 @@
         color: white;
     }
 
+    .product-img {
+    width: 100px; /* Set the desired width */
+    height: auto; /* Maintain the aspect ratio */
+    object-fit: cover; /* Ensure images are cropped nicely if needed */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px; /* Adds space between the buttons */
+    margin: 20px 0; /* Adds spacing above and below the buttons */
+}
+
+.styled-button {
+    background-color: #ff8c00; /* Orange background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Add space inside the button */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+.styled-button:hover {
+    background-color: #e07600; /* Darker orange on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.styled-button:active {
+    background-color: #cc6900; /* Even darker orange on click */
+    transform: translateY(0); /* Return to normal position */
+}
+
+
+
 </style>
 
 <body>
@@ -72,10 +109,10 @@
         ?>
     <?php include_once "../includes/sidebar.php" ?>
     <div class="main-content">
-        <div class="flex justify-between items-end my-4">
-                <p class="text-4xl">Inventory Management</p>
-                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='../product/add_product.php'">Add Product / Add Size</button>
-        </div>
+    <div class="flex justify-between items-end my-4">
+    <p class="text-4xl">Inventory Management</p>
+   
+</div>
 
         <form method="GET" action="" class="search-bar">
             <input type="text" name="search" class="search-input" placeholder="Search by product name"
@@ -92,6 +129,15 @@
             <button type="submit" class="btn-search">Search</button>
         </form>
 
+        <div class="action-buttons">
+          <!-- Button for Adding Product -->
+            <button class="styled-button" onclick="window.location.href='../product/add_product.php'">
+                Add Product
+            </button>
+          
+       </div>
+
+
         <table border="1">
             <thead>
                 <tr>
@@ -106,7 +152,7 @@
                 <?php foreach ($products as $product): 
                     ?>
                 <tr>
-                    <td><img src="../product/<?= $product['product_img'] ?>" alt="" srcset="" class=" size-16 "></td>
+                    <td><img src="../product/<?= $product['product_img'] ?>" alt="Product Image" class="product-img"></td>
                     <td><?= $product['product_name'] ?></td>
                     <td><?= $product['category_name'] ?></td>
                     <td>
