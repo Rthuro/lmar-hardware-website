@@ -55,6 +55,14 @@
         color: white;
     }
 
+    .product-img {
+    width: 100px; /* Set the desired width */
+    height: auto; /* Maintain the aspect ratio */
+    object-fit: cover; /* Ensure images are cropped nicely if needed */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+
 </style>
 
 <body>
@@ -106,7 +114,7 @@
                 <?php foreach ($products as $product): 
                     ?>
                 <tr>
-                    <td><img src="../product/<?= $product['product_img'] ?>" alt="" srcset="" class=" size-16 "></td>
+                    <td><img src="../product/<?= $product['product_img'] ?>" alt="Product Image" class="product-img"></td>
                     <td><?= $product['product_name'] ?></td>
                     <td><?= $product['category_name'] ?></td>
                     <td>
