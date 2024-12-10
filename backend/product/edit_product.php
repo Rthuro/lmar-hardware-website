@@ -65,105 +65,154 @@
 
 ?>
 
-<body>
-    
-        <?php if (!empty($error)) { 
-            ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $error ?></p> <?php }
-        ?>
-        <?php if (!empty($e)) { 
-            ?> <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40">
-                <?= $e ?>
-            </p> <?php }
-        ?>
-         <?php if (!empty($success)) { 
-            ?> <p id="succ" class="succ flex justify-center fixed top-0 left-0 right-0 py-5 bg-green-600 text-white z-50">
-                <?= $success ?>
-            </p> <?php }
-        ?>
-    <?php include_once "../includes/sidebar.php" ?>
-    <div class=" main-content">
-        <div class="header">
-            <h1 class=" text-2xl text-center">Edit Product</h1>
-        </div>
-         <div class="flex flex-col justify-start ">
-            <form action="" method="POST">
+<?php
+require_once "../classes/product.class.php";
+require_once "../classes/product_size.class.php";
+require_once "../tools/functions.php";
+include_once "../includes/header.php";
 
-                    <label for="product_name">Name:</label>
-                    <input type="text" name="product_name" value="<?= isset($product_name)? $product_name:"" ?>" required>
+$productObj = new Product();
+$productSizeObj = new ProductSize();
 
-                    <label for="category">Category:</label>
-                    <select name="category" required>
-                        <?php foreach($categories as $categoryName){ 
-                            ?>
-                            <option value="<?= $categoryName['id'] ?>" <?= isset($category) && $category == $categoryName['id']? "selected" : "" ?>>
-                                <?= $categoryName['name'] ?>
-                            </option>
+$error = $success = "";
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
-                        <?php }  ?>
+if (!$id) {
+    $_SESSION["outputMsg"]["error"] = 'Invalid Product ID';
+    header("Location: /backend/dashboard/inventory.php");
+    exit;
+}
 
-                        </php>
-                    </select>
-                    <label for="description">Description:</label>
-                    <input type="text" name="description" value="<?= isset($description)? $description:"" ?>">
-                    <input type="submit" value="Edit Product" name="edit_prod" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md" >
-                </form>
-            <p class="text-2xl font-medium text-white">
-                Product Size </p>          
-            <table>
-                <thead>
-                    <tr>
-                        <td>Size</td>
-                        <td>Stock</td>
-                        <td>Price</td>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php if ( !empty($getProdSizes)): ?>
-                <?php foreach ($getProdSizes as $prodSize): 
-                $_SESSION['product_size'] = $prodSize['size_id'];
-                    ?>
-                <tr>
-                    <td><?= $prodSize['size'] ?></td>
-                    <td><?= $prodSize['stock'] ?></td>
-                    <td><?= $prodSize['price'] ?></td>
-                    <td>
-                       <a href="../product_size/edit_size.php?id=<?= $prodSize['size_id'] ?>">Edit</a>
-                        <a href="../product_size/delete_size.php?id=<?= $prodSize['size_id'] ?>"
-                            onclick="return confirm('Are you sure?')">Delete</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-                <?php else: ?>  
-                <tr>
-                    <td colspan="3">No product size.</td>
-                </tr>
-                <?php endif; ?>
-            </tbody>
-            </table>
+$categories = $productObj->fetchCategory();
+$record = $productObj->fetchRecord($id);
 
-        </div>
-    </div>
-    <script>
-       
+if (empty($record)) {
+    $_SESSION["outputMsg"]["error"] = 'Product not found';
+    header("Location: /backend/dashboard/inventory.php");
+    exit;
+}
 
-        const err = document.getElementById('err');
-        const succ = document.getElementById('succ');
+// Initialize form values from the fetched record
+$product_name = $record['product_name'];
+$category = $record['category'];
+$description = $record['description'] ?? "";
 
-        if(err !== null){
-            err.addEventListener( ('click'), ()=>{
-            err.classList.replace("flex", "hidden");
-        } )
+// Fetch sizes for the product
+$productSizeObj->product_id = $id;
+$getProdSizes = $productSizeObj->fetchProdSizeById();
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_prod'])) {
+    $product_name = clean_input($_POST['product_name']);
+    $category = clean_input($_POST['category']);
+    $description = clean_input($_POST['description']);
+
+    try {
+        $productObj->id = $id;
+        $productObj->product_name = $product_name;
+        $productObj->category = $category;
+        $productObj->description = $description;
+
+        if ($productObj->update()) {
+            $_SESSION['outputMsg']['success'] = "Product information successfully updated";
+            header("Location: /backend/dashboard/inventory.php");
+            exit;
+        } else {
+            $error = "Failed to update the product. The name might already exist.";
         }
-       
+    } catch (PDOException $e) {
+        $error = "Error: " . $e->getMessage();
+    }
+}
+?>
 
-        if(succ !== null){
-            succ.addEventListener( ('click'), ()=>{
+<body>
+<?php if (!empty($error)): ?>
+    <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $error ?></p>
+<?php endif; ?>
+
+<?php if (!empty($success)): ?>
+    <p id="succ" class="succ flex justify-center fixed top-0 left-0 right-0 py-5 bg-green-600 text-white z-50"><?= $success ?></p>
+<?php endif; ?>
+
+<?php include_once "../includes/sidebar.php"; ?>
+<div class="main-content">
+    <div class="header">
+        <h1 class="text-2xl text-center">Edit Product</h1>
+    </div>
+    <div class="flex flex-col justify-start">
+        <form action="?id=<?= htmlspecialchars($id) ?>" method="POST">
+            <label for="product_name">Name:</label>
+            <input type="text" name="product_name" value="<?= htmlspecialchars($product_name) ?>" required>
+
+            <label for="category">Category:</label>
+            <select name="category" required>
+                <?php foreach ($categories as $categoryName): ?>
+                    <option value="<?= htmlspecialchars($categoryName['id']) ?>"
+                        <?= $category == $categoryName['id'] ? "selected" : "" ?>>
+                        <?= htmlspecialchars($categoryName['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="description">Description:</label>
+            <input type="text" name="description" value="<?= htmlspecialchars($description) ?>">
+
+            <input type="submit" value="Edit Product" name="edit_prod" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md">
+        </form>
+
+        <p class="text-2xl font-medium text-white">Product Size</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Size</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($getProdSizes)): ?>
+                <?php foreach ($getProdSizes as $prodSize): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($prodSize['size']) ?></td>
+                        <td><?= htmlspecialchars($prodSize['stock']) ?></td>
+                        <td><?= htmlspecialchars($prodSize['price']) ?></td>
+                        <td>
+                            <a href="../product_size/edit_size.php?id=<?= htmlspecialchars($prodSize['size_id']) ?>">Edit</a>
+                            <a href="../product_size/delete_size.php?id=<?= htmlspecialchars($prodSize['size_id']) ?>"
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="4">No product size available.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const err = document.getElementById('err');
+    const succ = document.getElementById('succ');
+
+    if (err) {
+        err.addEventListener('click', () => {
+            err.classList.replace("flex", "hidden");
+        });
+    }
+
+    if (succ) {
+        succ.addEventListener('click', () => {
             succ.classList.replace("flex", "hidden");
-             } )
-        }  
-
-
-    </script>
+        });
+    }
+</script>
 </body>
+</html>
+
+
 </html>
