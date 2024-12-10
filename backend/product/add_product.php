@@ -126,19 +126,7 @@
             
             <form method="POST">
                 <p class="text-lg font-medium mb-2">Add product size</p>
-                <label for="productName_size">Select product:</label>
-                <?php  $products = $productObj->showAll()  ?>
-                <select name="productName_size" required>
-                    <?php foreach($products as $arr){ ?>
-
-                         <option value="<?= $arr['id'] ?>" <?= (isset($productName_size) && $productName_size == $arr['id']) ? "selected" : "" ?>>
-                            <?= $arr['product_name'] ?>
-                        </option>
-
-                    <?php }  ?>
-
-                    </php>
-                </select>
+               
                 <label for="size">Size:</label>
                 <input type="text" name="size" value="<?= (isset($size))? $size:" " ?>" required>
                 
