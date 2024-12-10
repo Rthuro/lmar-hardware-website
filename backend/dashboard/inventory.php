@@ -80,10 +80,11 @@
         ?>
     <?php include_once "../includes/sidebar.php" ?>
     <div class="main-content">
-    <div class="flex justify-between items-end my-4">
-    <p class="text-4xl">Inventory Management</p>
-   
-</div>
+  
+        <div class="header">
+                <h1 class="text-4xl">Inventory Management</h1>
+        </div>
+
 
         <form method="GET" action="" class="search-bar">
             <input type="text" name="search" class="search-input" placeholder="Search by product name"
@@ -102,7 +103,7 @@
 
         <div class="action-buttons">
           <!-- Button for Adding Product -->
-            <button class="styled-button" onclick="window.location.href='../product/add_product.php'">
+            <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='../product/add_product.php'">
                 Add Product
             </button>
           
