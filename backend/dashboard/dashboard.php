@@ -14,7 +14,7 @@
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: ;
+    background-color: #1e1e1e;
     padding-top: 20px;
     position: fixed;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
