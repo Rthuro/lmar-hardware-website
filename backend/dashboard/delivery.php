@@ -13,14 +13,7 @@
     .recent-orders{
         margin-top: 12px;
     }
-    #dashboard{
-        background-color: #ff8c00;
-    }
 
-    .dashboard{
-        background-color: #ff8c00;
-        color: white;
-    }
 
     .recent-orders{
         margin-top: 12px;
@@ -80,7 +73,7 @@
 
     <div class="main-content">
         <div class="header">
-            <h1>Admin Dashboard</h1>
+            <h1>Delivery</h1>
         </div>
 
         <div class="dashboard-grid">
