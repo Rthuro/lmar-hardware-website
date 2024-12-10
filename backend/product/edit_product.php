@@ -20,6 +20,7 @@
             if (!empty($record)) {
                 $product_name = $record['product_name'];
                 $category = $record['category'];
+                $description = $record['description'];
 
                 $productSizeObj->product_id = $record['id'];
                 $getProdSizes = $productSizeObj->fetchProdSizeById();
@@ -46,7 +47,7 @@
                     $productObj->product_name = $product_name;
                     $productObj->category = $category;
                     $productObj->description = $description;
-    
+
                     if( $productObj->update()){
                         $_SESSION['outputMsg']['success'] = "Product information successfully updated";
                         header("location: /backend/dashboard/inventory.php");
@@ -65,67 +66,6 @@
 
 ?>
 
-<?php
-require_once "../classes/product.class.php";
-require_once "../classes/product_size.class.php";
-require_once "../tools/functions.php";
-include_once "../includes/header.php";
-
-$productObj = new Product();
-$productSizeObj = new ProductSize();
-
-$error = $success = "";
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
-if (!$id) {
-    $_SESSION["outputMsg"]["error"] = 'Invalid Product ID';
-    header("Location: /backend/dashboard/inventory.php");
-    exit;
-}
-
-$categories = $productObj->fetchCategory();
-$record = $productObj->fetchRecord($id);
-
-if (empty($record)) {
-    $_SESSION["outputMsg"]["error"] = 'Product not found';
-    header("Location: /backend/dashboard/inventory.php");
-    exit;
-}
-
-// Initialize form values from the fetched record
-$product_name = $record['product_name'];
-$category = $record['category'];
-$description = $record['description'] ?? "";
-
-// Fetch sizes for the product
-$productSizeObj->product_id = $id;
-$getProdSizes = $productSizeObj->fetchProdSizeById();
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_prod'])) {
-    $product_name = clean_input($_POST['product_name']);
-    $category = clean_input($_POST['category']);
-    $description = clean_input($_POST['description']);
-
-    try {
-        $productObj->id = $id;
-        $productObj->product_name = $product_name;
-        $productObj->category = $category;
-        $productObj->description = $description;
-
-        if ($productObj->update()) {
-            $_SESSION['outputMsg']['success'] = "Product information successfully updated";
-            header("Location: /backend/dashboard/inventory.php");
-            exit;
-        } else {
-            $error = "Failed to update the product. The name might already exist.";
-        }
-    } catch (PDOException $e) {
-        $error = "Error: " . $e->getMessage();
-    }
-}
-?>
-
 <body>
 <?php if (!empty($error)): ?>
     <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $error ?></p>
@@ -141,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_prod'])) {
         <h1 class="text-2xl text-center">Edit Product</h1>
     </div>
     <div class="flex flex-col justify-start">
-        <form action="?id=<?= htmlspecialchars($id) ?>" method="POST">
+        <form action="" method="POST">
             <label for="product_name">Name:</label>
             <input type="text" name="product_name" value="<?= htmlspecialchars($product_name) ?>" required>
 
@@ -173,9 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_prod'])) {
             </thead>
             <tbody>
             <?php if (!empty($getProdSizes)): ?>
-                <?php foreach ($getProdSizes as $prodSize): ?>
+                <?php foreach ($getProdSizes as $prodSize): ?> 
                     <tr>
-                        <td><?= htmlspecialchars($prodSize['size']) ?></td>
+                        <td><?= $prodSize['size']?></td>
                         <td><?= htmlspecialchars($prodSize['stock']) ?></td>
                         <td><?= htmlspecialchars($prodSize['price']) ?></td>
                         <td>
