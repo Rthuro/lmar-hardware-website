@@ -25,14 +25,15 @@ class Product {
     }
 
     function update(){
-        $sql = "UPDATE products SET product_name = :product_name, category = :category, description = :description ;";
+        $sql = "UPDATE products SET product_name = :product_name, category = :category, description = :description WHERE id = :id ;";
         $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':id', $this->id);
         $query->bindParam(':product_name', $this->product_name);
         $query->bindParam(':category', $this->category);
         $query->bindParam(':description', $this->description);
         return $query->execute();
-
     }
+    
     function delete(){
         $sql = "DELETE FROM products WHERE id = :id";
         $query = $this->db->connect()->prepare($sql);
