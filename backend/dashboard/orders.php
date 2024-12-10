@@ -77,7 +77,7 @@
         ?>
     <div class="main-content">
         <div class="header">
-            <h1>Admin Dashboard</h1>
+            <h1>Orders </h1>
         </div>
 
         <div class="dashboard-grid">
