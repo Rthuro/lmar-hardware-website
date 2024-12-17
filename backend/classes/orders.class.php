@@ -15,6 +15,7 @@
         public $delivery_date = " ";
         public $payment = " ";
         public $price = " ";
+        public $order_item_id = " ";
         protected $db;
 
         function __construct() {
@@ -145,7 +146,23 @@
             return $data;
         }
         function getCancelledOrders(){
-            $sql = "SELECT o.*,oi.* FROM orders o JOIN order_items oi ON o.id = oi.order_id WHERE o.customer_id = :customer_id AND status = 'cancelled' ";
+            $sql = "SELECT 
+                    u.username,
+                    o.id, 
+                    o.contact_num, 
+                    o.delivery_option, 
+                    o.status, 
+                    o.delivery_date, 
+                    o.order_date, 
+                    oi.quantity, 
+                    p.product_name, 
+                    s.size
+                FROM orders o
+                LEFT JOIN order_items oi ON o.id = oi.order_id
+                LEFT JOIN users u ON o.customer_id = u.id
+                LEFT JOIN products p ON oi.product_id = p.id
+                LEFT JOIN product_size s ON oi.size_id = s.size_id
+                WHERE o.customer_id = :customer_id AND status = 'cancelled' ";
             $query = $this->db->connect()->prepare($sql);
             $query->bindParam(':customer_id',$this->customer_id);
 
@@ -208,8 +225,9 @@
                 LEFT JOIN users u ON o.customer_id = u.id
                 LEFT JOIN products p ON oi.product_id = p.id
                 LEFT JOIN product_size s ON oi.size_id = s.size_id
-                WHERE o.delivery_option = 'delivery' ORDER BY o.order_date ASC; ";
+                WHERE o.delivery_option = 'delivery' AND o.customer_id = :customer_id AND o.status = 'pending' ORDER BY o.order_date ASC; ";
             $query = $this->db->connect()->prepare($sql);
+            $query ->bindParam(':customer_id', $this->customer_id);
             $data = null;
             if ($query->execute()) {
                 $data = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -217,24 +235,20 @@
             return $data;
         }
         function displayPickUps(){
-            $sql = "SELECT 
-                    u.username,
-                    o.id, 
-                    o.contact_num, 
-                    o.delivery_option, 
-                    o.status, 
-                    o.pickup_date, 
-                    o.order_date, 
-                    oi.quantity, 
-                    p.product_name, 
-                    s.size
-                FROM orders o
-                LEFT JOIN order_items oi ON o.id = oi.order_id
-                LEFT JOIN users u ON o.customer_id = u.id
-                LEFT JOIN products p ON oi.product_id = p.id
-                LEFT JOIN product_size s ON oi.size_id = s.size_id
-                WHERE o.delivery_option = 'pickup' ORDER BY o.order_date ASC; ";
+            $sql = "SELECT * FROM orders WHERE delivery_option = 'pickup' AND customer_id = :customer_id AND status = 'pending' ORDER BY order_date ASC; ";
             $query = $this->db->connect()->prepare($sql);
+            $query ->bindParam(':customer_id', $this->customer_id);
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return $data;
+        }
+
+        function displayCompleted(){
+            $sql = "SELECT * FROM orders WHERE customer_id = :customer_id AND status = 'completed' ORDER BY order_date ASC; ";
+            $query = $this->db->connect()->prepare($sql);
+            $query ->bindParam(':customer_id', $this->customer_id);
             $data = null;
             if ($query->execute()) {
                 $data = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -255,8 +269,10 @@
                 o.delivery_date, 
                 o.order_date, 
                 oi.quantity, 
+                oi.size_id, 
                 p.product_name, 
-                s.size
+                s.size,
+                s.stock
             FROM orders o
             LEFT JOIN order_items oi ON o.id = oi.order_id
             LEFT JOIN users u ON o.customer_id = u.id
@@ -273,6 +289,46 @@
 
         }
 
+        function updateProdStockIfCancelled($stock){
+            $sql = 'UPDATE product_size SET stock = :stock WHERE size_id = :size_id;';
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':stock', $stock);
+            $query->bindParam(':size_id', $this->size_id);
+
+            return $query->execute();
+        }
+
+        function getOrderItems(){
+            $sql = 'SELECT oi.*, s.* FROM order_items oi JOIN product_size s ON oi.size_id = s.size_id WHERE oi.order_item_id = :id;';
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':id', $this->order_item_id);
+            return $query->execute();
+        }
+
+        function fetchOrder(){
+            $sql = "SELECT * FROM orders WHERE customer_id = :customer_id;";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':customer_id', $this->customer_id);
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return $data;
+        }
+
+        function fetchOrderItems($order_id){
+            $sql = "SELECT oi.*, p.product_name, p.product_img, s.size FROM order_items oi 
+            JOIN products p ON oi.product_id = p.id JOIN product_size s ON oi.size_id = s.size_id
+            WHERE oi.order_id = :id;";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':id', $order_id);
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return $data;
+
+        }
 
 
         
