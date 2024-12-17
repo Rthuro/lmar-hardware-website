@@ -84,16 +84,14 @@
                             $productSizeObj->size_id = $prod['size_id'];
                             $getSize = $productSizeObj->fetchProdSizeBySizeId();
                 
-                            // Add order items for each product to the SINGLE order
-                            $orderObj->id = $orderId['id']; // Associate order items with the correct order ID
+                            $orderObj->id = $orderId['id']; 
                             $orderObj->product_id = $getProd['id'];
                             $orderObj->size_id = $getSize[0]['size_id'];
                             $orderObj->quantity = $prod['quantity'];
-                            $orderObj->price = $getSize[0]['price']; //Use the price from the size table
+                            $orderObj->price = $getSize[0]['price']; 
                 
-                            $orderObj->createOrderItems(); // Add order items
+                            $orderObj->createOrderItems(); 
                 
-                            //Update Stock after creating order items
                             $productSizeObj->size_id = $prod['size_id'];
                             $productSizeObj->stock = intval($getSize[0]['stock']) - intval($prod['quantity']);
                             $productSizeObj->modifyProdStock();
@@ -119,7 +117,7 @@
      }
 
     include_once './includes/header.php';
-    $subtotal = 0.00;
+    $subtotal = 0;
 
 ?>
 
@@ -129,7 +127,7 @@
     <div class="max-w-[400px] flex flex-col my-6 gap-3 border shadow-md rounded-md ">
     <?php
      if(!empty($userCart)){
-        $subtotal = 0; // Initialize subtotal outside the loop
+      
         foreach($userCart as $prod){  
         $getProd = $productObj->fetchRecord( $prod['product_id']);
         $productSizeObj->size_id = $prod['size_id'];
@@ -142,13 +140,13 @@
                         <p class="text-sm" > 
                         <?= $prod['quantity'] ?>X 
                         <?=$getProd['product_name']?> 
-                        <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?>
+                        <?= (!empty($getSize[0]['size']) && $getSize[0]['size'] !== 'no size')? $getSize[0]['size']: ""  ;?>
                         </p>
                         <p class="text-sm font-medium" data-item-price="<?= $getSize[0]['price'] * $prod['quantity'] ?>">PHP <?php 
                                     $subtotal += $getSize[0]['price'] *  $prod['quantity'];
-                                    echo $getSize[0]['price'] *  $prod['quantity']; // Show individual item price
+                                    echo $getSize[0]['price'] *  $prod['quantity']; 
                                     ?></p>
-                        <input type="hidden" data-item-id="<?= $prod['product_id'] ?>" data-item-qty="<?= $prod['quantity'] ?>" data-item-size-id="<?= $prod['size_id'] ?>" data-item-price="<?= $getSize[0]['price'] * $prod['quantity'] ?>">
+                        <input type="hidden" data-item-id="<?= $prod['product_id'] ?>" data-item-qty="<?= $prod['quantity'] ?>" data-item-size-id="<?= $prod['size_id'] ?>" data-item-price="<?= $getSize[0]['price']  ?>">
                   </div>
                 </div>
             <?php } ?>
@@ -206,17 +204,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() { // Wait for DOM to load before manipulating
-        const items = document.querySelectorAll('[data-item-price]');
-        let subtotal = 0;
-        items.forEach(item => {
-            subtotal += parseInt(item.dataset.itemPrice);
-        });
-        document.getElementById('subTotal').textContent = "PHP " + subtotal;
-        document.getElementById('subTotal').setAttribute('data-subtotal', subtotal);
-        document.getElementById('setTotalAmount').textContent = subtotal;
-        document.getElementById('getTotalAmount').value = subtotal;
+       
 
-        //rest of the js code
+       
         document.getElementById('locationDropdown').addEventListener('change', function () {
             const selectedOption = this.options[this.selectedIndex];
             const subTotal = document.getElementById('subTotal').getAttribute('data-subtotal');
