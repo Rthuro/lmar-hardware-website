@@ -48,7 +48,7 @@
 
 ?>
 
-<div class="flex flex-col max-w-[1050px]  h-screen py-8 mx-auto">
+<div class="flex flex-col max-w-[1050px]  h-screen py-8  mx-auto">
     <p class="text-lg text-center mb-8">Shopping Cart</p>
 
         <?php if(!isset($_SESSION['account'])){ ?>
@@ -59,7 +59,7 @@
             </div>
             <?php } else { ?>
 
-        <form action="" method="post" class="w-full  flex flex-col gap-3">
+        <form action="" method="post" class="w-full  flex flex-col gap-3 xs:px-6 lg:px-0">
             <table class=" table-fixed w-full">
                 <thead>
                     <tr class="pb-2">
@@ -85,7 +85,7 @@
                             <td class="">
                                 <a href="product.php?id=<?=$prod['product_id']?>" >
                                             <?=$getProd['product_name']?> 
-                                    <?= (!empty($getSize[0]['size']))? $getSize[0]['size']: ""  ;?></a>
+                                    <?= (!empty($getSize[0]['size']) && $getSize[0]['size'] !== 'no size')? $getSize[0]['size']: ""  ;?></a>
                              <a href="cart.php?id=<?=$prod['id']?>" class=" block text-xs text-red-500 hover:underline ">Remove</a>
 
                             </td>
