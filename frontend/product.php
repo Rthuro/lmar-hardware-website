@@ -30,7 +30,7 @@
     }
 
    
-    $error = $userId  = '';
+    $error = $userId = $prodErr = $prodSize = '';
     $quantity = 1; 
 
     if(!empty($email)){
@@ -39,10 +39,9 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $quantity = $_POST['quantity'];
-
         $prodSize = (isset($_POST['product_size']))? $_POST['product_size']: null;
 
-        if(isset($_POST['add_cart']) && isset($_SESSION['account'])){
+        if(isset($_POST['add_cart']) && isset($_SESSION['account']) && !empty($prodSize) ){
 
                 $cartObj->user_id = $userId['id'];
                 $cartObj->product_id = $_GET['id'];
@@ -70,6 +69,8 @@
                 }    
         } else if (!isset($_SESSION['account'])) {
             header('location: cart.php');
+        } else {
+            $prodErr = "Product not available.";
         }
        
     }
@@ -78,9 +79,9 @@
     
 ?>
 
-<div class="flex max-w-[1050px] mx-auto items-center py-6">
+<div class="flex max-w-[1050px] mx-auto md:flex-row xs:flex-col xs:items-center  py-6">
    <img src="/backend/product/<?=$product['product_img']?>" width="500" height="500" alt="<?=$product['product_name']?>">
-   <div class="flex flex-col w-1/2 mt-8  p-6 ">
+   <div class="flex flex-col lg:w-1/2 mt-8  lg:p-6 xs:w-full xs:px-8 ">
         <p class="text-2xl font-medium text-wrap"><?=$product['product_name']?></p>
         <form action="" method="post" class="w-full flex flex-col">
             <?php if(!empty($getSize)){ 
@@ -92,18 +93,22 @@
                     Product price range: PHP <?= $prodPrice['minPrice'] ?>
                     <?= ($prodPrice['maxPrice'] == $prodPrice['minPrice']) ? "" : " - <span id='maxPrice'>" . $prodPrice['maxPrice'] . "</span>" ?>
                 </p>
-                <select name="product_size" id="productSizeDropdown"  class="w-[200px] border p-2 mb-2" required >
 
-                <?php foreach($getSize as $arr){ ?>
+                <?php if(count($getSize) == 1 && $getSize[0]['size'] == 'no size'){ ?>
+                    <input type="hidden" name="product_size" value="<?= $getSize[0]['size_id'] ?>">
+                  <?php   } else { ?>
+                      <select name="product_size" id="productSizeDropdown"  class="w-[200px] border p-2 mb-2" required >
+                    <?php
+                    foreach($getSize as $arr){  ?>
                          <option value="<?= $arr['size_id'] ?>"
                          data-price-min="<?= $arr['price'] ?>" 
                          data-stock="<?= $arr['stock'] ?>"  
                          <?= isset($productName_size) && $productName_size == $arr['size_id'] ? "selected" : "" ?>>
                             <?= $arr['size'] ?>
                         </option>
-
                     <?php } ?>
                 </select>
+                <?php } ?>
            <?php } ?>
 
            <label for="quantity" class="my-1">Quantity</label>
@@ -111,8 +116,9 @@
             
             <p id="stockDisplay" class=" text-gray-600 my-2 "></p>
             <input type="hidden" name="product_id" value="<?=$product['id']?>" >
-            <input type="submit" value="Add To Cart" name="add_cart" class="max-w-[400px] bg-customOrange text-white w-full py-2 px-4 my-3">
+            <input type="submit" value="Add To Cart" name="add_cart" class=" md:max-w-[400px] xs:w-full bg-customOrange text-white w-full py-2 px-4 my-3" id="addCartBtn" >
             <p class="text-red-600"><?= (!empty($error)? $error:"") ?></p>
+            <p class="text-red-600"><?= (!empty($prodErr)? $prodErr:"") ?></p>
         </form>
    </div>
 </div>
@@ -124,14 +130,12 @@
     const minPrice = selectedOption.getAttribute('data-price-min');
     const stock = selectedOption.getAttribute('data-stock');
 
-    // Update price display
     document.getElementById('minPrice').textContent = minPrice;
-
-    // Update stock display
     document.getElementById('stockDisplay').textContent = `Stocks: ${stock}`;
-
-    // Update max attribute of quantity input
     document.getElementById('quantityInput').setAttribute('max', stock);
+
+    
+        
     });
 
 </script>
