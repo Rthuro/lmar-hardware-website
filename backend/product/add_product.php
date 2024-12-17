@@ -23,7 +23,8 @@
             $target = $folder. uniqid() . $image;
 
             try{
-                $productInfo = $productObj->checkProductDup($product_name);
+                $productObj->product_name = $product_name;
+                $productInfo = $productObj->checkProductDup();
     
                 if($productInfo){
                     $error = "Product name: ". $product_name . " already exist";
@@ -106,7 +107,7 @@
                 <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required>
 
                 <label for="product_name">Name:</label>
-                <input type="text" name="product_name" value="<?= (isset($product_name))? $product_name:"" ?>" required>
+                <input type="text" name="product_name" value="" required>
 
                 <label for="category">Category:</label>
                 <select name="category" required>
@@ -137,16 +138,17 @@
 
                     <?php }  ?>
 
-                    </php>
                 </select>
                 <label for="size">Size:</label>
-                <input type="text" name="size" value="<?= (isset($size))? $size:" " ?>" required>
+                <p class="text-sm mb-2">"no size" for product with no size</p>
+                <input type="text" name="size" value="" required>
+               
                 
                 <label for="sizePrice">Size Price:</label>
-                <input type="text" name="sizePrice" value="<?= (isset($price))? $price:" " ?>"min="1" required>
+                <input type="text" name="sizePrice" value=""min="1" required>
 
                 <label for="stock">Stocks:</label>
-                <input type="number" name="stock" value="<?= (isset($stock))? $stock:"" ?>" min="1" required>
+                <input type="number" name="stock" value="" min="1" required>
 
                 <input type="submit" value="Add Product Size" name="add_size" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md"  >
     
