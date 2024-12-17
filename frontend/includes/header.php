@@ -1,6 +1,7 @@
 <?php
      require_once "../backend/classes/account.class.php";
-
+     require_once "../backend/classes/cart.class.php";
+     $cartObj = new Cart();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,15 +39,14 @@
                                 <i data-lucide="chevron-down" class="size-4" id="iconDown"></i> 
                             </p>
                             <div id="burger_categoryList" class="hidden flex-col items-start z-50 justify-start mt-1 w-full">
-                                <a href="">Hand Tools</a>
-                                <a href="">Measuring Tools</a>
-                                <a href="">Cutting Tools</a>
-                                <a href="">Fastening Tools</a>
-                                <a href="">Grinding Tools</a>
-                                <a href="">Clamping Tools</a>
-                                <a href="">Finishing Tools</a>
-                                <a href="">Wood Materials</a>
-                                <a href="">Building Materials</a>
+                                <a href="products.php?category=Hand%20Tools">Hand Tools</a>
+                                <a href="products.php?category=Measuring%20Tools">Measuring Tools</a>
+                                <a href="products.php?category=Cutting%20Tools">Cutting Tools</a>
+                                <a href="products.php?category=Fastening%20Tools">Fastening Tools</a>
+                                <a href="products.php?category=Grinding%20Tools">Grinding Tools</a>
+                                <a href="products.php?category=Clamping%20Tools">Clamping Tools</a>
+                                <a href="products.php?category=Finishing%20Tools">Finishing Tools</a>
+                                <a href="products.php?category=Building%20Materials">Building Materials</a>
                             </div>
                          </li>
                          <li class="flex items-center  gap-1 text-customOrange">
@@ -75,17 +75,21 @@
                         <p class="text-2xl font-bold -ml-2 text-[#1d1d1d]  ">LMARHardware</p>
                 </div>
                     <form action="" method="get" class="flex items-center justify-end  basis-1/2   max-[1000px]:hidden ">
-                        <input type="text" name="search" id="" placeholder="Search..." class=" w-[500px] px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
+                        <input type="text" name="search" id="" placeholder="Search..." class=" w-full px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
                         <button type="submit" value="" class="px-6 py-2 bg-gray-950 rounded-r -ml-1 ">
                             <i data-lucide="search" class="size-6 text-white"></i>
                         </button>
                     </form>
  
-                       <div class="flex items-center justify-end gap-3 basis-1/4" >
+                       <div class="flex items-center justify-end gap-3 w-fit" >
                             <a href="cart.php" id="cart" class="relative flex items-end gap-2 cursor-pointer">
                                 <i data-lucide="shopping-cart" class=" size-8 text-customOrange"></i>
                                 <div id="cart_items_count" class="absolute -top-1 right-0 bg-black/80 px-1 rounded-full">
-                                    <p class="text-white text-xs" >0</p>
+                                    <?php if(isset($_SESSION['account'])){
+                                        $cartObj->user_id = $_SESSION['account']['id'];
+                                        $countCart = $cartObj->fetchCart();
+                                    } ?>
+                                    <p class="text-white text-xs" ><?= (!empty($countCart))? COUNT($countCart):0 ?></p>
                                 </div>
                             </a>
                             <?php
