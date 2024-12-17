@@ -12,18 +12,40 @@
     $accountObj = new Account();
     $cartObj = new Cart();
     $orderObj = new Order();
+   
+
+    $userId = $date = $order_id = $order_item_id = '';
+    $dateTime = new DateTime($date);
 
     session_start();
 
      if(isset($_SESSION['account'])){
         $username = $_SESSION['account']['username'];
         $email = $_SESSION['account']['email'];
+        $logUser = $accountObj->fetch($email);
+        if(!empty($logUser)){
+            $userId = $logUser['id'];
+        }
      } else {
         header('location: landing_page.php');
         exit();
      }
 
-     $userId = $accountObj->fetch($email);
+     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['cancel_order'])){
+            $order_id = $_POST['order_id'];
+            $status = 'cancelled';
+
+            if($orderObj->updateOrderStatus($order_id, $status)){
+                $order = $orderObj->fetchOrderById($order_id);
+                foreach($order as $arr){
+                    $updateStock = $arr['quantity'] + $arr['stock'];
+                    $orderObj->size_id = $arr['size_id'];
+                    $orderObj->updateProdStockIfCancelled($updateStock);
+                }
+                header('location: account.php');
+            }
+
+     }
 
      include_once "./includes/header.php";
 ?>
@@ -65,150 +87,199 @@
 
                         switch($_GET['type']){
                             case "Pick Up":
-                                    $orderObj->customer_id = $userId['id'];
-                                    $array = $orderObj ->getPickUpOrderCustomer();
-                                        if(!empty($array) && $array[0]['status'] == 'pending'){
-                                            foreach($array as $pickUp){ 
-                                                $getProd = $productObj->fetchRecord( $pickUp['product_id']);
-                                                $productSizeObj->size_id =  $pickUp['size_id'];
-                                                $getSize = $productSizeObj->fetchProdSizeBySizeId();
-                                                    
-                                                $dateTime = new DateTime($pickUp['pickup_date']);
-                                                $formattedDate = $dateTime->format('F j, Y');
-                                                ?>
-                                                <div class="flex flex-col gap-2 py-2">
-                                                <p class="text-sm px-2">Pickup date: <?= $formattedDate ?></p>
-                                                    <div class="flex items-center justify-around w-full  border-b">
-                                                    <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                                    <a href="product.php?id=<?=$getProd['id']?>" >
-                                                    <?=$pickUp['quantity']?>X 
-                                                        <?=$getProd['product_name']?> 
-                                                        <?=  $getSize[0]['size']?> </a>
-                                                    <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
-                                                        <?=  $pickUp['status']?>
+                                if(!empty($userId)){
+                                    $orderObj->customer_id = $userId;
+                                    $userOrder = $orderObj->displayPickUps();
+                                }
+                
+                                if(!empty($userOrder)){
+                                    foreach($userOrder as $order){
+                                            $orderItems = $orderObj->fetchOrderItems($order['id']);
+                                            $date = $order['pickup_date'];
+                                            $formattDate = $dateTime->format('F j, Y');
+                                            ?>
+                                            <div class="w-full py-3 px-3 border-b">
+                                                <form action="" method="post" class=" flex-col flex gap-3">
+                                                    <?php
+                                                    foreach($orderItems as $items){
+                                                        ?>
+                                                        <div class="flex justify-between items-center w-full">
+                                                            <div class="flex gap-2 items-center">
+                                                            <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
+                                                            <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2"><?= $items['product_name'] ?> <?= ($items['size'] !=='no size')? $items['size']:'' ?></a>
+                                                            <p class="text-gray-600"><?= $items['quantity']?>X</p>
+                                                            </div>
+                            
+                                                        <p class="font-medium">Total: PHP
+                                                        <?= $items['price']*$items['quantity'] ?>
+                                                        </p>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <div class="flex items-center justify-between">
+                                                    <p class="font-medium text-gray-700">
+                                                        Pick-up date: <?= $formattDate ?>
                                                     </p>
-                                                    
-                                                        <p class="text-lg font-medium">PHP <?=$pickUp['payment']?> </p>
-                                                        
+                                                    <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                                    <input type="submit" value="Cancel Order" name="cancel_order" class=" py-2 px-4 bg-customOrange text-white rounded-md">
                                                     </div>
-                                                </div>
-                                               
-                                         <?php   } 
-                                        } else {
-                                            ?>      
-                                            <div class="flex flex-col items-center justify-center h-full">
-                                                <img src="./assets/img/out-of-stock.png" alt="" srcset="">
-                                                <p class="text-lg">No orders yet</p>
+                                                    
+                                                </form>
                                             </div>
-                                          <?php
-                                        }
+                                            
+                                            <?php
+                                    }
+                                }  else {
+                                    ?>      
+                                    <div class="flex flex-col items-center justify-center h-full">
+                                         <img src="./assets/img/out-of-stock.png" alt="" srcset="">
+                                        <p class="text-lg">No orders yet</p>
+                                    </div>
+                                  <?php
+                                }
                                     break;
                             case "To Deliver":
-                                $orderObj->customer_id = $userId['id'];
-                                $array = $orderObj ->getDeliveryCustomer();
-                                    if(!empty($array)){
-                                        foreach($array as $delivery){ 
-                                            $getProd = $productObj->fetchRecord( $delivery['product_id']);
-                                            $productSizeObj->size_id =  $delivery['size_id'];
-                                            $getSize = $productSizeObj->fetchProdSizeBySizeId();
+                                if(!empty($userId)){
+                                    $orderObj->customer_id = $userId;
+                                    $userOrder = $orderObj->displayDeliveries();
+                                }
+                                if(!empty($userOrder)){
+                                    foreach($userOrder as $order){
+                                            $orderItems = $orderObj->fetchOrderItems($order['id']);
+                                            $date = $order['delivery_date'];
+                                            $formattDate = $dateTime->format('F j, Y');
                                             ?>
-                                            <div class="flex items-center justify-around w-full py-2 border-b">
-                                              <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                              <a href="product.php?id=<?=$getProd['id']?>" >
-                                               <?=$delivery['quantity']?>X 
-                                                <?=$getProd['product_name']?> 
-                                                <?=  $getSize[0]['size']?> </a>
-                                              <p class="bg-customOrange text-xs text-white px-3 py-1 rounded-full">
-                                                <?=  $delivery['status']?>
-                                              </p>
-                                                <p class="text-lg font-medium">PHP <?=$delivery['payment']?> </p>
-                                                
-                                            </div>
-                                     <?php   } 
-                                        } else {
-                                            ?>      
-                                            <div class="flex flex-col items-center justify-center h-full">
-                                                 <img src="./assets/img/out-of-stock.png" alt="" srcset="">
-                                                <p class="text-lg">No orders yet</p>
-                                            </div>
-                                          <?php
-                                        }
-                                    break;
+                                            <div class="w-full py-3 px-3 border-b">
+                                                <form action="" method="post" class=" flex-col flex gap-3">
+                                                    <?php
+                                                    foreach($orderItems as $items){
+                                                        ?>
+                                                        <div class="flex justify-between items-center w-full">
+                                                            <div class="flex gap-2 items-center">
+                                                            <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
+                                                            <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2"><?= $items['product_name'] ?> <?= ($items['size'] !=='no size')? $items['size']:'' ?></a>
+                                                            <p class="text-gray-600"><?= $items['quantity']?>X</p>
+                                                            </div>
 
-                        case "Completed":
-                            $orderObj->customer_id = $userId['id'];
-                            $array = $orderObj ->getCompletedOrders();
-                                    if(!empty($array)){
-                                        foreach($array as $orders){ 
-                                            $getProd = $productObj->fetchRecord( $orders['product_id']);
-                                            $productSizeObj->size_id =  $orders['size_id'];
-                                            $getSize = $productSizeObj->fetchProdSizeBySizeId();
-                                                
-                                            ?>
-                                            <div class="flex flex-col gap-2 py-2">
-                            
-                                                <div class="flex items-center justify-around w-full  border-b">
-                                                <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                                <a href="product.php?id=<?=$getProd['id']?>" >
-                                                <?=$orders['quantity']?>X 
-                                                    <?=$getProd['product_name']?> 
-                                                    <?=  $getSize[0]['size']?> </a>
-                                                <p class="bg-green-600 text-xs text-white px-3 py-1 rounded-full">
-                                                    <?=  $orders['status']?>
-                                                </p>
-                                                
-                                                    <p class="text-lg font-medium">PHP <?=$orders['payment']?> </p>
+                                                        <p class="font-medium">Total: PHP
+                                                        <?= $items['price']*$items['quantity'] ?>
+                                                        </p>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <div class="flex items-center justify-between">
+                                                    <p class="font-medium text-gray-700">
+                                                        Delivery date: <?= $formattDate ?>
+                                                    </p>
+                                                    <input type="submit" value="Cancel Order"  name="cancel_order"class=" py-2 px-4 bg-customOrange text-white rounded-md">
+                                                    </div>
                                                     
-                                                </div>
+                                                </form>
                                             </div>
+                                            
+                                            <?php
+                                    }
+                                } else {
+                                    ?>      
+                                    <div class="flex flex-col items-center justify-center h-full">
+                                         <img src="./assets/img/out-of-stock.png" alt="" srcset="">
+                                        <p class="text-lg">No orders yet</p>
+                                    </div>
+                                  <?php
+                                }
+                                    break;
+                        case "Completed":
+                            if(!empty($userId)){
+                                $orderObj->customer_id = $userId;
+                                $userOrder = $orderObj->displayCompleted();
+                            }
+                            if(!empty($userOrder)){
+                                foreach($userOrder as $order){
+                                    if($order['status'] == 'completed' ){
+                                        $orderItems = $orderObj->fetchOrderItems($order['id']);
+                                        ?>
+                                        <div class="w-full py-3 px-3 border-b">
+                                            <form action="" method="post" class=" flex-col flex gap-3">
+                                                <?php
+                                                foreach($orderItems as $items){
+                                                    ?>
+                                                    <div class="flex justify-between items-center w-full">
+                                                        <div class="flex gap-2 items-center">
+                                                        <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
+                                                        <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2"><?= $items['product_name'] ?> <?= $items['size'] ?></a>
+                                                    <p class="text-gray-600"><?= $items['quantity']?>X</p>
+                                                    </div>
+                                                    <p class="font-medium">Total: PHP
+                                                    <?= $items['price']*$items['quantity'] ?>
+                                                    </p>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                                <p class=" text-sm text-green-700 text-end ">Completed</p>
+                                            </form>
+                                        </div>
                                         
-                                    <?php   } 
-                                    } else {
+                                        <?php
+                                    } 
+                                }
+                            } else {
+                                ?>      
+                                <div class="flex flex-col items-center justify-center h-full">
+                                     <img src="./assets/img/out-of-stock.png" alt="" srcset="">
+                                    <p class="text-lg">No orders yet</p>
+                                </div>
+                              <?php
+                            }
+                                break;
+                       case "Cancelled":
+                                    if(!empty($userId)){
+                                        $orderObj->customer_id = $userId;
+                                        $userOrder = $orderObj->getCancelledOrders();
+                                    }
+                                    if(!empty($userOrder)){
+                                        foreach($userOrder as $order){
+                                            if($order['status'] == 'cancelled' ){
+                                                $orderItems = $orderObj->fetchOrderItems($order['id']);
+                                                ?>
+                                                <div class="w-full py-3 px-3 border-b">
+                                                    <form action="" method="post" class=" flex-col flex gap-3">
+                                                        <?php
+                                                        foreach($orderItems as $items){
+                                                            ?>
+                                                            <div class="flex justify-between items-center w-full">
+                                                                <div class="flex gap-2 items-center">
+                                                                <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
+                                                                <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2"><?= $items['product_name'] ?> <?= $items['size'] ?></a>
+                                                                <p class="text-gray-600"><?= $items['quantity']?>X</p>
+                                                                </div>
+        
+                                                            <p class="font-medium">Total: PHP
+                                                            <?= $items['price']*$items['quantity'] ?>
+                                                            </p>
+                                                            </div>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                        <p class=" text-sm text-red-500 text-end ">Cancelled</p>
+                                                        
+                                                    </form>
+                                                </div>
+                                                
+                                                <?php
+                                            }
+                                        }
+                                    }  else {
                                         ?>      
                                         <div class="flex flex-col items-center justify-center h-full">
-                                            <img src="./assets/img/out-of-stock.png" alt="" srcset="">
+                                             <img src="./assets/img/out-of-stock.png" alt="" srcset="">
                                             <p class="text-lg">No orders yet</p>
                                         </div>
-                                    <?php
+                                      <?php
                                     }
                                 break;
-                                case "Cancelled":
-                                    $orderObj->customer_id = $userId['id'];
-                                    $array = $orderObj ->getCancelledOrders();
-                                            if(!empty($array)){
-                                                foreach($array as $orders){ 
-                                                    $getProd = $productObj->fetchRecord( $orders['product_id']);
-                                                    $productSizeObj->size_id =  $orders['size_id'];
-                                                    $getSize = $productSizeObj->fetchProdSizeBySizeId();
-                                                        
-                                                    ?>
-                                                    <div class="flex flex-col gap-2 py-2">
-                                                   
-                                                        <div class="flex items-center justify-around w-full  border-b">
-                                                        <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
-                                                        <a href="product.php?id=<?=$getProd['id']?>" >
-                                                        <?=$orders['quantity']?>X 
-                                                            <?=$getProd['product_name']?> 
-                                                            <?=  $getSize[0]['size']?> </a>
-                                                        <p class="bg-red-600 text-xs text-white px-3 py-1 rounded-full">
-                                                            <?=  $orders['status']?>
-                                                        </p>
-                                                        
-                                                            <p class="text-lg font-medium">PHP <?=$orders['payment']?> </p>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                
-                                            <?php   } 
-                                            } else {
-                                                ?>      
-                                                <div class="flex flex-col items-center justify-center h-full">
-                                                    <img src="./assets/img/out-of-stock.png" alt="" srcset="">
-                                                    <p class="text-lg">No orders yet</p>
-                                                </div>
-                                            <?php
-                                            }
-                                        break;
                             default:
                             echo "No matching case found.";
                         }
