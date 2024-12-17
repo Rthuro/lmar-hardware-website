@@ -58,6 +58,13 @@
 
        
         if( $orderObj->updateOrderStatus($_GET['id'], $status)){
+            if($status === 'cancelled'){
+                foreach($record as $cancelled){
+                    $orderObj->size_id = $cancelled['size_id'];
+                    $updateStock = $cancelled['stock'] + $cancelled['quantity'];
+                    $updateRes = $orderObj->updateProdStockIfCancelled($updateStock);
+                }
+            }
             $_SESSION["outputMsg"]["success"] = 'Successfully update order status';
             header("location: /backend/dashboard/orders.php");
         }
