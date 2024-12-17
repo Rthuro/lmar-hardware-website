@@ -19,7 +19,7 @@
     $categories = $productObj->fetchCategory();
     // $products = $productObj->showAll($search_term, $filter_category);
 
-    $productsPerPage = 9; 
+    $productsPerPage = 12; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
@@ -34,14 +34,14 @@
 <body>
 
     <div class=" items-center justify-center lg:hidden xs:flex">
-         <button id="filter_Bttn" class="flex items-center gap-1  px-3 py-2 rounded-sm    text-gray-950 ">
+         <button id="filter_Bttn" type="button" class="flex items-center gap-1  px-3 py-2 rounded-sm   text-gray-950 ">
             <i data-lucide="filter" class="size-5"></i>
             <p class="font-medium">Filters</p>
         </button>
             <form id="filter_mobileCont" action="" method="get" class="hidden flex-col fixed top-0 left-0 w-[50%] max-w-[355px] bottom-0 filter border-[1px] bg-white p-4 z-50 ">
                 <div  class="flex items-center justify-between pb-2">
                     <p class="text-[28px] ">Filters</p>
-                    <button id="filter_xBttn"><i  data-lucide="x"></i></button>
+                    <button id="filter_xBttn" type="button"><i  data-lucide="x"></i></button>
                 </div>
                 <label for="availability" class="block text-[18px] pl-1 pb-1 border-b-[1px]">Availability</label>
                 <div class="block pl-2 mt-2 mb-1 ">
@@ -67,7 +67,7 @@
             </form>
 
             <form action="" method="get" class="flex  items-center justify-center  w-[65%] lg:hidden my-3 ">
-                 <input type="text" name="" id="" placeholder="Search..." class=" w-9/12 px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
+                 <input type="text" name="search" id="" placeholder="Search..." class=" w-9/12 px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
                     <button type="submit" value="" class="px-6 py-2 bg-gray-950 rounded-r -ml-1 ">
                             <i data-lucide="search" class="size-6 text-white"></i>
                 </button>
@@ -96,7 +96,6 @@
                                 <div class="flex flex-col justify-between mt-6 gap-2">
                                     <input type="submit" value="Filter" name="filter" class="py-2  o-y-btn rounded-[2px] cursor-pointer ">
                                     <input type="submit" value="Clear All" name="clearFilter" class="py-2  outline-o-btn cursor-pointer ">
-
                                 </div>
         </form>
    
@@ -104,16 +103,16 @@
             <?php if(empty($products)){ ?>
                 <p class="text-xl text-gray-500 text-center w-full my-32"> Products not found</p>
             <?php } else { ?>
-            <div class="grid  grid-cols-3 grid-rows-3 gap-2  mb-7 h-fit z-0">
+            <div class="grid  md:grid-cols-3 xs:grid-cols-2 grid-rows-4 md:gap-2 xs:gap-1  mb-7 h-fit z-0 content-center">
             <?php foreach ($products as $product):
                 $productSizeObj->product_id = $product['id']; 
                 $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
                 ?>
-                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  w-[250px] hover:shadow-lg cursor-pointer overflow-hidden">
-                                <img class="size-[250px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
+                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  md:w-[250px] xs:w-[200px] hover:shadow-lg cursor-pointer overflow-hidden">
+                                <img class="w-full md:h-[250px] xs:h-[180px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
                                 <div class="py-2 px-3 flex flex-col gap-1">
                                     <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
-                                     <span class="prodName text-lg "><?= $product['product_name'] ?></span>
+                                     <span class="prodName text-lg truncate text-ellipsis "><?= $product['product_name'] ?></span>
                                      <span class=" text-sm text-gray-700" >PHP <?= $prodPrice['minPrice'] ?></span>
                                 </div>
                     </a>  
@@ -121,6 +120,7 @@
                </div>
              <?php }  ?>
     </div>
+
     <div class="flex items-center justify-center mx-auto max-w-[1050px]">
         <?php if ($totalPages >= 1){ ?>
                 <div class="pagination">
