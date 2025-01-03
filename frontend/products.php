@@ -19,11 +19,11 @@
     $categories = $productObj->fetchCategory();
     // $products = $productObj->showAll($search_term, $filter_category);
 
-    $productsPerPage = 12; 
+    $productsPerPage = 9; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
-    $totalProducts = $productObj->getTotalProducts();
+    $totalProducts = $productObj->getTotalProducts($search_term, $filter_category);
     $totalPages = ceil($totalProducts / $productsPerPage);
 
     $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category);
@@ -77,7 +77,7 @@
     <div class="flex items-start justify-center max-w-[1050px] mx-auto gap-6 my-8 flex-1">
             <form action="" method="get" class="flex flex-col w-[250px] border-[1px] h-fit bg-white p-4  xs:hidden  lg:flex   ">
                                 <p class="text-[28px] pb-2">Filters</p>
-                                <label for="availability" class="block text-[18px] pl-1 pb-1 border-b-[1px]">Availability</label>
+                                <!-- <label for="availability" class="block text-[18px] pl-1 pb-1 border-b-[1px]">Availability</label>
                                 <div class="block pl-2 mt-2 mb-1 ">
                                     <input type="radio" name="availability" id="inStock">
                                     <label for="inStock">In stock</label>
@@ -86,7 +86,7 @@
                                 <div class="block pl-2" >
                                     <input type="radio" name="availability" id="outOfStock">
                                     <label for="outOfStock">Out of stock</label>
-                                </div>
+                                </div> -->
                                 <label for="priceRange" class="block text-[18px] pl-1 my-2 ">Price </label>
                                 <input type="range" name="priceRange" id="priceRange2" min="0" max="10000" step="10" class="w-full block ">
                                 <div class="flex justify-between items-center mt-1">
@@ -103,7 +103,7 @@
             <?php if(empty($products)){ ?>
                 <p class="text-xl text-gray-500 text-center w-full my-32"> Products not found</p>
             <?php } else { ?>
-            <div class="grid  md:grid-cols-3 xs:grid-cols-2 grid-rows-4 md:gap-2 xs:gap-1  mb-7 h-fit z-0 content-center">
+            <div class="grid  md:grid-cols-3 xs:grid-cols-2 grid-rows-3 md:gap-2 xs:gap-1  mb-7 h-fit z-0 content-center">
             <?php foreach ($products as $product):
                 $productSizeObj->product_id = $product['id']; 
                 $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
@@ -128,8 +128,6 @@
                         <a href="?page=<?= $i ?>" class="rounded-md border border-black/80  active:bg-black py-2 px-4 active:text-white <?= ($i == $currentPage) ? 'active' : '' ?>" ><?= $i ?></a>
                     <?php endfor; ?>
                 </div>
-            <?php }else{ ?>
-                <p>No products found.</p>
             <?php } ?>
     </div>
     
