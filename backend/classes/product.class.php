@@ -139,7 +139,7 @@ class Product {
     }
 
     function getProducts($start, $limit, $search = '',  $filter_category= '') {
-        $sql = "SELECT p.*,c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id  WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%') LIMIT :start, :limit";
+        $sql = "SELECT p.*,c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id  WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%') LIMIT :start, :limit; ";
         $query = $this->db->connect()->prepare($sql);
         $query->bindParam(':start', $start, PDO::PARAM_INT);
         $query->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -151,16 +151,14 @@ class Product {
     }
     
     
-    function getTotalProducts() {
-        $sql = "SELECT COUNT(*) AS total FROM products";
+    function getTotalProducts($search = '', $filter_category= '') {
+        $sql = "SELECT COUNT(*) AS total FROM products p LEFT JOIN categories c ON p.category = c.id WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%');";
         $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':category', $filter_category);
+        $query->bindParam(':search', $search);
+
         $query->execute();
         return $query->fetchColumn();
     }
-
- 
-
-    
-
-    
+  
 }
