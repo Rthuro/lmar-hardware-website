@@ -43,8 +43,8 @@ class Product {
     }
 
     function showAll($keyword='', $category='') {
-        $sql = "SELECT  p.*, c.name as category_name, SUM(IF(s.change_type='addition', quantity, 0)) as stock_in, SUM(IF(s.change_type='subtraction', quantity, 0)) as stock_out FROM products p INNER JOIN categories c ON p.category = c.id 
-        LEFT JOIN stock_transactions s ON p.id = s.product_id WHERE p.product_name LIKE CONCAT('%', :keyword, '%') AND (c.name LIKE CONCAT('%', :category, '%')) GROUP BY p.id ORDER BY p.product_name ASC;";
+        $sql = "SELECT  p.*, c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id 
+        WHERE p.product_name LIKE CONCAT('%', :keyword, '%') AND (c.name LIKE CONCAT('%', :category, '%')) GROUP BY p.id ORDER BY p.product_name ASC;";
 
         $query = $this->db->connect()->prepare($sql);
         $query->bindParam(':keyword', $keyword);
@@ -55,6 +55,7 @@ class Product {
         }
         return $data;
     }
+
 
     function checkProductDup(){
         $sql = "SELECT * FROM products WHERE product_name = :product_name;";
@@ -86,6 +87,46 @@ class Product {
         }
         return $data;
     }
+    function fetchCategoryById($id) {
+        $sql = "SELECT * FROM categories WHERE id = :id ;";
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':id', $id);
+        $data = null;
+        if ($query->execute()) {
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $data;
+    }
+    function fetchCategoryByName($name) {
+        $sql = "SELECT * FROM categories WHERE name = :name ;";
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':name', $name);
+        $data = null;
+        if ($query->execute()) {
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $data;
+    }
+    function editCategory($id, $name) {
+        $sql = "UPDATE categories SET name = :name WHERE id = :id ;";
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':name', $name);
+        $query->bindParam(':id', $id);
+        return $query->execute();
+    }
+    function addCategory( $name) {
+        $sql = "INSERT INTO categories (name) VALUES (:name) ;";
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':name', $name);
+        return $query->execute();
+    }
+    function deleteCategory( $id) {
+        $sql = "DELETE FROM categories WHERE id = :id ;";
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':id', $id);
+        return $query->execute();
+    }
+
 
      function displayTopProd(){
         $sql = "SELECT p.*, c.name as category_name FROM products p  INNER JOIN categories c ON p.category = c.id LIMIT 4;";
