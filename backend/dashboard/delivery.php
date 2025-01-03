@@ -6,63 +6,30 @@
 
     $orderObj = new Order();
 
-    $recent_orders = $orderObj->displayDeliveries();
+    function formatDate($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y, g:i a');
+        return $formattedOrderDate;
+    }
+    function formatDeliveryDate($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y');
+        return $formattedOrderDate;
+    }
+        $keyword = isset($_GET['search']) ? $_GET['search']: '';
+        $status = isset($_GET['filter_status']) ? $_GET['filter_status']: '';
+
+        $recent_orders = $orderObj->showAllOrders($keyword,$status, 'delivery');
 ?>
 
 <style>
-    .recent-orders{
-        margin-top: 12px;
-    }
-
-
-    .recent-orders{
-        margin-top: 12px;
-    }
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        background-color: #1e1e1e;
-        padding-top: 20px;
-        position: fixed;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
-    }
-
-    .sidebar h2 {
-        color:#e67e00 ;
-        text-align: center;
-        font-size: 22px;
-        margin-bottom: 30px;
-    }
-
-    .sidebar ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .sidebar ul li {
-        margin: 10px 0;
-    }
-
-    .sidebar a {
-        color: white;
-        padding: 15px;
-        text-decoration: none;
-        display: block;
-        font-size: 18px;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-
+   
     /* Active Link Styling */
     .sidebar a.active {
         background-color: #e67e00; /* Darker orange for active link */
     }
 
-    /* Hover Effect */
-    .sidebar a:hover {
-        background-color: #e67e00; /* Darker orange for hover */
-    }
-
+   
 </style>
 
 
@@ -117,9 +84,26 @@
         </div>
 
         <div class="recent-orders">
-            <div class="flex justify-between items-end mt-4">
-                <p class="text-4xl">Recent Orders</p>
-                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='orders.php'">View All</button>
+        <p class="text-4xl my-6">Recent Orders</p>
+             <div class="flex items-center gap-3 justify-between ">
+                <form action="" method="get" class="flex items-center m-0 p-0 bg-transparent shadow-none gap-3  flex-1">
+                   
+                    <div class="flex items-center relative">
+                     <input type="text" name="search" class="search-input m-0 w-[800px]" placeholder="Search..." value="<?= isset($_GET['search'])? $_GET['search']: '' ?>">
+                        <button type="submit" class="absolute right-3 top-0 bottom-0"> 
+                            <i data-lucide="search" class="size-6 text-white"></i>
+                      </button>
+                    </div>
+
+                        <select name="filter_status" id="" class="mb-0  w-fit">
+                            <option value="" selected>Order status </option>
+                            <option value="pending" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending'? 'selected': '' ?>>Pending</option>
+                            <option value="cancelled" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'cancelled'? 'selected': '' ?>>Cancelled</option>
+                            <option value="completed" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'completed'? 'selected': '' ?>>Completed</option>
+                        </select>
+                        <input type="submit" value="Filter" name="filter" class="btn bg-[#ff8c00] py-2 px-6 rounded-md">
+                    </form>
+                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md flex-2" onclick="window.location.href='orders.php'">View All</button>
             </div>
             <table>
                 <thead>
@@ -145,10 +129,10 @@
                             <td><?= $order['address'] ?></td> <td><?= $order['product_name'] ?></td>
                             <td><?= $order['size'] ?></td>
                             <td><?= $order['quantity'] ?></td>
-                            <td><?= $order['delivery_date'] ?></td>
+                            <td><?= formatDeliveryDate($order['delivery_date']) ?></td>
                             <td><?= $order['status'] ?></td>
-                            <td><?= $order['order_date'] ?></td>
-                            <td><a href="../order/view_order.php?id=<?= $order['id'];?>">View</a></td>
+                            <td><?= formatDate($order['order_date']) ?></td>
+                            <td><a href="view_order.php?id=<?= $order['id'];?>">View</a></td>
                         </tr>
                         <?php } } else { ?>
                         <tr>
