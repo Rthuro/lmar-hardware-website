@@ -17,5 +17,7 @@
     <link rel="stylesheet" href="/frontend/tailwind.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="/frontend/assets/img/lmar_logo.png" type="image/x-icon">
+    <script src="../../node_modules/lucide/dist/umd/lucide.js"></script>
+   
 
 </head>
