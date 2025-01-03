@@ -109,14 +109,14 @@
         if( !empty($_GET['modal']) ){ 
             if($_GET['modal'] == 'add_product'){  ?>
                 <div class="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center bg-black/40">
-                    <div class=" bg-[#1e1e1e] shadow-md rounded-lg w-[500px] h-fit p-4">
+                    <div class=" bg-[#1e1e1e] shadow-md rounded-lg w-[500px] h-fit p-4 ">
                         <p class=" text-lg ">Add New Product</p>
                         <form action="" method="post" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
                             <label for="product_image" >Image:</label>
                             <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required>
 
                             <label for="product_name">Name:</label>
-                            <input type="text" name="product_name" value="" required>
+                            <input type="text" name="product_name" value=""  required>
 
                             <label for="category">Category:</label>
                             <select name="category" required>
@@ -146,29 +146,25 @@
                 <h1 class="text-4xl">Inventory Management</h1>
         </div>
 
-
-        <form method="GET" action="" class="search-bar">
-            <input type="text" name="search" class="search-input" placeholder="Search by product name"
-                value="<?= htmlspecialchars($search_term) ?>">
-            <select name="category" class="search-input">
-                <option value="">All Categories</option>
-                <?php foreach ($categories as $category): ?>
-                <option value="<?= $category['name'] ?>"
-                    <?= $filter_category == $category['name'] ? 'selected' : '' ?>>
-                    <?= $category['name'] ?>
-                </option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit" class="btn-search">Search</button>
-        </form>
-
-        <div class="action-buttons">
+        <div class="flex items-center justify-between">
+            <form method="GET" action="" class="search-bar shadow-none m-0 p-0 bg-transparent">
+                <input type="text" name="search" class="search-input" placeholder="Search by product name"
+                    value="<?= htmlspecialchars($search_term) ?>">
+                <select name="category" class="search-input">
+                    <option value="">All Categories</option>
+                    <?php foreach ($categories as $category): ?>
+                    <option value="<?= $category['name'] ?>"
+                        <?= $filter_category == $category['name'] ? 'selected' : '' ?>>
+                        <?= $category['name'] ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn-search">Search</button>
+            </form>
             <a class="btn bg-[#ff8c00] py-2 px-6 rounded-md" href="inventory.php?modal=add_product">
-                Add Product
+                    Add Product
             </a>
-          
-       </div>
-
+        </div>
 
         <table border="1">
             <thead>
