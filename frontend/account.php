@@ -173,7 +173,8 @@
                                                     <p class="font-medium text-gray-700">
                                                         Delivery date: <?= $formattDate ?>
                                                     </p>
-                                                    <input type="submit" value="Cancel Order"  name="cancel_order"class=" py-2 px-4 bg-customOrange text-white rounded-md">
+                                                    <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                                    <input type="submit" value="Cancel Order"  name="cancel_order" class=" py-2 px-4 bg-customOrange text-white rounded-md">
                                                     </div>
                                                     
                                                 </form>
