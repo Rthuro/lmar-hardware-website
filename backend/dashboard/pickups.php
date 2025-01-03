@@ -101,7 +101,6 @@
                         </select>
                         <input type="submit" value="Filter" name="filter" class="btn bg-[#ff8c00] py-2 px-6 rounded-md">
                     </form>
-                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md flex-2" onclick="window.location.href='orders.php'">View All</button>
             </div>
             <table>
                 <thead>
