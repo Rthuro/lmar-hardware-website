@@ -5,7 +5,6 @@ include_once "../includes/header.php";
 
 $orderObj = new Order();
 
-$recent_orders = $orderObj->displayOnDashboard();
 
 $servername = "localhost";
 $username = "root";
@@ -20,55 +19,13 @@ if ($conn->connect_error) {
 $sql = "SELECT * FROM users WHERE role IN ('admin', 'customer')";
 $result = $conn->query($sql);
 
-// Get the current page's filename
 $current_page = basename($_SERVER['PHP_SELF']);
 
 ?>
 <style>
-    /* Sidebar Styling */
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    background-color: #1e1e1e;
-    padding-top: 20px;
-    position: fixed;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
-}
 
-.sidebar h2 {
-    color:#e67e00 ;
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 30px;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin: 10px 0;
-}
-
-.sidebar a {
-    color: white;
-    padding: 15px;
-    text-decoration: none;
-    display: block;
-    font-size: 18px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-/* Active Link Styling */
 .sidebar a.active {
-    background-color: #e67e00; /* Darker orange for active link */
-}
-
-/* Hover Effect */
-.sidebar a:hover {
-    background-color: #e67e00; /* Darker orange for hover */
+    background-color: #e67e00; 
 }
 
 </style>
@@ -134,9 +91,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
-        <!-- Accounts Table Section -->
         <div class="recent-orders">
-            <h2>Available Accounts</h2>
 
             <table>
                 <thead>
