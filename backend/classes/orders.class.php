@@ -22,6 +22,30 @@
             $this->db = new Database();
         }
 
+        function showAllOrders($keyword='', $status = '', $delivery_option = '') {
+            $sql = "SELECT  o.*, oi.*, s.size, p.product_name, u.username FROM orders o 
+            LEFT JOIN order_items oi ON o.id = oi.order_id 
+            LEFT JOIN product_size s ON oi.size_id = s.size_id 
+            LEFT JOIN products p ON oi.product_id = p.id  
+            LEFT JOIN users u ON o.customer_id = u.id
+            WHERE (p.product_name LIKE CONCAT('%', :keyword, '%') 
+            OR u.username LIKE  CONCAT('%', :keyword, '%'))
+            AND o.status LIKE  CONCAT('%', :status, '%') 
+            AND o.delivery_option LIKE  CONCAT('%', :delivery_option, '%') 
+            ORDER BY o.order_date DESC;";
+    
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':keyword', $keyword);
+            $query->bindParam(':status', $status);
+            $query->bindParam(':delivery_option', $delivery_option);
+            $data = null;
+
+            if ($query->execute()) {
+                $data = $query->fetchAll();
+            }
+            return $data;
+        }
+
         function createOrder(){
             $sql = "INSERT INTO orders ( customer_id, payment, address,location, contact_num, delivery_option, pickup_date, delivery_date) VALUES (:customer_id, :payment, :address,:location, :contact_num, :delivery_option, :pickup_date, :delivery_date ); ";
 
@@ -77,16 +101,68 @@
         }
 
         function fetchLocation (){
-                $sql = "SELECT * FROM location";
+                $sql = "SELECT * FROM location; ";
                 $query = $this->db->connect()->prepare($sql);
                 $data = null;
                 if ($query->execute()) {
                     $data = $query->fetchAll(PDO::FETCH_ASSOC);
                 }
                 return $data;
-            
         }
 
+        function editLocation ($name, $deliveryFee, $id){
+            $sql = "UPDATE location SET name = :name , deliveryFee = :deliveryFee WHERE id = :id; ";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':name', $name);
+            $query->bindParam(':deliveryFee', $deliveryFee);
+            $query->bindParam(':id', $id);
+            
+            return $query->execute();
+        
+         }
+         function addLocation ($name, $deliveryFee){
+            $sql = "INSERT INTO location (name, deliveryFee ) VALUES ( :name , :deliveryFee ); ";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':name', $name);
+            $query->bindParam(':deliveryFee', $deliveryFee);
+            
+            return $query->execute();
+        
+         }
+         function deleteLocation ($id){
+            $sql = "DELETE FROM location WHERE id = :id; ";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':id', $id);
+            return $query->execute();
+        
+         }
+       
+        function fetchLocationById ($id){
+            $sql = "SELECT * FROM location WHERE id = :id; ";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam('id', $id);
+
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetch();
+            }
+
+            return $data;
+        
+        }
+        function fetchLocationByName (){
+            $sql = "SELECT * FROM location WHERE name = :name; ";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam('name', $this->location_name);
+
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetch();
+            }
+
+            return $data;
+        
+        }
         function getDeliveryFee (){
             $sql = "SELECT deliveryFee FROM location WHERE name = :name";
             $query = $this->db->connect()->prepare($sql);
@@ -199,7 +275,7 @@
                 LEFT JOIN users u ON o.customer_id = u.id
                 LEFT JOIN products p ON oi.product_id = p.id
                 LEFT JOIN product_size s ON oi.size_id = s.size_id
-                ORDER BY o.order_date ASC; ";
+                ORDER BY o.order_date DESC; ";
             $query = $this->db->connect()->prepare($sql);
             $data = null;
             if ($query->execute()) {
@@ -262,6 +338,8 @@
                 u.email,
                 o.id, 
                 o.contact_num, 
+                o.location, 
+                o.address, 
                 o.payment, 
                 o.delivery_option, 
                 o.status, 
