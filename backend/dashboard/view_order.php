@@ -183,9 +183,11 @@
                 <input type="number" name="total" id="" value="<?= $payment ?>"  readonly>
               
                 <?php if($order_status === "completed"){ ?>
-                    <input type="button" value="Order Completed " name="" class="w-full bg-green-600 py-2 px-6 rounded-md" disabled >
-                <?php } else { ?>
-                    <input type="submit" value="Update Order Status " name="update_order" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md" >
+                    <input type="button" value="Order Completed " name="" class="w-full bg-green-600 py-2 px-6 rounded-md my-3" disabled >
+                <?php } else if($order_status === "cancelled") { ?>
+                    <input type="button" value="Order Cancelled " name="" class="w-full bg-red-600 py-2 px-6 rounded-md my-3" disabled >
+               <?php } else { ?>
+                    <input type="submit" value="Update Order Status " name="update_order" class="w-full bg-[#ff8c00] py-2 px-6 rounded-md my-3" >
                 <?php } ?>
             </form>
             <div class="flex flex-col flex-1">
