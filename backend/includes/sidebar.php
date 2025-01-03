@@ -8,6 +8,7 @@
         <li><a class="delivery <?php echo (basename($_SERVER['PHP_SELF']) == 'delivery.php') ? 'active' : ''; ?>" href="/backend/dashboard/delivery.php">Deliveries</a></li>
         <li><a class="pickup <?php echo (basename($_SERVER['PHP_SELF']) == 'pickups.php') ? 'active' : ''; ?>" href="/backend/dashboard/pickups.php">Pickups</a></li>
         <li><a class="account <?php echo (basename($_SERVER['PHP_SELF']) == 'account.php') ? 'active' : ''; ?>" href="/backend/dashboard/account.php">Account</a></li>
+        <li><a class="system <?php echo (basename($_SERVER['PHP_SELF']) == 'system_configurations.php') ? 'active' : ''; ?>" href="/backend/dashboard/system_configurations.php">System Configurations</a></li>
         <li><a href="/backend/account/logout.php">Logout</a></li>
     </ul>
 </div>
