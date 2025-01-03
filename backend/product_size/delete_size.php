@@ -16,7 +16,7 @@ $productSizeObj = new ProductSize();
 $productSizeObj->size_id = $id;
 if ($productSizeObj->deleteSize()) {
     $_SESSION['outputMsg']['success'] = 'Product deleted successfully';
-    header("location: /backend/dashboard/inventory.php");
+    echo "<script> history.back() </script>";
 } else {
     $_SESSION['outputMsg']['error'] = 'Deleting product failed';
     header("location: /backend/dashboard/inventory.php");
