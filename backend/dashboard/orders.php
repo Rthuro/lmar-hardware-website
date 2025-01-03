@@ -7,6 +7,13 @@
     $orderObj = new Order();
 
     $recent_orders = $orderObj->displayOnDashboard();
+
+    $keyword = isset($_GET['search']) ? $_GET['search']: '';
+    $status = isset($_GET['filter_status']) ? $_GET['filter_status']: '';
+    $delivery_option  = isset($_GET['filter_deliveryOption']) ? $_GET['filter_deliveryOption']: '' ;
+
+    $recent_orders = $orderObj->showAllOrders($keyword,$status,$delivery_option);
+
 ?>
 
 <style>
@@ -65,9 +72,30 @@
         </div>
 
         <div class="recent-orders">
-            <div class="flex justify-between items-end mt-4">
+            <div class="flex flex-col gap-3 mt-4">
                 <p class="text-4xl">Recent Orders</p>
-                <button class="btn bg-[#ff8c00] py-2 px-6 rounded-md" onclick="window.location.href='orders.php'">View All</button>
+                <form action="" method="get" class="flex items-center m-0 p-0 bg-transparent shadow-none gap-3  flex-1">
+                   
+                    <div class="flex items-center relative">
+                     <input type="text" name="search" class="search-input m-0 w-[800px]" placeholder="Search..." value="<?= isset($_GET['search'])? $_GET['search']: '' ?>">
+                        <button type="submit" class="absolute right-3 top-0 bottom-0"> 
+                            <i data-lucide="search" class="size-6 text-white"></i>
+                      </button>
+                    </div>
+
+                        <select name="filter_status" id="" class="mb-0  w-fit">
+                            <option value="" selected>Order status </option>
+                            <option value="pending" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending'? 'selected': '' ?>>Pending</option>
+                            <option value="cancelled" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'cancelled'? 'selected': '' ?>>Cancelled</option>
+                            <option value="completed" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'completed'? 'selected': '' ?>>Completed</option>
+                        </select>
+                        <select name="filter_deliveryOption" id="" class="mb-0 w-fit">
+                            <option value="" selected>Delivery Option </option>
+                            <option value="pickup" <?= isset($_GET['filter_deliveryOption']) && $_GET['filter_deliveryOption'] == 'pickup'? 'selected': '' ?>>Pickup</option>
+                            <option value="delivery" <?= isset($_GET['filter_deliveryOption']) && $_GET['filter_deliveryOption'] == 'delivery'? 'selected': '' ?>>Delivery</option>
+                        </select>
+                        <input type="submit" value="Filter" name="filter" class="btn bg-[#ff8c00] py-2 px-6 rounded-md">
+                </form>
             </div>
             <table>
                 <thead>
