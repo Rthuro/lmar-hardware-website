@@ -8,27 +8,33 @@
     $productSizeObj = new ProductSize();
 
     session_start();
-    if(isset($_SESSION['account'])){
-        $username = $_SESSION['account']['username'];
-        $email = $_SESSION['account']['email'];
-     } 
-   
+
+     $categories = $productObj->fetchCategory();
+     // $products = $productObj->showAll($search_term, $filter_category);
+     $maxPrice = $productObj->getMaxSizePrice();
+     $totalProd = $productObj->getTotalProducts(); 
+
     $search_term = isset($_GET['search']) ? clean_input($_GET['search']): '';
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
-
-    $categories = $productObj->fetchCategory();
-    // $products = $productObj->showAll($search_term, $filter_category);
+    $filter_price =  isset($_GET['price'])&& $_GET['price']>0 ? clean_input($_GET['price']): null;
+    
+    if(isset($_GET['clear'])){
+        header('location: products.php');
+        exit();
+    }
 
     $productsPerPage = 9; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
-    $totalProducts = $productObj->getTotalProducts($search_term, $filter_category);
+    $totalProducts = $productObj->getTotalProducts($search_term, $filter_category, $filter_price);
     $totalPages = ceil($totalProducts / $productsPerPage);
 
-    $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category);
+    $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category, $filter_price);
+    
+    include_once 'includes/header.php';
 
-     include_once 'includes/header.php';
+    
 ?>
 
 <body>
@@ -43,26 +49,22 @@
                     <p class="text-[28px] ">Filters</p>
                     <button id="filter_xBttn" type="button"><i  data-lucide="x"></i></button>
                 </div>
-                <label for="availability" class="block text-[18px] pl-1 pb-1 border-b-[1px]">Availability</label>
-                <div class="block pl-2 mt-2 mb-1 ">
-                    <input type="radio" name="availability" id="inStock">
-                    <label for="inStock">In stock</label>
-                </div>
-            
-                <div class="block pl-2" >
-                    <input type="radio" name="availability" id="outOfStock">
-                    <label for="outOfStock">Out of stock</label>
-                </div>
+                <p>Result <?= $totalProducts ?> of <?= $totalProd ?> products</p>
+                    <?php if(isset($_GET['category'])){ ?>
+                            <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                    <?php } ?>
+                    <?php if(isset($_GET['search'])){ ?>
+                            <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                    <?php } ?>
                 <label for="priceRange" class="block text-[18px] pl-1 my-2 ">Price </label>
-                <input type="range" name="priceRange" id="priceRange" min="0" max="10000" step="10" class="w-full block ">
+                <input type="range" name="price" id="priceRange" min="0" max="<?= !empty($maxPrice)? $maxPrice['maxPrice']:'' ?>" step="10" class="w-full block " value="<?= isset($_GET['price'])? $_GET['price']:0 ?>">
                 <div class="flex justify-between items-center mt-1">
-                    <p id="minPrice">PHP</p>
-                    <p id="maxPrice">PHP 10,000</p>
+                    <p id="minPrice">PHP <?= isset($_GET['price'])? (int)$_GET['price']:0 ?></p>
+                    <p id="maxPrice">PHP <?= !empty($maxPrice)? $maxPrice['maxPrice']:'' ?></p>
                 </div>
                 <div class="flex flex-col justify-between mt-6 gap-2">
-                    <input type="submit" value="Filter" name="filter" class="py-2  o-y-btn rounded-[2px] cursor-pointer ">
-                    <input type="submit" value="Clear All" name="clearFilter" class="py-2  outline-o-btn cursor-pointer ">
-
+                        <input type="submit" value="Filter" class="py-2  o-y-btn rounded-[2px] cursor-pointer ">
+                        <input type="submit" name="clear" value="Clear Filter" id="clearFilter" class="py-2  outline-o-btn cursor-pointer ">
                 </div>
             </form>
 
@@ -75,29 +77,28 @@
     </div>
 
     <div class="flex items-start justify-center max-w-[1050px] mx-auto gap-6 my-8 flex-1">
-            <form action="" method="get" class="flex flex-col w-[250px] border-[1px] h-fit bg-white p-4  xs:hidden  lg:flex   ">
+            <form  method="get" class="flex flex-col w-[250px] border-[1px] h-fit bg-white p-4  xs:hidden  lg:flex   ">
                                 <p class="text-[28px] pb-2">Filters</p>
-                                <!-- <label for="availability" class="block text-[18px] pl-1 pb-1 border-b-[1px]">Availability</label>
-                                <div class="block pl-2 mt-2 mb-1 ">
-                                    <input type="radio" name="availability" id="inStock">
-                                    <label for="inStock">In stock</label>
-                                </div>
-                            
-                                <div class="block pl-2" >
-                                    <input type="radio" name="availability" id="outOfStock">
-                                    <label for="outOfStock">Out of stock</label>
-                                </div> -->
-                                <label for="priceRange" class="block text-[18px] pl-1 my-2 ">Price </label>
-                                <input type="range" name="priceRange" id="priceRange2" min="0" max="10000" step="10" class="w-full block ">
+                                <p>Result <?= $totalProducts ?> of <?= $totalProd ?> products</p>
+                                <?php if(isset($_GET['category'])){ ?>
+                                        <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                                <?php } ?>
+                                <?php if(isset($_GET['search'])){ ?>
+                                        <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                                <?php } ?>
+                                
+                                
+                                <label for="price" class="block text-[18px] pl-1 my-2 ">Price </label>
+                                <input type="range" name="price" id="priceRange2" min="0" max="<?= !empty($maxPrice)? $maxPrice['maxPrice']:'' ?>" step="10" class="w-full block " value="<?= isset($_GET['price'])? $_GET['price']:0 ?>">
                                 <div class="flex justify-between items-center mt-1">
-                                    <p id="minPrice2">PHP</p>
-                                    <p id="maxPrice">PHP 10,000</p>
+                                    <p id="minPrice2">PHP <?= isset($_GET['price'])? (int)$_GET['price']:0 ?></p>
+                                    <p id="maxPrice">PHP <?= !empty($maxPrice)? $maxPrice['maxPrice']:'' ?></p>
                                 </div>
                                 <div class="flex flex-col justify-between mt-6 gap-2">
-                                    <input type="submit" value="Filter" name="filter" class="py-2  o-y-btn rounded-[2px] cursor-pointer ">
-                                    <input type="submit" value="Clear All" name="clearFilter" class="py-2  outline-o-btn cursor-pointer ">
+                                    <input type="submit" value="Filter" class="py-2  o-y-btn rounded-[2px] cursor-pointer ">
+                                    <input type="submit" name="clear" value="Clear Filter" id="clearFilter" class="py-2  outline-o-btn cursor-pointer ">
                                 </div>
-        </form>
+            </form>
    
        
             <?php if(empty($products)){ ?>
@@ -106,14 +107,17 @@
             <div class="grid  md:grid-cols-3 xs:grid-cols-2 grid-rows-3 md:gap-2 xs:gap-1  mb-7 h-fit z-0 content-center">
             <?php foreach ($products as $product):
                 $productSizeObj->product_id = $product['id']; 
-                $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
+                $prodPrice = $productSizeObj->fetchPriceToDisplay("product");
                 ?>
-                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  md:w-[250px] xs:w-[200px] hover:shadow-lg cursor-pointer overflow-hidden">
-                                <img class="w-full md:h-[250px] xs:h-[180px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
+                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  md:w-[250px] sm:w-[200px] xs:w-[160px] hover:shadow-lg cursor-pointer overflow-hidden">
+                                <img class="w-full md:h-[250px] sm:h-[180px] xs:h-[160px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
                                 <div class="py-2 px-3 flex flex-col gap-1">
                                     <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
                                      <span class="prodName text-lg truncate text-ellipsis "><?= $product['product_name'] ?></span>
-                                     <span class=" text-sm text-gray-700" >PHP <?= $prodPrice['minPrice'] ?></span>
+                                     <p class="text-sm text-gray-700">
+                                        PHP <?= $prodPrice['minPrice'] ?>
+                                        <?= ($prodPrice['maxPrice'] == $prodPrice['minPrice']) ? "" : " - <span id='maxPrice'>" . $prodPrice['maxPrice'] . "</span>" ?>
+                                    </p>
                                 </div>
                     </a>  
                 <?php endforeach; ?>
