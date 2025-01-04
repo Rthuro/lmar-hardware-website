@@ -129,7 +129,7 @@ class Product {
 
 
      function displayTopProd(){
-        $sql = "SELECT p.*, c.name as category_name FROM products p  INNER JOIN categories c ON p.category = c.id LIMIT 4;";
+        $sql = "SELECT p.*, c.name as category_name, SUM(oi.quantity) AS total_quantity_sold  FROM products p  INNER JOIN categories c ON p.category = c.id LEFT JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id ORDER BY total_quantity_sold DESC LIMIT 4;";
         $query = $this->db->connect()->prepare($sql);
         $data = null;
         if ($query->execute()) {
@@ -138,27 +138,79 @@ class Product {
         return $data;
     }
 
-    function getProducts($start, $limit, $search = '',  $filter_category= '') {
-        $sql = "SELECT p.*,c.name as category_name FROM products p INNER JOIN categories c ON p.category = c.id  WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%') LIMIT :start, :limit; ";
+    function getProducts($start, $limit, $search = '', $filter_category = '', $filter_price = null) {
+        $sql = "SELECT p.*, c.name AS category_name 
+                FROM products p 
+                INNER JOIN categories c ON p.category = c.id 
+                INNER JOIN product_size ps ON p.id = ps.product_id 
+                WHERE p.product_name LIKE CONCAT('%', :search, '%') 
+                AND c.name LIKE CONCAT('%', :category, '%')";
+    
+        if (!is_null($filter_price)) {
+            $sql .= " AND ps.price <= :price ";
+        }
+    
+        $sql .= " GROUP BY p.id ORDER BY ps.price DESC LIMIT :start, :limit ";
+    
         $query = $this->db->connect()->prepare($sql);
         $query->bindParam(':start', $start, PDO::PARAM_INT);
         $query->bindParam(':limit', $limit, PDO::PARAM_INT);
         $query->bindParam(':search', $search);
         $query->bindParam(':category', $filter_category);
-
+    
+        if (!is_null($filter_price)) {
+            $query->bindParam(':price', $filter_price);
+        }
+    
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
     
     
-    function getTotalProducts($search = '', $filter_category= '') {
-        $sql = "SELECT COUNT(*) AS total FROM products p LEFT JOIN categories c ON p.category = c.id WHERE p.product_name LIKE CONCAT('%', :search, '%') AND c.name LIKE CONCAT('%', :category, '%');";
+    
+    function getTotalProducts($search = '', $filter_category = '', $filter_price = null) {
+        $sql = "SELECT COUNT(DISTINCT p.id) AS total 
+                FROM products p 
+                INNER JOIN categories c ON p.category = c.id 
+                INNER JOIN product_size ps ON p.id = ps.product_id 
+                WHERE p.product_name LIKE CONCAT('%', :search, '%') 
+                AND c.name LIKE CONCAT('%', :category, '%')";
+    
+        if (!is_null($filter_price)) {
+            $sql .= " AND ps.price <= :price";
+        }
+    
         $query = $this->db->connect()->prepare($sql);
-        $query->bindParam(':category', $filter_category);
         $query->bindParam(':search', $search);
-
+        $query->bindParam(':category', $filter_category);
+    
+        if (!is_null($filter_price)) {
+            $query->bindParam(':price', $filter_price);
+        }
+    
         $query->execute();
         return $query->fetchColumn();
+    }
+
+    function fetchAllProducts(){
+        $sql = "SELECT COUNT(*) as total FROM products";
+        $query = $this->db->connect()->prepare($sql);
+        $data = null;
+        if($query->execute()){
+            $data = $query->fetch();
+        }
+       return $data; 
+    }
+    
+    function getMaxSizePrice(){
+        $sql = "SELECT MAX(price) as maxPrice FROM product_size";
+        $query = $this->db->connect()->prepare($sql);
+        $data = null;
+        if($query->execute()){
+            $data = $query->fetch();
+            return $data;
+        }
+        return $data;
     }
   
 }
