@@ -101,14 +101,15 @@
             }
             return $data;
         }
+    
 
-    function modifyProdStock(){
-        $sql = "UPDATE product_size SET stock = :stock WHERE size_id = :size_id";
-        $query = $this->db->connect()->prepare($sql);
-        $query->bindParam(':stock', $this->stock);
-        $query->bindParam(':size_id', $this->size_id);
-        return $query->execute();
-    }
+        function modifyProdStock(){
+            $sql = "UPDATE product_size SET stock = :stock WHERE size_id = :size_id";
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':stock', $this->stock);
+            $query->bindParam(':size_id', $this->size_id);
+            return $query->execute();
+        }
 
 
     }
