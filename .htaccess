@@ -11,4 +11,4 @@
 #RewriteRule (.*) %3/$1 [DPI] 
 
 RewriteEngine On
-RewriteRule ^frontend/landing_page$ frontend/landing_page.php
+RewriteRule ^landing_page$ /frontend/landing_page.php [L]
