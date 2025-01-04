@@ -100,7 +100,13 @@
                             $cartObj->delete($prod['id']);
                         }
                 
-                        header('location: cart.php');
+                        if($payment == "delivery"){
+                            header('location: account.php?type=To+Deliver');
+                        } else if ($payment == "pickup"){
+                            header('location: account.php?type=Pick+Up');
+  
+                        }
+                        
                     }
                 }
        
