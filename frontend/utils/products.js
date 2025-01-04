@@ -21,8 +21,6 @@ document.addEventListener('click', (e) => {
 let priceRange = document.getElementById('priceRange');
 let minPrice = document.getElementById('minPrice');
 
-minPrice.innerHTML = "PHP " + 0;
-priceRange.value = 0
 
 priceRange.addEventListener('input', (e) => {
     minPrice.innerHTML = "PHP " + e.currentTarget.value;
@@ -31,8 +29,6 @@ priceRange.addEventListener('input', (e) => {
 let priceRange2 = document.getElementById('priceRange2');
 let minPrice2 = document.getElementById('minPrice2');
 
-minPrice2.innerHTML = "PHP " + 0;
-priceRange2.value = 0
 
 priceRange2.addEventListener('input', (e) => {
     minPrice2.innerHTML = "PHP " + e.currentTarget.value;
