@@ -2,6 +2,9 @@
      require_once "../backend/classes/account.class.php";
      require_once "../backend/classes/cart.class.php";
      $cartObj = new Cart();
+
+    
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +33,7 @@
                 <button id="burger_menuBttn" class="flex items-center ">
                     <i data-lucide="menu"></i>
                 </button>
-                  <div id="burger_menu" class=" fixed top-[88px] bottom-0 left-0 right-0 ">
+                  <div id="burger_menu" class=" fixed top-[88px] bottom-0 left-0 right-0 z-50">
                      <ul class="menu_items flex flex-col items-start justify-start py-3 px-4 bg-white w-full h-full">
                          <li><a href="landing_page.php">Home</a></li>
                          <li><a href="products.php">All Products</a></li>
@@ -59,7 +62,7 @@
                             <?php
                             } else {
                             ?>
-                                <a href="account.php" class="flex items-center gap-1">
+                                <a href="/frontend/account.php?type=Pick+Up" class="flex items-center gap-1">
                                     <i data-lucide="circle-user-round"></i>
                                     <p class="font-semibold text-lg"><?= $username ?></p>
                                 </a>
@@ -70,12 +73,19 @@
                      </ul>
                  </div>
              </div>
-                <div  id="logo" class="flex items-center cursor-pointer basis-1/4 xs:basis-0">
+                <div  id="logo" class="flex items-center cursor-pointer w-fit ">
                         <img src="./assets/img/lmar_logo_black_nobg.png" alt="" class=" object-contain sm:size-14 xs:size-12">
-                        <p class="text-2xl font-bold -ml-2 text-[#1d1d1d]  ">LMARHardware</p>
+                        <p class="md:text-2xl xs:text-lg font-bold -ml-2 text-[#1d1d1d]  ">LMARHardware</p>
                 </div>
                     <form action="/frontend/products.php" method="get" class="flex items-center justify-end  basis-1/2   max-[1000px]:hidden ">
-                        <input type="text" name="search" id="" placeholder="Search..." class=" w-full px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
+                         <?php if(isset($_GET['price'])){ ?>
+                                        <input type="hidden" name="price" value="<?= isset($_GET['price'])? $_GET['price']:0 ?>">
+                        <?php } ?>
+
+                        <?php if(isset($_GET['category'])){ ?>
+                                        <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                        <?php } ?>
+                        <input type="text" name="search" value="<?= isset($_GET['search'])? $_GET['search']: '' ?>" id="" placeholder="Search..." class=" w-full px-6 py-2 text-md rounded-l bg-white border focus:outline-gray-200 focus:bg-slate-50   ">
                         <button type="submit" value="" class="px-6 py-2 bg-gray-950 rounded-r -ml-1 ">
                             <i data-lucide="search" class="size-6 text-white"></i>
                         </button>
@@ -83,7 +93,7 @@
  
                        <div class="flex items-center justify-end gap-3 w-fit" >
                             <a href="cart.php" id="cart" class="relative flex items-end gap-2 cursor-pointer">
-                                <i data-lucide="shopping-cart" class=" size-8 text-customOrange"></i>
+                                <i data-lucide="shopping-cart" class=" md:size-8 xs:size-6 text-customOrange"></i>
                                 <div id="cart_items_count" class="absolute -top-1 right-0 bg-black/80 px-1 rounded-full">
                                     <?php if(isset($_SESSION['account'])){
                                         $cartObj->user_id = $_SESSION['account']['id'];
@@ -96,7 +106,7 @@
                          if(!isset($_SESSION['account'])){
                          ?> <button id="loginBtn" class=" rounded bg-gray-950 text-white  px-4 py-1 text-lg lg:flex xs:hidden">Log in</button>  <?php
                         } else {
-                          ?> <a href="/frontend/account.php" class="lg:flex xs:hidden items-center gap-1">
+                          ?> <a href="/frontend/account.php?type=Pick+Up" class="lg:flex xs:hidden items-center gap-1">
                                     <i data-lucide="circle-user-round"></i>
                                     <p  class="font-semibold text-lg"><?= $username ?></p>
                               </a> 
