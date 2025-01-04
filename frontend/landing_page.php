@@ -24,14 +24,14 @@
         </button>
     </form>
 
-    <section id="banner" class="flex 2xl:w-full lg:h-fit xs:w-fit   ">
+    <section id="banner" class="flex w-full  lg:h-fit   ">
         <div class=" flex items-center lg:flex-nowrap md:flex-wrap justify-center w-full h-full mx-12 lg:flex-row xs:flex-col    ">
             <div class="flex flex-1 flex-col  gap-2 max-w-[950px] lg:items-start  xs:items-center ">
-                <p class="lg:text-start  xs:text-center text-wrap font-bold sm:text-8xl  xs:text-6xl text-gray-950 ">Welcome to <span class="text-[#FB951C]">LMAR</span> Hardware</p>
+                <p class="lg:text-start  xs:text-center text-wrap font-bold sm:text-8xl  xs:text-5xl text-gray-950 ">Welcome to <span class="text-[#FB951C]">LMAR</span> Hardware</p>
                 <p class="md:text-lg  xs:text-sm lg:text-start xs:text-center text-wrap text-[#1d1d1d]">Browse and shop easily to your next door hardware.</p>
-                <div class="flex items-center gap-2 my-4">
-                    <button id="order_nowBtn" class=" text-white bg-[#fb951c] rounded py-2 px-4">Order now</button>
-                    <button id="view_prodBtn" class="text-white bg-gray-950 rounded py-2 px-4 gap-2 flex items-center">View products
+                <div class="flex items-center gap-2 my-4 xs:flex-col sm:flex-row">
+                    <button id="order_nowBtn" class=" text-white bg-[#fb951c] rounded py-2 px-4 w-[170px]">Order now</button>
+                    <button id="view_prodBtn" class="text-white bg-gray-950 rounded py-2 px-4 gap-2 flex items-center w-[170px]">View products
                         <i data-lucide="arrow-right" class="size-5"></i>
                     </button>
                 </div>
@@ -88,14 +88,17 @@
             <?php } else { ?>
             <?php foreach ($topProducts as $product):
                 $productSizeObj->product_id = $product['id']; 
-                $prodPrice = $productSizeObj->fetchPriceToDisplay("landing_page");
+                $prodPrice = $productSizeObj->fetchPriceToDisplay("product");
                 ?>
-                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  w-[250px] hover:shadow-lg cursor-pointer overflow-hidden">
-                                <img class="size-[250px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
+                    <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  md:w-[250px] sm:w-[200px] xs:w-[160px] hover:shadow-lg cursor-pointer overflow-hidden">
+                                <img  class="w-full md:h-[250px] sm:h-[180px] xs:h-[160px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
                                 <div class="py-2 px-3 flex flex-col gap-1">
                                     <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
-                                     <span class="prodName text-lg "><?= $product['product_name'] ?></span>
-                                     <span class=" text-sm text-gray-700" >PHP <?= $prodPrice['minPrice'] ?></span>
+                                     <span class="prodName text-lg truncate text-ellipsis "><?= $product['product_name'] ?></span>
+                                     <p class="text-sm text-gray-700">
+                                        PHP <?= $prodPrice['minPrice'] ?>
+                                        <?= ($prodPrice['maxPrice'] == $prodPrice['minPrice']) ? "" : " - <span id='maxPrice'>" . $prodPrice['maxPrice'] . "</span>" ?>
+                                    </p>
                                 </div>
                     </a>  
                 <?php endforeach; ?>
@@ -104,7 +107,7 @@
      
             
     <div class="flex justify-end max-w-[1050px] mx-auto my-3">
-        <button id="view_allBtn" class="text-white bg-[#1d1d1d] rounded py-2 px-4 gap-2 flex items-center">View all</button>
+        <button id="view_allBtn" class="text-white bg-[#1d1d1d] rounded py-2 px-4 gap-2 flex items-center mr-3">View all</button>
     </div>
     <?php
         include_once './includes/footer.php';
