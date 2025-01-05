@@ -246,7 +246,7 @@
                         <td><?= $prodSize['size']?></td>
                         <td><?=$prodSize['stock'] ?></td>
                         <td><?= $prodSize['price'] ?></td>
-                        <td><?php echo ($prodSize['stock'] == 0)? 'out of stock': ($prodSize['stock'] > 10 ? 'in stock': 'low of stock' ); ?></td>
+                        <td><?php echo ($prodSize['stock'] == 0)? 'out of stock': ($prodSize['stock'] > 10 ? 'in stock': 'low on stock' ); ?></td>
                         <td>
                             <a href="view_product.php?id=<?= $id ?>&modal=edit_size&size_id=<?= $prodSize['size_id'] ?>">Edit</a>
                             <a href="../product_size/delete_size.php?id=<?= $prodSize['size_id'] ?>"
