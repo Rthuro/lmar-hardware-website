@@ -15,16 +15,16 @@
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
 
     $categories = $productObj->fetchCategory();
-    $totalProd = $productObj->getTotalProducts(); 
+    $allProd = $productObj->fetchAllProducts();
 
     $productsPerPage = 5; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
-    $totalProducts = $productObj->getTotalProducts($search_term, $filter_category, $filter_price = null);
+    $totalProducts = $productObj->getTotalProductsInventory($search_term, $filter_category, $filter_price = null);
     $totalPages = ceil($totalProducts / $productsPerPage);
 
-    $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category, $filter_price = null);
+    $products = $productObj->getProductsInventory($start, $productsPerPage, $search_term,  $filter_category, $filter_price = null);
 
     if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_prod'])){
 
@@ -32,7 +32,7 @@
         $category = clean_input($_POST['category']);
         $image = $_FILES['product_image']['name'];
         $imageTemp = $_FILES['product_image']['tmp_name'];
-        $folder = "productImages/";
+        $folder = "../product/productImages/";
         $target = $folder. uniqid() . $image;
 
         try{
@@ -47,13 +47,10 @@
                 $productObj->product_name = $product_name;
                 $productObj->category = $category;
 
-                try{
-                    $addProd =$productObj->add();
-                    $success = "Successfully add product ". $product_name ;
-                    
-                }  catch (PDOException $e) {
-                    $error = "Error: " . $e->getMessage();
-                }
+                if($addProd =$productObj->add()){
+                    $lastInsertedId = $productObj->getLastInsertedId();
+                    header('location: /backend/product/view_product.php?id='.$lastInsertedId['id']);
+                } 
                 
             }
         }  catch (PDOException $e) {
@@ -120,7 +117,7 @@
                 <div class="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center bg-black/40">
                     <div class=" bg-[#1e1e1e] shadow-md rounded-lg w-[500px] h-fit p-4 ">
                         <p class=" text-lg ">Add New Product</p>
-                        <form action="" method="post" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
+                        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
                             <label for="product_image" >Image:</label>
                             <input type="file" id="product_image" name="product_image" accept=".jpg, .jpeg, .png" required>
 
@@ -141,7 +138,7 @@
                             </select>
 
                             <div class="flex gap-3">
-                                <input type="submit" name="add_prod" value="Save changes" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
+                                <input type="submit" name="add_prod" value="Add Product" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
                                 <a href="inventory.php" class="flex-1 text-center bg-red-600 py-2 px-6 my-4 rounded-md">Cancel</a>
                             </div>
                             
@@ -156,7 +153,7 @@
         </div>
         <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
                 <p class=" text-2xl text-customOrange">Total Products</p>
-                <p class=" text-xl "><?= $totalProd ?></p>
+                <p class=" text-xl "><?= $allProd ?></p>
         </div>
         <div class="flex items-center justify-between">
             <form method="GET" action="" class="search-bar shadow-none m-0 p-0 bg-transparent">
@@ -165,7 +162,7 @@
                 <select name="category" class="search-input">
                     <option value="">All Categories</option>
                     <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['name'] ?>"
+                    <option value="<?= htmlspecialchars($category['name'])  ?>"
                         <?= $filter_category == $category['name'] ? 'selected' : '' ?>>
                         <?= $category['name'] ?>
                     </option>
@@ -211,12 +208,19 @@
             </tbody>
         </table>
         <div class="flex items-center justify-start mx-auto h-fit py-5">
-        <?php if ($totalPages >= 1){ ?>
-                <div class="pagination">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" ><?= $i ?></a>
+            <?php if ($totalPages >= 1){ ?>
+                <form method="get" class=" shadow-none m-0 p-0 bg-transparent">
+                    <?php if(isset($_GET['category'])){ ?>
+                        <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                        <?php } 
+                        if(isset($_GET['search'])){ ?>
+                            <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                        <?php } 
+                      for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <input type="submit" name="page" value="<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" >
                     <?php endfor; ?>
-                </div>
+
+                </form>
             <?php } ?>
          </div>
     </div>
