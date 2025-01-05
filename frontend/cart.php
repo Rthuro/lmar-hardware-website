@@ -59,7 +59,7 @@
             </div>
             <?php } else { ?>
 
-        <form action="" method="post" class="w-full  flex flex-col gap-3 xs:px-6 lg:px-0">
+        <form action="" method="post" class="w-full  flex flex-col gap-3 xs:px-6">
             <table class=" table-fixed w-full">
                 <thead>
                     <tr class="pb-2">
@@ -78,12 +78,12 @@
                     $productSizeObj->size_id = $prod['size_id'];
                     $getSize = $productSizeObj->fetchProdSizeBySizeId();
                     ?>
-                        <tr class="border-y">
+                        <tr class="border-y xs:text-xs lg:text-md"> 
                             <td class="py-1" >
-                                <img src="/backend/product/<?=$getProd['product_img']?>" width="80" height="80" alt="<?= $getProd['product_name'] ?>">
+                                <img src="/backend/product/<?=$getProd['product_img']?>" class="lg:size-[80px] xs:size-[50px]" alt="<?= $getProd['product_name'] ?>">
                             </td>
                             <td class="">
-                                <a href="product.php?id=<?=$prod['product_id']?>" >
+                                <a href="product.php?id=<?=$prod['product_id']?>"  >
                                             <?=$getProd['product_name']?> 
                                     <?= (!empty($getSize[0]['size']) && $getSize[0]['size'] !== 'no size')? $getSize[0]['size']: ""  ;?></a>
                              <a href="cart.php?id=<?=$prod['id']?>" class=" block text-xs text-red-500 hover:underline ">Remove</a>
@@ -91,7 +91,7 @@
                             </td>
                             <td class="text-gray-500">
                            
-                            <p class="text-center"> <?= $prod['price'] ?></p>
+                            <p class="text-center">PHP <?= $prod['price'] ?></p>
                             </td>
                             <td class="" >
                             
