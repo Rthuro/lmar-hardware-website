@@ -120,6 +120,10 @@
             <p class="text-red-600"><?= (!empty($error)? $error:"") ?></p>
             <p class="text-red-600"><?= (!empty($prodErr)? $prodErr:"") ?></p>
         </form>
+        <div class="flex flex-col gap-3 border-t pt-3">
+            <p class="text-lg font-medium">Description</p>
+            <p class="text-sm text-black/60"><?= $product['description'] ?></p>
+        </div>
    </div>
 </div>
 
