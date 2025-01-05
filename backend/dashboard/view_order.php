@@ -145,7 +145,7 @@
                 <select name="status" id="" >
                          <option value="pending" <?= ($order_status == "pending")? "selected":'' ?>>Pending</option>
                           <?php if($delivery){ ?>
-                                <option value="to_deliver" <?= ($order_status == "to_deliver")? "selected":'' ?>>To Deliver</option> 
+                                <option value="to deliver" <?= ($order_status == "to deliver")? "selected":'' ?>>To Deliver</option> 
                               <?php }?>
                         <option value="completed" 
                         <?= ($order_status == "completed")? "selected":'' ?> >Completed</option>
