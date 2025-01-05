@@ -15,7 +15,16 @@
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
 
     $categories = $productObj->fetchCategory();
-    $products = $productObj->showAll($search_term, $filter_category);
+    $totalProd = $productObj->getTotalProducts(); 
+
+    $productsPerPage = 5; 
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+    $start = ($currentPage - 1) * $productsPerPage;
+
+    $totalProducts = $productObj->getTotalProducts($search_term, $filter_category, $filter_price = null);
+    $totalPages = ceil($totalProducts / $productsPerPage);
+
+    $products = $productObj->getProducts($start, $productsPerPage, $search_term,  $filter_category, $filter_price = null);
 
     if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_prod'])){
 
@@ -145,7 +154,10 @@
         <div class="header">
                 <h1 class="text-4xl">Inventory Management</h1>
         </div>
-
+        <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                <p class=" text-2xl text-customOrange">Total Products</p>
+                <p class=" text-xl "><?= $totalProd ?></p>
+        </div>
         <div class="flex items-center justify-between">
             <form method="GET" action="" class="search-bar shadow-none m-0 p-0 bg-transparent">
                 <input type="text" name="search" class="search-input" placeholder="Search by product name"
@@ -165,7 +177,8 @@
                     Add Product
             </a>
         </div>
-
+        
+       
         <table border="1">
             <thead>
                 <tr>
@@ -197,6 +210,15 @@
                 <?php endif; ?>
             </tbody>
         </table>
+        <div class="flex items-center justify-start mx-auto h-fit py-5">
+        <?php if ($totalPages >= 1){ ?>
+                <div class="pagination">
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <a href="?page=<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" ><?= $i ?></a>
+                    <?php endfor; ?>
+                </div>
+            <?php } ?>
+         </div>
     </div>
 
     <script>
