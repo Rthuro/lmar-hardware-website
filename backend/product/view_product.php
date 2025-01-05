@@ -179,7 +179,7 @@
                             <label for="stock">Stocks:</label>
                             <input type="number" name="stock" value="" min="1" required>
                             <div class="flex gap-3">
-                                <input type="submit" name="add_size" value="Save changes" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
+                                <input type="submit" name="add_size" value="Add Size" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
                                 <a href="view_product.php?id=<?= $id ?>" class="flex-1 text-center bg-red-600 py-2 px-6 my-4 rounded-md">Cancel</a>
                             </div>
                         </form>
