@@ -130,11 +130,18 @@
             </table>
             <div class="flex items-center justify-start mx-auto h-fit py-5">
             <?php if ($totalPages >= 1){ ?>
-                    <div class="pagination">
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <a href="?page=<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" ><?= $i ?></a>
-                        <?php endfor; ?>
-                    </div>
+                <form method="get" class=" shadow-none m-0 p-0 bg-transparent">
+                    <?php if(isset($_GET['filter_status'])){ ?>
+                        <input type="hidden" name="filter_status" value="<?= isset($_GET['filter_status'])? $_GET['filter_status']:'' ?>">
+                        <?php } 
+                        if(isset($_GET['search'])){ ?>
+                            <input type="hidden" name="search" value="<?= isset($_GET['search'])? $_GET['search']:'' ?>">
+                        <?php } 
+                      for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <input type="submit" name="page" value="<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" >
+                    <?php endfor; ?>
+
+                </form method="get">
             <?php } ?>
          </div>
         </div>
