@@ -16,9 +16,9 @@
 
         $keyword = isset($_GET['search']) ? $_GET['search']: '';
         $status = isset($_GET['filter_status']) ? $_GET['filter_status']: '';
-        $delivery_option  = isset($_GET['filter_deliveryOption']) ? $_GET['filter_deliveryOption']: '' ;
+        $delivery_option  = isset($_GET['filter_deliveryOption']) ? $_GET['filter_deliveryOption']: '' ;  
 
-        $recent_orders = $orderObj->showAllOrders($keyword,$status,$delivery_option);
+        $recent_orders = $orderObj->showAllOrders($keyword,$status,$delivery_option,'dashboard','','');
 ?>
 
 <style>
