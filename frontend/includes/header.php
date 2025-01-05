@@ -3,8 +3,6 @@
      require_once "../backend/classes/cart.class.php";
      $cartObj = new Cart();
 
-    
-    
 ?>
 <!DOCTYPE html>
 <html lang="en">
