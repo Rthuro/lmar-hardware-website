@@ -22,7 +22,7 @@
             $this->db = new Database();
         }
 
-        function showAllOrders($keyword='', $status = '', $delivery_option = '') {
+        function showAllOrders($keyword='', $status = '', $delivery_option = '', $location,$start,$limit) {
             $sql = "SELECT  o.*, oi.*, s.size, p.product_name, u.username FROM orders o 
             LEFT JOIN order_items oi ON o.id = oi.order_id 
             LEFT JOIN product_size s ON oi.size_id = s.size_id 
@@ -32,18 +32,51 @@
             OR u.username LIKE  CONCAT('%', :keyword, '%'))
             AND o.status LIKE  CONCAT('%', :status, '%') 
             AND o.delivery_option LIKE  CONCAT('%', :delivery_option, '%') 
-            ORDER BY o.order_date DESC;";
-    
+            ORDER BY o.order_date DESC ";
+
+             if(!empty($location) && $location == 'dashboard'){
+                $sql .= "LIMIT 10";
+            }
+
+            if(!empty($start) && !empty($limit)){
+                $sql .= "LIMIT :start, :limit";
+            }
             $query = $this->db->connect()->prepare($sql);
             $query->bindParam(':keyword', $keyword);
             $query->bindParam(':status', $status);
             $query->bindParam(':delivery_option', $delivery_option);
+
+            if(!empty($start) && !empty($limit)){   
+            $query->bindParam(':start', $start, PDO::PARAM_INT);
+            $query->bindParam(':limit', $limit, PDO::PARAM_INT);
+            }
+
             $data = null;
 
             if ($query->execute()) {
                 $data = $query->fetchAll();
             }
             return $data;
+        }
+        function getTotalOrders($keyword = '', $status = '', $delivery_option='') {
+            $sql = "SELECT COUNT(DISTINCT o.id) AS total 
+                    FROM orders o 
+                    LEFT JOIN order_items oi ON o.id = oi.order_id 
+                    LEFT JOIN product_size s ON oi.size_id = s.size_id 
+                    LEFT JOIN products p ON oi.product_id = p.id  
+                    LEFT JOIN users u ON o.customer_id = u.id
+                    WHERE (p.product_name LIKE CONCAT('%', :keyword, '%') 
+                    OR u.username LIKE  CONCAT('%', :keyword, '%'))
+                    AND o.status LIKE  CONCAT('%', :status, '%') 
+                    AND o.delivery_option LIKE  CONCAT('%', :delivery_option, '%'); ";
+        
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':keyword', $keyword);
+            $query->bindParam(':status', $status);
+            $query->bindParam(':delivery_option', $delivery_option);
+
+            $query->execute();
+            return $query->fetchColumn();
         }
 
         function createOrder(){
@@ -408,6 +441,17 @@
 
         }
 
+        function getOrdersByMonth($currMonth, $status='', $option = ''){
+            $sql = "SELECT COUNT(*) as total FROM orders WHERE MONTH(order_date) = :month AND delivery_option LIKE CONCAT('%', :option, '%') AND status LIKE CONCAT('%', :status, '%')";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':month', $currMonth, PDO::PARAM_INT);
+            $query->bindParam(':option', $option);
+            $query->bindParam(':status', $status);
+
+            $query->execute();
+            return $query->fetchColumn();
+        }
 
         
     }
