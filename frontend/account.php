@@ -152,6 +152,7 @@
                                             ?>
                                             <div class="w-full py-3 px-3 border-b">
                                                 <form action="" method="post" class=" flex-col flex gap-3">
+                                                    <p class=" py-1 px-3 text-sm bg-green-700 text-white w-fit rounded-full self-end"><?=$order['status']?></p>
                                                     <?php
                                                     foreach($orderItems as $items){
                                                         ?>
