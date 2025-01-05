@@ -57,9 +57,12 @@
                 <p>Result <?= $totalProducts ?> of <?= $totalProd ?> products</p>
                     <?php if(isset($_GET['category'])){ ?>
                             <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
-                    <?php } ?>
-                    <?php if(isset($_GET['search'])){ ?>
+                    <?php } 
+                     if(isset($_GET['search'])){ ?>
                             <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                    <?php } 
+                     if(isset($_GET['page'])){ ?>
+                            <input type="hidden" name="page" value="<?= isset($_GET['page'])? $currentPage:'' ?>">
                     <?php } ?>
                 <label for="priceRange" class="block text-[18px] pl-1 my-2 ">Price </label>
                 <input type="range" name="price" id="priceRange" min="0" max="<?= !empty($maxPrice)? $maxPrice['maxPrice']:'' ?>" step="10" class="w-full block " value="<?= isset($_GET['price'])? $_GET['price']:0 ?>">
@@ -86,10 +89,13 @@
                                 <p class="text-[28px] pb-2">Filters</p>
                                 <p>Result <?= $totalProducts ?> of <?= $totalProd ?> products</p>
                                 <?php if(isset($_GET['category'])){ ?>
-                                        <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
-                                <?php } ?>
-                                <?php if(isset($_GET['search'])){ ?>
+                                <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                                <?php } 
+                                if(isset($_GET['search'])){ ?>
                                         <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                                <?php } 
+                                if(isset($_GET['page'])){ ?>
+                                        <input type="hidden" name="page" value="<?= isset($_GET['page'])? $currentPage:'' ?>">
                                 <?php } ?>
                                 
                                 
@@ -132,11 +138,21 @@
 
     <div class="flex items-center justify-center mx-auto max-w-[1050px]">
         <?php if ($totalPages >= 1){ ?>
-                <div class="pagination">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?= $i ?>" class="rounded-md border border-black/80  py-2 px-4  <?= ($i == $currentPage) ? 'active text-white bg-black' : '' ?>" ><?= $i ?></a>
+                <form method="get" class="pagination">
+                    <?php if(isset($_GET['category'])){ ?>
+                                <input type="hidden" name="category" value="<?= isset($_GET['category'])? $_GET['category']:'' ?>">
+                                <?php } 
+                                if(isset($_GET['search'])){ ?>
+                                        <input type="hidden" name="search" value="<?= isset($_GET['search'])? $search_term:'' ?>">
+                                <?php } 
+                                if(isset($_GET['price'])){ ?>
+                                <input type="hidden" name="price" value="<?= isset($_GET['price'])? $_GET['price']:null ?>">
+                     <?php } 
+                      for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <input type="submit" name="page" value="<?= $i ?>" class=" w-fit rounded-md border border-black/80  py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-black' : '' ?>" >
                     <?php endfor; ?>
-                </div>
+
+                </form >
             <?php } ?>
     </div>
     
