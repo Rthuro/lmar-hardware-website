@@ -88,6 +88,7 @@
                         <select name="filter_status" id="" class="mb-0  w-fit">
                             <option value="" selected>Order status </option>
                             <option value="pending" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending'? 'selected': '' ?>>Pending</option>
+                            <option value="to deliver" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'to deliver'? 'selected': '' ?>>To Deliver</option>
                             <option value="cancelled" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'cancelled'? 'selected': '' ?>>Cancelled</option>
                             <option value="completed" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'completed'? 'selected': '' ?>>Completed</option>
                         </select>
