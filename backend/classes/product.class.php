@@ -167,7 +167,6 @@ class Product {
     }
     
     
-    
     function getTotalProducts($search = '', $filter_category = '', $filter_price = null) {
         $sql = "SELECT COUNT(DISTINCT p.id) AS total 
                 FROM products p 
@@ -197,7 +196,7 @@ class Product {
         $query = $this->db->connect()->prepare($sql);
         $data = null;
         if($query->execute()){
-            $data = $query->fetch();
+            $data = $query->fetchColumn();
         }
        return $data; 
     }
@@ -213,4 +212,50 @@ class Product {
         return $data;
     }
   
+    function getProductsInventory($start, $limit, $search = '', $filter_category = '', $filter_price = null) {
+        $sql = "SELECT p.*, c.name AS category_name 
+                FROM products p 
+                INNER JOIN categories c ON p.category = c.id 
+             
+                WHERE p.product_name LIKE CONCAT('%', :search, '%') 
+                AND c.name LIKE CONCAT('%', :category, '%') GROUP BY p.id  LIMIT :start, :limit ";
+    
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':start', $start, PDO::PARAM_INT);
+        $query->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $query->bindParam(':search', $search);
+        $query->bindParam(':category', $filter_category);
+
+    
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    
+    function getTotalProductsInventory($search = '', $filter_category = '', $filter_price = null) {
+        $sql = "SELECT COUNT(DISTINCT p.id) AS total 
+                FROM products p 
+                INNER JOIN categories c ON p.category = c.id  
+                WHERE p.product_name LIKE CONCAT('%', :search, '%') 
+                AND c.name LIKE CONCAT('%', :category, '%')";
+    
+       
+    
+        $query = $this->db->connect()->prepare($sql);
+        $query->bindParam(':search', $search);
+        $query->bindParam(':category', $filter_category);
+    
+    
+        $query->execute();
+        return $query->fetchColumn();
+    }
+
+    function getLastInsertedId(){
+        $sql = "SELECT LAST_INSERT_ID() as id ;";
+        $query = $this->db->connect()->prepare($sql);
+        if ($query->execute()) {
+            $data = $query->fetch();
+        }
+        return $data;
+    }
 }
