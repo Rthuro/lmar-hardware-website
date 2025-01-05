@@ -6,14 +6,24 @@
 
     $orderObj = new Order();
 
-    $recent_orders = $orderObj->displayOnDashboard();
-
     $keyword = isset($_GET['search']) ? $_GET['search']: '';
     $status = isset($_GET['filter_status']) ? $_GET['filter_status']: '';
     $delivery_option  = isset($_GET['filter_deliveryOption']) ? $_GET['filter_deliveryOption']: '' ;
 
-    $recent_orders = $orderObj->showAllOrders($keyword,$status,$delivery_option);
+    function formatDate($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y, g:i a');
+        return $formattedOrderDate;
+    }
 
+    $ordersPerPage = 5; 
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
+    $start = ($currentPage - 1) * $ordersPerPage;
+    $totalOrders = $orderObj->getTotalOrders($keyword,$status,$delivery_option);
+    $totalPages = ceil($totalOrders / $ordersPerPage);
+
+    $recent_orders = $orderObj->showAllOrders($keyword,$status,$delivery_option,'',$start,$ordersPerPage);
+    
 ?>
 
 <style>
@@ -32,45 +42,30 @@
             <h1>Orders </h1>
         </div>
 
-        <div class="dashboard-grid">
-            
-           <div class="card" onclick="location.href='inventory.php'">
-              
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" style="fill: #e67e00;">
-                    <path d="M19 3H5c-1.1 0-1.99.89-1.99 1.99L3 19c0 1.1.89 1.99 1.99 1.99h16c1.1 0 1.99-.89 1.99-1.99V5c0-1.1-.89-1.99-1.99-1.99zM5 5h14v14H5z"/>
-                </svg>
-                <h3>Inventory</h3>
+        <div class="flex gap-5 flex-wrap items-center">
+            <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                    <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">monthly</p>
+                    <p class=" text-2xl text-customOrange">Total Orders</p>
+                    <p class=" text-xl "><?= $orderObj->getOrdersByMonth(idate("m"), '','') ?></p>
             </div>
-           
-            <div class="card" onclick="location.href='orders.php'">
-           
-                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" style="fill: #e67e00;">
-                    <path d="M3 3h18v2H3zm0 4h18v2H3zm0 4h18v2H3zm0 4h18v2H3z"/>
-                </svg>
-                <h3>Orders</h3>
-                
+            <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">monthly</p>
+                <p class=" text-2xl text-customOrange">Pending</p>
+                <p class=" text-xl "><?= $orderObj->getOrdersByMonth(idate("m"), 'pending','') ?></p>
+        
             </div>
-            <div class="card" onclick="location.href='delivery.php'">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" style="fill: #e67e00;">
-                    <path d="M2 5v14h20V5H2zm18 12h-4v-2h4zm-6-4h-4V9h4zm-6-1H4V7h4z"/>
-                </svg>
-
-                <h3>Deliveries</h3>
-              
+            <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">monthly</p>
+                <p class=" text-2xl text-customOrange">Cancelled</p>
+                <p class=" text-xl "><?= $orderObj->getOrdersByMonth(idate("m"), 'cancelled','') ?></p>
             </div>
-
-            <div class="card" onclick="location.href='pickups.php'">
-                <!-- Pickups SVG Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" style="fill: #e67e00;">
-                    <path d="M7 2C6.45 2 6 2.45 6 3V19C6 19.55 6.45 20 7 20H17C17.55 20 18 19.55 18 19V3C18 2.45 17.55 2 17 2H7ZM8 3H16V5H8V3ZM9 6H15C15.55 6 16 6.45 16 7V18C16 18.55 15.55 19 15 19H9C8.45 19 8 18.55 8 18V7C8 6.45 8.45 6 9 6Z"/>
-                </svg>
-
-
-
-                <h3>Pickups</h3>
+            <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">monthly</p>
+                <p class=" text-2xl text-customOrange">Completed</p>
+                <p class=" text-xl "><?= $orderObj->getOrdersByMonth(idate("m"), 'completed','') ?></p>
             </div>
         </div>
-
+       
         <div class="recent-orders">
             <div class="flex flex-col gap-3 mt-4">
                 <p class="text-4xl">Recent Orders</p>
@@ -86,6 +81,7 @@
                         <select name="filter_status" id="" class="mb-0  w-fit">
                             <option value="" selected>Order status </option>
                             <option value="pending" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending'? 'selected': '' ?>>Pending</option>
+                            <option value="to_deliver" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'to_deliver'? 'selected': '' ?>>To Deliver</option>
                             <option value="cancelled" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'cancelled'? 'selected': '' ?>>Cancelled</option>
                             <option value="completed" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'completed'? 'selected': '' ?>>Completed</option>
                         </select>
@@ -122,7 +118,7 @@
                         <td><?= $order['quantity'] ?></td>
                         <td><?= $order['delivery_option'] ?></td>
                         <td><?= $order['status'] ?></td>
-                        <td><?= $order['order_date'] ?></td>
+                        <td><?= formatDate( $order['order_date']) ?></td>
                         <td><a href="view_order.php?id=<?= $order['id'];?>">View</a></td>
                     </tr>
                     <?php } } else { ?>
@@ -132,6 +128,15 @@
                     <?php } ?>
                 </tbody>
             </table>
+            <div class="flex items-center justify-start mx-auto h-fit py-5">
+            <?php if ($totalPages >= 1){ ?>
+                    <div class="pagination">
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <a href="?page=<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" ><?= $i ?></a>
+                        <?php endfor; ?>
+                    </div>
+            <?php } ?>
+         </div>
         </div>
     </div>
 </body>
