@@ -261,6 +261,7 @@
                     o.contact_num, 
                     o.delivery_option, 
                     o.status, 
+                    o.payment, 
                     o.delivery_date, 
                     o.order_date, 
                     oi.quantity, 
