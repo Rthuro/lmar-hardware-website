@@ -63,7 +63,7 @@ body {
     padding: 30px;
     width: calc(100% - 250px);
     background-color: #121212;
-    min-height: 100vh;
+    height: 100%;
 }
 
 .header {
