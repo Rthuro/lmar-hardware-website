@@ -81,7 +81,7 @@
                         <select name="filter_status" id="" class="mb-0  w-fit">
                             <option value="" selected>Order status </option>
                             <option value="pending" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending'? 'selected': '' ?>>Pending</option>
-                            <option value="to_deliver" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'to deliver'? 'selected': '' ?>>To Deliver</option>
+                            <option value="to deliver" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'to deliver'? 'selected': '' ?>>To Deliver</option>
                             <option value="cancelled" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'cancelled'? 'selected': '' ?>>Cancelled</option>
                             <option value="completed" <?= isset($_GET['filter_status']) && $_GET['filter_status'] == 'completed'? 'selected': '' ?>>Completed</option>
                         </select>
@@ -130,11 +130,21 @@
             </table>
             <div class="flex items-center justify-start mx-auto h-fit py-5">
             <?php if ($totalPages >= 1){ ?>
-                    <div class="pagination">
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <a href="?page=<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" ><?= $i ?></a>
-                        <?php endfor; ?>
-                    </div>
+                <form method="get" class=" shadow-none m-0 p-0 bg-transparent">
+                    <?php if(isset($_GET['filter_status'])){ ?>
+                        <input type="hidden" name="filter_status" value="<?= isset($_GET['filter_status'])? $_GET['filter_status']:'' ?>">
+                        <?php } 
+                        if(isset($_GET['search'])){ ?>
+                            <input type="hidden" name="search" value="<?= isset($_GET['search'])? $_GET['search']:'' ?>">
+                        <?php } 
+                         if(isset($_GET['filter_deliveryOption'])){ ?>
+                            <input type="hidden" name="filter_deliveryOption" value="<?= isset($_GET['filter_deliveryOption'])? $_GET['filter_deliveryOption']:'' ?>">
+                        <?php } 
+                      for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <input type="submit" name="page" value="<?= $i ?>" class="text-customOrange rounded-md border border-customOrange py-2 px-4  <?= ($i == $currentPage) ? ' text-white bg-customOrange' : '' ?>" >
+                    <?php endfor; ?>
+
+                </form>
             <?php } ?>
          </div>
         </div>
