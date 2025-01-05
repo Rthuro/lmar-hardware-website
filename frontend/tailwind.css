@@ -1040,16 +1040,6 @@ video {
   height: 1.5rem;
 }
 
-.size-8 {
-  width: 2rem;
-  height: 2rem;
-}
-
-.size-\[250px\] {
-  width: 250px;
-  height: 250px;
-}
-
 .h-12 {
   height: 3rem;
 }
@@ -1148,10 +1138,6 @@ video {
   width: 100%;
 }
 
-.w-screen {
-  width: 100vw;
-}
-
 .max-w-\[1050px\] {
   max-width: 1050px;
 }
@@ -1190,10 +1176,6 @@ video {
 
 .basis-1\/2 {
   flex-basis: 50%;
-}
-
-.basis-1\/4 {
-  flex-basis: 25%;
 }
 
 .basis-2\/6 {
@@ -1424,6 +1406,10 @@ video {
   border-radius: 0.25rem;
 }
 
+.rounded-\[12px\] {
+  border-radius: 12px;
+}
+
 .rounded-\[2px\] {
   border-radius: 2px;
 }
@@ -1504,10 +1490,6 @@ video {
   border-bottom-width: 2px;
 }
 
-.border-b-\[1px\] {
-  border-bottom-width: 1px;
-}
-
 .border-t {
   border-top-width: 1px;
 }
@@ -1533,6 +1515,11 @@ video {
 .border-blue-700 {
   --tw-border-opacity: 1;
   border-color: rgb(29 78 216 / var(--tw-border-opacity));
+}
+
+.border-customOrange {
+  --tw-border-opacity: 1;
+  border-color: rgb(251 149 28 / var(--tw-border-opacity));
 }
 
 .border-gray-100 {
@@ -1670,6 +1657,23 @@ video {
   background-color: rgb(255 255 255 / 0.5);
 }
 
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.bg-black\/20 {
+  background-color: rgb(0 0 0 / 0.2);
+}
+
+.bg-black\/10 {
+  background-color: rgb(0 0 0 / 0.1);
+}
+
+.bg-white\/10 {
+  background-color: rgb(255 255 255 / 0.1);
+}
+
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1;
 }
@@ -1756,6 +1760,11 @@ video {
   padding-right: 1.5rem;
 }
 
+.px-\[20px\] {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -1806,6 +1815,11 @@ video {
   padding-bottom: 2rem;
 }
 
+.py-\[30px\] {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
 .pb-0 {
   padding-bottom: 0px;
 }
@@ -1850,10 +1864,6 @@ video {
   padding-left: 0.25rem;
 }
 
-.pl-2 {
-  padding-left: 0.5rem;
-}
-
 .ps-0 {
   padding-inline-start: 0px;
 }
@@ -1884,10 +1894,6 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
-}
-
-.pr-3 {
-  padding-right: 0.75rem;
 }
 
 .text-center {
@@ -2097,6 +2103,11 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -2124,6 +2135,12 @@ video {
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-2xl {
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -2192,6 +2209,10 @@ video {
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
 }
 
 .ease-out {
@@ -2678,10 +2699,6 @@ footer a {
 }
 
 @media (min-width: 320px) {
-  .xs\:mr-3 {
-    margin-right: 0.75rem;
-  }
-
   .xs\:flex {
     display: flex;
   }
@@ -2695,14 +2712,14 @@ footer a {
     height: 3rem;
   }
 
-  .xs\:size-\[350px\] {
-    width: 350px;
-    height: 350px;
-  }
-
   .xs\:size-6 {
     width: 1.5rem;
     height: 1.5rem;
+  }
+
+  .xs\:size-\[350px\] {
+    width: 350px;
+    height: 350px;
   }
 
   .xs\:h-\[160px\] {
@@ -2717,17 +2734,8 @@ footer a {
     width: 160px;
   }
 
-  .xs\:w-fit {
-    width: -moz-fit-content;
-    width: fit-content;
-  }
-
   .xs\:w-full {
     width: 100%;
-  }
-
-  .xs\:basis-0 {
-    flex-basis: 0px;
   }
 
   .xs\:grid-cols-2 {
@@ -2830,10 +2838,6 @@ footer a {
 }
 
 @media (min-width: 768px) {
-  .md\:mr-0 {
-    margin-right: 0px;
-  }
-
   .md\:size-8 {
     width: 2rem;
     height: 2rem;
@@ -2849,10 +2853,6 @@ footer a {
 
   .md\:max-w-\[400px\] {
     max-width: 400px;
-  }
-
-  .md\:basis-1\/4 {
-    flex-basis: 25%;
   }
 
   .md\:grid-cols-3 {
@@ -2887,10 +2887,6 @@ footer a {
 }
 
 @media (min-width: 1024px) {
-  .lg\:mr-0 {
-    margin-right: 0px;
-  }
-
   .lg\:flex {
     display: flex;
   }
