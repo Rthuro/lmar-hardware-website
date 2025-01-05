@@ -9,6 +9,11 @@
 
     session_start();
 
+    if(isset($_SESSION['account'])){
+        $username = $_SESSION['account']['username'];
+        $email = $_SESSION['account']['email'];
+     } 
+
      $categories = $productObj->fetchCategory();
      // $products = $productObj->showAll($search_term, $filter_category);
      $maxPrice = $productObj->getMaxSizePrice();
@@ -129,7 +134,7 @@
         <?php if ($totalPages >= 1){ ?>
                 <div class="pagination">
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?= $i ?>" class="rounded-md border border-black/80  active:bg-black py-2 px-4 active:text-white <?= ($i == $currentPage) ? 'active' : '' ?>" ><?= $i ?></a>
+                        <a href="?page=<?= $i ?>" class="rounded-md border border-black/80  py-2 px-4  <?= ($i == $currentPage) ? 'active text-white bg-black' : '' ?>" ><?= $i ?></a>
                     <?php endfor; ?>
                 </div>
             <?php } ?>
