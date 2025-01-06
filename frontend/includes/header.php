@@ -42,12 +42,14 @@
                             <div id="burger_categoryList" class="hidden flex-col items-start z-50 justify-start mt-1 w-full">
                                 <a href="products.php?category=Hand%20Tools">Hand Tools</a>
                                 <a href="products.php?category=Measuring%20Tools">Measuring Tools</a>
-                                <a href="products.php?category=Cutting%20Tools">Cutting Tools</a>
+                                <a href="products.php?category=Cutting+%2F+Disc+Tools">Cutting / Disc Tools</a>
                                 <a href="products.php?category=Fastening%20Tools">Fastening Tools</a>
                                 <a href="products.php?category=Grinding%20Tools">Grinding Tools</a>
                                 <a href="products.php?category=Clamping%20Tools">Clamping Tools</a>
                                 <a href="products.php?category=Finishing%20Tools">Finishing Tools</a>
+                                <a href="products.php?category=Bits+Tools">Bits Tools</a>
                                 <a href="products.php?category=Building%20Materials">Building Materials</a>
+                                <a href="products.php?category=Others">Others</a>
                             </div>
                          </li>
                          <li class="flex items-center  gap-1 text-customOrange">
@@ -125,12 +127,14 @@
                 <div id="categoryDropdownContainer" class=" hidden absolute bottom-[-350px] top-10 right-0 pt-2 bg-white w-[200px] h-fit flex-col justify-start items-start rounded-b-md shadow-md">
                     <a href="products.php?category=Hand%20Tools">Hand Tools</a>
                     <a href="products.php?category=Measuring%20Tools">Measuring Tools</a>
-                    <a href="products.php?category=Cutting%20Tools">Cutting Tools</a>
+                    <a href="products.php?category=Cutting+%2F+Disc+Tools">Cutting / Disc Tools</a>
                     <a href="products.php?category=Fastening%20Tools">Fastening Tools</a>
                     <a href="products.php?category=Grinding%20Tools">Grinding Tools</a>
                     <a href="products.php?category=Clamping%20Tools">Clamping Tools</a>
                     <a href="products.php?category=Finishing%20Tools">Finishing Tools</a>
+                    <a href="products.php?category=Bits+Tools">Bits Tools</a>
                     <a href="products.php?category=Building%20Materials">Building Materials</a>
+                    <a href="products.php?category=Others">Others</a>
                 </div>
             </div>
            
