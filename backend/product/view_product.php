@@ -153,7 +153,7 @@
                             </select>
 
                             <label for="description">Description:</label>
-                            <input type="text" name="description" value="<?= $description ?>">
+                            <textarea type="text" name="description" > <?= $description ?></textarea>
 
                             <div class="flex gap-3">
                                 <input type="submit" name="edit_prod" value="Save changes" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
@@ -220,7 +220,8 @@
             <label for="category" class=" mt-2 ">Category:</label>
             <input type="text" name="category_name" value="<?= $category_name ?>" disabled>
             <label for="description" class=" mt-2 ">Description:</label>
-            <input type="text" name="description" value="<?= $description ?>" disabled>
+            <textarea type="text" name="description" rows="5" class=" resize-none" disabled> <?= $description ?></textarea>
+
         </form>
 
         <div class="flex justify-between items-center">
@@ -245,7 +246,7 @@
                     <tr>
                         <td><?= $prodSize['size']?></td>
                         <td><?=$prodSize['stock'] ?></td>
-                        <td><?= $prodSize['price'] ?></td>
+                        <td>PHP <?= $prodSize['price'] ?></td>
                         <td><?php echo ($prodSize['stock'] == 0)? 'out of stock': ($prodSize['stock'] > 10 ? 'in stock': 'low on stock' ); ?></td>
                         <td>
                             <a href="view_product.php?id=<?= $id ?>&modal=edit_size&size_id=<?= $prodSize['size_id'] ?>">Edit</a>
