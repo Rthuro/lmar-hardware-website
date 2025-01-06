@@ -16,7 +16,7 @@
         return $formattedOrderDate;
     }
 
-    $ordersPerPage = 5; 
+    $ordersPerPage = 20; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $ordersPerPage;
     $totalOrders = $orderObj->getTotalOrders($keyword,$status,$delivery_option);
