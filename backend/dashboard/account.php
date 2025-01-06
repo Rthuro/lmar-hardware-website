@@ -1,10 +1,12 @@
 <?php
 
+require_once "../classes/account.class.php";
+require_once "../tools/functions.php";
 require_once "../classes/orders.class.php";
 include_once "../includes/header.php";
 
 $orderObj = new Order();
-
+$accountObj = new Account();
 
 $servername = "localhost";
 $username = "root";
@@ -21,12 +23,71 @@ $result = $conn->query($sql);
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new_admin'])){
+    $email = clean_input($_POST['email']);
+    $username = clean_input($_POST['username']);
+    $password =  clean_input($_POST['password']);
+    $confirmpass =  clean_input($_POST['confirm_password']);
+    $role = 'admin';
+
+     if(empty($email)){
+         $emailErr = "Please enter your email.";
+     }
+     if(empty($username)){
+         $usernameErr = "Please create a username.";
+     }
+
+     if(empty($password)){
+         $passwordErr = "Please enter your email.";
+     }
+
+     if(empty($confirmpass)){
+        $confirmpassErr = "You need to confirm your password" ;
+     } elseif ($confirmpass !== $password) {
+         $confirmpassErr =  "Wrong password" ;
+     }
+
+     if(empty($emailErr) && empty($passwordErr) && empty($confirmpassErr)){
+         $checkAccDuplicate  = $accountObj->fetch($email);
+         if(empty($checkAccDuplicate)){
+             $accountObj->email = $email;
+             $accountObj->username = $username;
+             $accountObj->password = $password;
+             $accountObj->role = $role;
+
+             if($accountObj->add()){
+                 echo "<p class='success'>Successfully created an account!</p>";
+                 header('location: account.php');
+             } else {
+                 echo "<p class='err'>Error occurred</p>";
+             }
+         } else {
+             echo "<p class='err'>Account already exists. Please enter a different email.</p>";
+         }
+         
+     } 
+    }
+
 ?>
 <style>
 
 .sidebar a.active {
     background-color: #e67e00; 
 }
+.success{
+        color:green;
+        background-color: rgb(232, 255, 232);
+        padding: 16px 12px;
+        border-radius: 8px;
+        text-align: center;
+    }
+.err{
+        color:red;
+        background-color: rgb(255, 238, 238);
+        padding: 16px 12px;
+        border-radius: 8px;
+        text-align: center;
+    }
 
 </style>
 
@@ -34,18 +95,46 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <?php include_once "../includes/sidebar.php" ?>
 
-    <?php if (isset($_SESSION['outputMsg']['error'])) { ?>
-        <p id="err" class="err flex justify-center fixed top-0 left-0 right-0 py-5 bg-red-600 text-white z-40"><?= $_SESSION['outputMsg']['error'] ?></p>
-    <?php unset($_SESSION['outputMsg']['error']);
-    } ?>
+    <?php 
+        if( !empty($_GET['modal']) ){ 
+            if($_GET['modal'] == 'add_admin'){  ?>
+                <div class="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center bg-black/40">
+                    <div class=" bg-[#1e1e1e] shadow-md rounded-lg w-[500px] h-fit p-4 ">
+                        <p class=" text-lg ">Add New Admin</p>
+                        <form action="" method="post" enctype="multipart/form-data" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="" value="<?= (isset($username))? $username:''; ?>" >
+                        <?php if(!empty($usernameErr)){ echo "<p class='err_input'>$usernameErr</p>"; }; ?>
 
-    <?php if (isset($_SESSION['outputMsg']['success'])) { ?>
-        <p id="succ" class="succ flex justify-center fixed top-0 left-0 right-0 py-5 bg-green-600 text-white z-50">
-            <?= $_SESSION['outputMsg']['success'] ?>
-        </p>
-    <?php unset($_SESSION['outputMsg']['success']);
-    } ?>
+                        <label for="email" class="mt-2">Email:</label>
+                        <input type="email" name="email" id="" value="<?= (isset($email))? $email:''; ?>" >
+                        <?php if(!empty($emailErr)){ echo "<p class='err_input'>$emailErr</p>"; }; ?>
 
+                        <label for="password" class="mt-2">Password:</label>
+                        <input type="password" name="password" id="passInput" value="<?= (isset($password))? $password:''; ?>" >
+                            <div class="flex items-center justify-start gap-1">
+                                <input type="checkbox" name="showPass" id="showPass" class="size-4">
+                                <label for="showPass" class=" font-normal" >Show password</label>
+                            </div>
+                        <?php if(!empty($passwordErr)){ echo "<p class='err_input'>$passwordErr</p>"; }; ?>
+
+                        <label for="confirm_password" class="mt-2">Confirm Password:</label>
+                        <input type="password" name="confirm_password" id="passConfirmInput" value="<?= (isset($confirmpass))? $confirmpass:''; ?>" >
+                            <div class="flex items-center justify-start gap-1">
+                                <input type="checkbox" name="showConfirmPass" id="showConfirmPass" class="size-4">
+                                <label for="showConfirmPass" class=" font-normal"  >Show password</label>
+                            </div>
+                        
+                        <?php if(!empty($confirmpassErr)){ echo "<p class='err_input'>$confirmpassErr</p>"; }; ?>
+                            <div class="flex gap-3">
+                                <input type="submit" name="new_admin" value="Add Admin" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
+                                <a href="account.php" class="flex-1 text-center bg-red-600 py-2 px-6 my-4 rounded-md">Cancel</a>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+      <?php  } } ?>
     <div class="main-content">
         <div class="header">
             <h1>Admin Dashboard - Available Accounts</h1>
@@ -90,7 +179,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <h3>Pickups</h3>
             </div>
         </div>
-
+        <a class="btn bg-[#ff8c00] py-2 px-6 rounded-md block my-4 w-fit" href="account.php?modal=add_admin">
+                    Add Admin
+        </a>
         <div class="recent-orders">
 
             <table>
@@ -129,11 +220,39 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </table>
         </div>
     </div>
+    <script>
+        const err = document.getElementById('err');
+        const succ = document.getElementById('success');
 
+        if(err !== null){
+            err.addEventListener( ('click'), ()=>{
+            err.classList.replace("flex", "hidden");
+        } )
+        }
+       
+
+        if(succ !== null){
+            succ.addEventListener( ('click'), ()=>{
+            succ.classList.replace("flex", "hidden");
+             } )
+        }  
+        const passInput = document.getElementById("passInput");
+        const passConfirmInput = document.getElementById("passConfirmInput");
+        const showPass = document.getElementById("showPass");
+        const showConfirmPass = document.getElementById("showConfirmPass");
+        
+        showPass.addEventListener("change", () => {
+            passInput.type = showPass.checked ? "text" : "password";
+        });
+
+        showConfirmPass.addEventListener("change", () => {
+            passConfirmInput.type = showConfirmPass.checked ? "text" : "password";
+        });
+
+    </script>
 </body>
 </html>
 
 <?php
-// Close database connection
 $conn->close();
 ?>
