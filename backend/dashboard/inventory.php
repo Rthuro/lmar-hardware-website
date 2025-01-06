@@ -17,7 +17,7 @@
     $categories = $productObj->fetchCategory();
     $allProd = $productObj->fetchAllProducts();
 
-    $productsPerPage = 12; 
+    $productsPerPage = 20; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
