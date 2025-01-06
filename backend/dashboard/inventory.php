@@ -165,7 +165,7 @@
             <form method="GET" action="" class="search-bar shadow-none m-0 p-0 bg-transparent">
                 <input type="text" name="search" class="search-input" placeholder="Search by product name"
                     value="<?= htmlspecialchars($search_term) ?>">
-                <select name="category" class="search-input">
+                <select name="category">
                     <option value="">All Categories</option>
                     <?php foreach ($categories as $category): ?>
                     <option value="<?= htmlspecialchars($category['name'])  ?>"
