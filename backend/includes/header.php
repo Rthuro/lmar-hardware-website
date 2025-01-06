@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>LMAR Hardware | Admin</title>
     <link rel="stylesheet" href="/frontend/tailwind.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="shortcut icon" href="/frontend/assets/img/lmar_logo.png" type="image/x-icon">
