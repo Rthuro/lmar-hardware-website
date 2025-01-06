@@ -170,7 +170,7 @@
                         <form action="" method="post" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
                             <input type="hidden" name="productName_size" value="<?= $id ?>">
                             <label for="size">Size:</label>
-                            <p class="text-sm mb-2">"no size" for product with no size</p>
+                            <p class="text-sm mb-2">"no size" for one size product. Edit "no size" product and add more size if there are new available sizes</p>
                             <input type="text" name="size" value="" required>
                             
                             <label for="sizePrice">Size Price:</label>
