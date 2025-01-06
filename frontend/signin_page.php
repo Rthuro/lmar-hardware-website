@@ -40,6 +40,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signup'])){
 
                 if($accountObj->add()){
                     echo "<p class='success'>Successfully created an account! Please login your email and password in the login page.</p>";
+                    header('location: login_page.php');
                 } else {
                     echo "<p class='err'>Error occurred</p>";
                 }
