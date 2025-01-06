@@ -28,6 +28,19 @@
         exit();
     }
 
+    function checkIfProdAvailable($getSize){
+        $inStock = false;
+        foreach($getSize as $size){
+            if($size['stock'] > 0){
+                $inStock = true;
+                break;
+            } else {
+                $inStock = false;
+            }
+        }
+        return $inStock;
+    }
+
     $productsPerPage = 9; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
@@ -119,17 +132,25 @@
             <?php foreach ($products as $product):
                 $productSizeObj->product_id = $product['id']; 
                 $prodPrice = $productSizeObj->fetchPriceToDisplay("product");
+                $getSize = $productSizeObj->fetchProdSizeById();
+                
+                $checkStock = checkIfProdAvailable($getSize);
                 ?>
                     <a href="product.php?id=<?= $product['id'] ?>" class="product relative flex flex-col gap-2  md:w-[250px] sm:w-[200px] xs:w-[160px] hover:shadow-lg cursor-pointer overflow-hidden">
                                 <img class="w-full md:h-[250px] sm:h-[180px] xs:h-[160px]"  src="/backend/product/<?= $product['product_img'] ?>" alt="<?=$product['product_name']?>">
                                 <div class="py-2 px-3 flex flex-col gap-1">
+                                <?php if(!$checkStock){ ?>
+                                         <div class="absolute top-0 bottom-0 left-0 right-0 bg-white/40"></div>
+                                <?php } ?>
                                     <span class=" text-xs text-customOrange"><?=$product['category_name']?></span>
                                      <span class="prodName text-lg truncate text-ellipsis "><?= $product['product_name'] ?></span>
                                      <p class="text-sm text-gray-700">
                                         PHP <?= $prodPrice['minPrice'] ?>
                                         <?= ($prodPrice['maxPrice'] == $prodPrice['minPrice']) ? "" : " - <span id='maxPrice'>" . $prodPrice['maxPrice'] . "</span>" ?>
                                     </p>
-                                </div>
+                                    
+                                </div>  
+                                
                     </a>  
                 <?php endforeach; ?>
                </div>
