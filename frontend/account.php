@@ -61,7 +61,7 @@
            
             <div class="flex items-center text-red-700 justify-start w-full py-2 px-3 gap-1">
                 <i data-lucide="trash" class=" size-4"></i>
-                <a href="" >Delete Account</a>    
+                <a href="/backend/dashboard/delete-account.php?id=<?= $userId ?>" onclick="return confirm('Are you sure you want to delete this account?');">Delete Account</a>    
             </div>
             <a href="./account/logout.php" class="flex items-center justify-center bg-customOrange w-full py-3 gap-1">
                 <i data-lucide="log-out" class="size-5"></i>
