@@ -41,7 +41,7 @@
         return $inStock;
     }
 
-    $productsPerPage = 9; 
+    $productsPerPage = 15; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
