@@ -1,18 +1,16 @@
-/* Reset some default styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* Body Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212; /* Dark background for modern look */
-    color: #ffffff; /* White text for contrast */
+    background-color: #121212;
+    color: #ffffff;
     display: flex;
     min-height: 100vh;
-    /* background-color: rgb(255, 238, 238); */
+  
 }
 
 /* Sidebar Styling */
@@ -20,7 +18,7 @@ body {
     position: fixed;
     width: 250px;
     height: 100%;
-    background-color: #1e1e1e; /* Slightly lighter than body for differentiation */
+    background-color: #1e1e1e; 
     color: #ffffff;
     padding: 30px 20px;
     transition: width 0.3s ease;
@@ -29,7 +27,7 @@ body {
 .sidebar h2 {
     text-align: center;
     font-size: 26px;
-    color: #ff8c00; /* Shade of orange */
+    color: #ff8c00; 
     margin-bottom: 30px;
 }
 
@@ -149,6 +147,9 @@ form input[type="text"],
 form input[type="number"],
 form input[type="tel"],
 form input[type="date"],
+form input[type="email"],
+form input[type="password"],
+form textarea,
 form select {
     width: 100%;
     padding: 12px 15px;
