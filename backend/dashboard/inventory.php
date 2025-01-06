@@ -9,7 +9,7 @@
     $productSizeObj = new ProductSize();
 
     $error = $success = $e =  $product_name = $size = $category = $price = $stocks = $data = $categoryId = $image = $imageTemp = $imageErr = "";
-    $prodId =  $size = $stock = $sizePrice = "";
+    $prodId = $description =  $size = $stock = $sizePrice = "";
 
     $search_term = isset($_GET['search']) ? clean_input($_GET['search']): '';
     $filter_category = isset($_GET['category']) ? clean_input($_GET['category']): '';
@@ -17,7 +17,7 @@
     $categories = $productObj->fetchCategory();
     $allProd = $productObj->fetchAllProducts();
 
-    $productsPerPage = 5; 
+    $productsPerPage = 12; 
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; 
     $start = ($currentPage - 1) * $productsPerPage;
 
@@ -30,6 +30,7 @@
 
         $product_name = clean_input($_POST['product_name']);
         $category = clean_input($_POST['category']);
+        $description = clean_input($_POST['description']);
         $image = $_FILES['product_image']['name'];
         $imageTemp = $_FILES['product_image']['tmp_name'];
         $folder = "../product/productImages/";
@@ -40,12 +41,13 @@
             $productInfo = $productObj->checkProductDup();
 
             if($productInfo){
-                $error = "Product name: ". $product_name . " already exist";
+               $err = " Product name: ". $product_name . " already exist ";
             } else {
                 move_uploaded_file($imageTemp,  $target);
                 $productObj->product_img = $target;
                 $productObj->product_name = $product_name;
                 $productObj->category = $category;
+                $productObj->description = $description;
 
                 if($addProd =$productObj->add()){
                     $lastInsertedId = $productObj->getLastInsertedId();
@@ -99,12 +101,11 @@
     }
 
     .product-img {
-    width: 100px; 
-    height: auto;
+    width: 60px; 
+    height: 60px;
     object-fit: cover;
     border-radius: 5px; 
 }
-
 
 </style>
 
@@ -116,6 +117,9 @@
             if($_GET['modal'] == 'add_product'){  ?>
                 <div class="fixed top-0 right-0 left-0 bottom-0 flex items-center justify-center bg-black/40">
                     <div class=" bg-[#1e1e1e] shadow-md rounded-lg w-[500px] h-fit p-4 ">
+                        <?php  if(!empty($err)){ ?>
+                            <p class="text-center font-normal text-red-500 my-3"><?= $err ?></p>
+                        <?php } ?>
                         <p class=" text-lg ">Add New Product</p>
                         <form action="" method="post" enctype="multipart/form-data" class="flex flex-col w-[450px] shadow-none m-0 p-0 bg-transparent ">
                             <label for="product_image" >Image:</label>
@@ -136,6 +140,8 @@
 
                                 </php>
                             </select>
+                            <label for="description">Description:</label>
+                            <textarea type="text" name="description"> </textarea>
 
                             <div class="flex gap-3">
                                 <input type="submit" name="add_prod" value="Add Product" class="flex-1 bg-[#ff8c00] py-2 px-6 my-4 rounded-md">
@@ -225,22 +231,6 @@
          </div>
     </div>
 
-    <script>
-        const err = document.getElementById('err');
-        const succ = document.getElementById('succ');
 
-        if(err !== null){
-            err.addEventListener( ('click'), ()=>{
-            err.classList.replace("flex", "hidden");
-        } )
-        }
-       
-
-        if(succ !== null){
-            succ.addEventListener( ('click'), ()=>{
-            succ.classList.replace("flex", "hidden");
-             } )
-        }  
-    </script>
 </body>
 </html>
