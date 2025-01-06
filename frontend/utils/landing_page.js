@@ -30,9 +30,9 @@ const category = [
     name: "Measuring Tools",
   },
   {
-    link: "products.php?category=Cutting%20Tools",
+    link: "products.php?category=Cutting+%2F+Disc+Tools",
     img: "/frontend/assets/category_img/3.png",
-    name: "Cutting Tools",
+    name: "Cutting / Disc Tools",
   },
   {
     link: "products.php?category=Fastening%20Tools",
