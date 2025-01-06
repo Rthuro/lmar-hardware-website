@@ -17,6 +17,19 @@
     $cartObj = new Cart();
     $accountObj = new Account();
 
+    function checkIfProdAvailable($getSize){
+        $inStock = false;
+        foreach($getSize as $size){
+            if($size['stock'] > 0){
+                $inStock = true;
+                break;
+            } else {
+                $inStock = false;
+            }
+        }
+        return $inStock;
+    }
+
     if(isset($_GET['id'])){
        $product =  $productObj->fetchRecord($_GET['id']);
        $productSizeObj->product_id = $_GET['id'];
@@ -25,6 +38,8 @@
         if(empty($product)){
             exit('Product does not exist!');
         }
+        
+        $checkStock = checkIfProdAvailable($getSize);
     } else {
         exit('Product does not exist!');
     }
@@ -103,7 +118,7 @@
                          <option value="<?= $arr['size_id'] ?>"
                          data-price-min="<?= $arr['price'] ?>" 
                          data-stock="<?= $arr['stock'] ?>"  
-                         <?= isset($productName_size) && $productName_size == $arr['size_id'] ? "selected" : "" ?>>
+                         <?= isset($productName_size) && $productName_size == $arr['size_id'] ? "selected" : "" ?> <?= $arr['stock'] == 0 ? "disabled" : "" ?>>
                             <?= $arr['size'] ?>
                         </option>
                     <?php } ?>
@@ -116,16 +131,20 @@
             
             <p id="stockDisplay" class=" text-gray-600 my-2 "></p>
             <input type="hidden" name="product_id" value="<?=$product['id']?>" >
-            <input type="submit" value="Add To Cart" name="add_cart" class=" md:max-w-[400px] xs:w-full bg-customOrange text-white w-full py-2 px-4 my-3" id="addCartBtn" >
+            <?php if($checkStock){ ?>
+             <input type="submit" value="Add To Cart" name="add_cart" class=" md:max-w-[400px] xs:w-full bg-customOrange text-white w-full py-2 px-4 my-3" id="addCartBtn" >
+            <?php }else { ?>
+                <input type="submit" value="out of stock" class=" md:max-w-[400px] xs:w-full bg-gray-400 text-white py-2 px-4 my-3" id="addCartBtn" disabled>
+            <?php } ?>
             <p class="text-red-600"><?= (!empty($error)? $error:"") ?></p>
             <p class="text-red-600"><?= (!empty($prodErr)? $prodErr:"") ?></p>
         </form>
-        <div class="flex flex-col gap-3 border-t pt-3">
-            <p class="text-lg font-medium">Description</p>
-            <p class="text-sm text-black/60"><?= $product['description'] ?></p>
-        </div>
    </div>
 </div>
+<div class="flex flex-col gap-3 max-w-[1050px] mx-auto py-3">
+            <p class="text-xl font-medium pb-2 border-b">Description</p>
+            <textarea rows="20" class="text-sm text-black/60 bg-white resize-none select-none" disabled><?= $product['description'] ?></textarea>
+    </div>
 
 <script>
 
