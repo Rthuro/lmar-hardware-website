@@ -129,7 +129,7 @@ class Product {
 
 
      function displayTopProd(){
-        $sql = "SELECT p.*, c.name as category_name, SUM(oi.quantity) AS total_quantity_sold  FROM products p  INNER JOIN categories c ON p.category = c.id LEFT JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id ORDER BY total_quantity_sold DESC LIMIT 4;";
+        $sql = "SELECT p.*, c.name as category_name, SUM(oi.quantity) AS total_quantity_sold  FROM products p  INNER JOIN categories c ON p.category = c.id LEFT JOIN order_items oi ON p.id = oi.product_id LEFT JOIN orders o ON oi.order_id = o.id WHERE o.status = 'completed' GROUP BY p.id ORDER BY total_quantity_sold DESC LIMIT 4;";
         $query = $this->db->connect()->prepare($sql);
         $data = null;
         if ($query->execute()) {
