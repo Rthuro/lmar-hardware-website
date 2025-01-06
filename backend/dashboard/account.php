@@ -18,7 +18,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM users WHERE role IN ('admin', 'customer')";
+$sql = "SELECT * FROM users WHERE role = 'admin' ";
 $result = $conn->query($sql);
 
 $current_page = basename($_SERVER['PHP_SELF']);
