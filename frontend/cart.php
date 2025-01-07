@@ -94,7 +94,6 @@
                             <p class="text-center">PHP <?= $prod['price'] ?></p>
                             </td>
                             <td class="" >
-                            
                             <p class="text-center"><?= $prod['quantity'] ?></p>
                               <input type="hidden" name="cart_id" value="<?=$prod['id']?>" >
                             </td>
@@ -102,8 +101,7 @@
                             <p class="text-center">
                                 <?php 
                                 $subtotal += intval($prod['price']) * $prod['quantity'];
-
-                                echo "PHP " . number_format($subtotal, 2);
+                                echo "PHP " . number_format($prod['price'] * $prod['quantity'], 2);
                                 ?>
                             </p>
                             
