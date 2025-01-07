@@ -255,24 +255,8 @@
             return $data;
         }
         function getCancelledOrders(){
-            $sql = "SELECT 
-                    u.username,
-                    o.id, 
-                    o.contact_num, 
-                    o.delivery_option, 
-                    o.status, 
-                    o.payment, 
-                    o.delivery_date, 
-                    o.order_date, 
-                    oi.quantity, 
-                    p.product_name, 
-                    s.size
-                FROM orders o
-                LEFT JOIN order_items oi ON o.id = oi.order_id
-                LEFT JOIN users u ON o.customer_id = u.id
-                LEFT JOIN products p ON oi.product_id = p.id
-                LEFT JOIN product_size s ON oi.size_id = s.size_id
-                WHERE o.customer_id = :customer_id AND status = 'cancelled' ";
+            $sql = "SELECT * FROM orders WHERE customer_id = :customer_id AND status = 'cancelled' ORDER BY order_date DESC; ";
+
             $query = $this->db->connect()->prepare($sql);
             $query->bindParam(':customer_id',$this->customer_id);
 
@@ -494,6 +478,18 @@
 
             $query->execute();
             return $query->fetchColumn();
+        }
+        function displayInViewOrders($id){
+            $sql = "SELECT * FROM orders WHERE id = :id; ";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':id',$id);
+
+            $data = null;
+            if ($query->execute()) {
+                $data = $query->fetch(PDO::FETCH_ASSOC);
+            }
+            return $data;
         }
 
         
