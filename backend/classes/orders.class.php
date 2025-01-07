@@ -303,23 +303,7 @@
         }
 
         function displayDeliveries(){
-            $sql = "SELECT 
-                    u.username,
-                    o.id, 
-                    o.contact_num, 
-                    o.delivery_option, 
-                    o.status, 
-                    o.delivery_date, 
-                    o.order_date, 
-                    oi.quantity, 
-                    p.product_name, 
-                    s.size
-                FROM orders o
-                LEFT JOIN order_items oi ON o.id = oi.order_id
-                LEFT JOIN users u ON o.customer_id = u.id
-                LEFT JOIN products p ON oi.product_id = p.id
-                LEFT JOIN product_size s ON oi.size_id = s.size_id
-                WHERE o.delivery_option = 'delivery' AND o.customer_id = :customer_id AND (o.status = 'pending' OR o.status = 'to deliver') ORDER BY o.order_date ASC; ";
+            $sql = "SELECT * FROM orders WHERE delivery_option = 'delivery' AND customer_id = :customer_id AND (status = 'pending' OR status = 'to deliver') ORDER BY order_date ASC; ";
             $query = $this->db->connect()->prepare($sql);
             $query ->bindParam(':customer_id', $this->customer_id);
             $data = null;
