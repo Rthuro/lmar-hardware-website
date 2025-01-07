@@ -182,7 +182,7 @@
                             <input type="text" name="size" value="" required>
                             
                             <label for="sizePrice">Size Price:</label>
-                            <input type="text" name="sizePrice" value=""min="1" required>
+                            <input type="number" name="sizePrice" value=""min="1" required>
 
                             <label for="stock">Stocks:</label>
                             <input type="number" name="stock" value="" min="1" required>
@@ -239,8 +239,8 @@
         <form action="" method="" class="flex flex-col">
             <div class="flex items-center justify-end gap-2">
                 <a href="view_product.php?modal=edit_product&id=<?= $id ?>" class="flex items-center self-end gap-2 text-green-600">Edit <i data-lucide="pencil-line" class=" size-5"></i></a>
-                <a href="../product/delete_product.php?id=<?= $_GET['id'] ?>"
-                class="flex items-center self-end gap-2 text-red-600" onclick="return confirm('Are you sure you want to delete product <?= $product_name ?> ?')">Delete<i data-lucide="trash" class=" size-5"></i></a>
+                <a href="delete_product.php?id=<?= $_GET['id'] ?>"
+                class="flex items-center self-end gap-2 text-red-600" onclick="return confirm('Are you sure you want to delete product <?= $product_name ?>?')">Delete<i data-lucide="trash" class=" size-5"></i></a>
             </div>
             <label for="product_name">Name:</label>
             <input type="text" name="product_name" value="<?= $product_name ?>" disabled>
