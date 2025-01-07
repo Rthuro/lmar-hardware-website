@@ -1,10 +1,6 @@
-const order_nowBtn = document.getElementById('order_nowBtn');
 const view_prodBtn = document.getElementById('view_prodBtn');
 const view_allBtn = document.getElementById('view_allBtn');
 
-order_nowBtn.addEventListener('click', function(){
-    window.location.href = "login_page.php";
-})
 view_prodBtn.addEventListener('click',function (){
     window.location.href = "products.php";
 })
