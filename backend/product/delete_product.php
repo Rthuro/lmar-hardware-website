@@ -2,21 +2,21 @@
 
 include_once "../includes/header.php";
 
-$id =  '';
+$id =  $_GET['id'];
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if (!isset($_GET['id'])) {
+    header("location: /backend/dashboard/inventory.php");
 }
 
 require_once '../classes/product.class.php';
 
 $productObj = new Product();
 
-if ($productObj->delete($id)) {
-    $_SESSION['outputMsg']['success'] = 'Product deleted successfully';
+$productObj->id = $id;
+if ($productObj->delete()) {
+   
     header("location: /backend/dashboard/inventory.php");
 } else {
-    $_SESSION['outputMsg']['error'] = 'Deleting product failed';
     header("location: /backend/dashboard/inventory.php");
 }
 ?>
