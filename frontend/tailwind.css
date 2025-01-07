@@ -1162,6 +1162,10 @@ video {
   max-width: 950px;
 }
 
+.max-w-\[450px\] {
+  max-width: 450px;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1672,6 +1676,18 @@ video {
 
 .bg-white\/50 {
   background-color: rgb(255 255 255 / 0.5);
+}
+
+.bg-customOrange\/40 {
+  background-color: rgb(251 149 28 / 0.4);
+}
+
+.bg-customOrange\/20 {
+  background-color: rgb(251 149 28 / 0.2);
+}
+
+.bg-customOrange\/10 {
+  background-color: rgb(251 149 28 / 0.1);
 }
 
 .bg-opacity-10 {
