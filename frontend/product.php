@@ -36,12 +36,12 @@
        $getSize = $productSizeObj->fetchProdSizeById();
 
         if(empty($product)){
-            exit('Product does not exist!');
+            header('location: products.php');
         }
         
         $checkStock = checkIfProdAvailable($getSize);
     } else {
-        exit('Product does not exist!');
+        header('location: products.php');
     }
 
    
