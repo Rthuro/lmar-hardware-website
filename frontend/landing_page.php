@@ -30,7 +30,7 @@
                 <p class="lg:text-start  xs:text-center text-wrap font-bold sm:text-8xl  xs:text-5xl text-gray-950 ">Welcome to <span class="text-[#FB951C]">LMAR</span> Hardware</p>
                 <p class="md:text-lg  xs:text-sm lg:text-start xs:text-center text-wrap text-[#1d1d1d]">Browse and shop easily to your next door hardware.</p>
                 <div class="flex items-center gap-2 my-4 xs:flex-col sm:flex-row">
-                    <button id="order_nowBtn" class=" text-white bg-[#fb951c] rounded py-2 px-4 w-[170px]">Order now</button>
+                    <a id="order_nowBtn" href="<?= (isset($_SESSION['account']))? 'products.php': 'login_page.php' ?>" class=" text-center text-white bg-[#fb951c] rounded py-2 px-4 w-[170px]">Order now</a>
                     <button id="view_prodBtn" class="text-white bg-gray-950 rounded py-2 px-4 gap-2 flex items-center w-[170px]">View products
                         <i data-lucide="arrow-right" class="size-5"></i>
                     </button>
