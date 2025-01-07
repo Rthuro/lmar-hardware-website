@@ -15,8 +15,13 @@
    
 
     $userId = $date = $order_id = $order_item_id = '';
-    $dateTime = new DateTime($date);
     session_start();
+
+    function formatDate($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y, g:i a');
+        return $formattedOrderDate;
+    }
 
      if(isset($_SESSION['account'])){
         $username = $_SESSION['account']['username'];
@@ -94,8 +99,8 @@
                                 if(!empty($userOrder)){
                                     foreach($userOrder as $order){
                                             $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                            $date = $order['pickup_date'];
-                                            $formattDate = $dateTime->format('F j, Y');
+                                            $date = formatDate($order['pickup_date']);
+                                            
                                             ?>
                                             <div class="w-full py-3 px-3 border-b">
                                                 <form action="" method="post" class=" flex-col flex gap-3">
@@ -118,7 +123,7 @@
                                                     ?>
                                                     <div class="flex items-center justify-between">
                                                     <p class="font-medium text-gray-700">
-                                                        Pick-up date: <?= $formattDate ?>
+                                                        Pick-up date: <?= $date ?>
                                                     </p>
                                                     <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
                                                     <input type="submit" value="Cancel Order" name="cancel_order" class=" py-2 px-4 bg-customOrange text-white rounded-md">
@@ -146,8 +151,7 @@
                                 if(!empty($userOrder)){
                                     foreach($userOrder as $order){
                                             $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                            $date = $order['delivery_date'];
-                                            $formattDate = $dateTime->format('F j, Y');
+                                            $date = formatDate( $order['delivery_date']);
                                             ?>
                                             <div class="w-full py-3 px-3 border-b">
                                                 <form action="" method="post" class=" flex-col flex gap-3">
@@ -171,7 +175,7 @@
                                                     ?>
                                                     <div class="flex items-center justify-between">
                                                     <p class="font-medium text-gray-700">
-                                                        Delivery date: <?= $formattDate ?>
+                                                        Delivery date: <?= $date ?>
                                                     </p>
                                                     <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
                                                     <input type="submit" value="Cancel Order"  name="cancel_order" class=" py-2 px-4 bg-customOrange text-white rounded-md">
@@ -200,19 +204,21 @@
                                 foreach($userOrder as $order){
                                     if($order['status'] == 'completed' ){
                                         $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                        $date = $order['order_date'];
-                                        $formattDate = $dateTime->format('F j, Y H:i:s');
+                                        $date = formatDate($order['order_date']);
                                         ?>
-                                        <div class="w-full py-3 px-3 border-b">
+                                        <a href="view_orders.php?orderId=<?=$order['id'] ?>" class="w-full py-3 px-3 border-b">
                                             <div class=" flex-col flex gap-3 ">
-                                                <p class=" text-sm text-green-700 text-end ">Completed</p>
+                                                <div class="flex items-center justify-between">
+                                                     <p class=" text-xs px-3 py-1 bg-customOrange/10 text-customOrange rounded-full "><?= $order['delivery_option'] == 'delivery'? 'Delivery':'Pickup' ?> Order</p>
+                                                     <p class=" text-sm text-green-700 text-end ">Completed</p>
+                                                </div>
                                                 <?php
                                                 foreach($orderItems as $items){
                                                     ?>
                                                     <div class="flex justify-between items-center w-full max-[640px]:text-sm ">
                                                         <div class="flex gap-2 items-center">
                                                         <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
-                                                        <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2 xs:w-40 md:w-fit"><?= $items['product_name'] ?> <?= $items['size'] ?></a>
+                                                        <p class="text-wrap flex-2 xs:w-40 md:w-fit"><?= $items['product_name'] ?> <?= $items['size'] ?></p>
                                                         <p class="text-gray-600"><?= $items['quantity']?>X</p>
                                                          </div>
                                                         <p class=" text-end"> PHP
@@ -224,7 +230,7 @@
                                                 ?>
                                                 <div class="flex justify-between items-center">
                                                     <p class="font-medium text-end">Order Placed:
-                                                            <?= $formattDate  ?>
+                                                            <?= $date  ?>
                                                     </p>
                                                     <p class="font-medium text-end">Total: PHP
                                                             <?= $order['payment'] ?>
@@ -233,7 +239,7 @@
                                                 
                                                
                                             </div>
-                                        </div>
+                                        </a>
                                         
                                         <?php
                                     } 
@@ -256,20 +262,22 @@
                                         foreach($userOrder as $order){
                                             if($order['status'] == 'cancelled' ){
                                                 $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                                $date = $order['order_date'];
-                                                $formattDate = $dateTime->format('F j, Y H:i:s');
+                                                $date = formatDate($order['order_date']);
                                                 ?>
-                                                <div class="w-full py-3 px-3 border-b ">
+                                                <a href="view_orders.php?orderId=<?=$order['id'] ?>" class="w-full py-3 px-3 border-b ">
                                                     <div class=" flex-col flex gap-3 ">
-                                                     <p class=" text-sm text-red-500 text-end ">Cancelled</p>
-
+                                                    <div class="flex items-center justify-between">
+                                                     <p class=" text-xs px-3 py-1 bg-customOrange/10 text-customOrange rounded-full "><?= $order['delivery_option'] == 'delivery'? 'Delivery':'Pickup' ?> Order</p>
+                                                      <p class=" text-sm text-red-500 text-end ">Cancelled</p>
+                                                    </div>
+                                
                                                         <?php
                                                         foreach($orderItems as $items){
                                                             ?>
                                                             <div class="flex justify-between items-center w-full  max-[640px]:text-sm">
                                                                 <div class="flex gap-2 items-center">
                                                                 <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
-                                                                <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap flex-2 xs:w-40 md:w-fit"><?= $items['product_name'] ?> <?= $items['size'] ?></a>
+                                                                <p class="text-wrap flex-2 xs:w-40 md:w-fit"><?= $items['product_name'] ?> <?= $items['size'] ?></p>
                                                                 <p class="text-gray-600"><?= $items['quantity']?>X</p>
                                                                 </div>
         
@@ -282,14 +290,14 @@
                                                         ?>
                                                         <div class="flex justify-between items-center">
                                                             <p class="font-medium text-end">Order Placed:
-                                                                    <?= $formattDate  ?>
+                                                                    <?= $date  ?>
                                                             </p>
                                                             <p class="font-medium text-end">Total: PHP
                                                                     <?= $order['payment'] ?>
                                                             </p>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </a>
                                                 
                                                 <?php
                                             }
