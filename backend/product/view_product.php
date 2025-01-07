@@ -1,16 +1,24 @@
 <?php
 
     require_once "../classes/product.class.php";
+    require_once "../classes/orders.class.php";
     require_once "../classes/product_size.class.php";
     require_once "../tools/functions.php";
     include_once "../includes/header.php";
 
     $productObj = new Product();
     $productSizeObj = new ProductSize();
+    $orderObj = new Order();
 
     $error = $success = $category_name = $e = $id = $product_code = $product_name  = $size = $category = $price = $stocks = $data = $categoryId = $description = $record = $getProdSizes = "";
 
     $categories = $productObj->fetchCategory();
+
+    function formatDate($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y, g:i a');
+        return $formattedOrderDate;
+    }
 
     if (isset($_GET['id'])) {
             $id = $_GET['id'];
@@ -212,16 +220,35 @@
     <div class="header">
         <h1 class="text-2xl text-center"><?= $product_name ?></h1>
     </div>
+    <div class="flex gap-5 flex-wrap items-center">
+             <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">Total</p>
+                <p class=" text-2xl text-customOrange">Total Sales</p>
+                <p class=" text-xl "><?= $orderObj->getProdTotalSale($_GET['id']) ?></p>
+        
+            </div>
+            <div class="bg-[#1e1e1e] py-[30px] px-[20px] rounded-[12px] shadow-2xl flex flex-col items-start transition-transform duration-300 my-3 w-[250px] gap-3" >
+                    <p class=" text-xs bg-white/10 text-white  rounded-full py-1 px-2">monthly</p>
+                    <p class=" text-2xl text-customOrange">Sales</p>
+                    <p class=" text-xl "><?= $orderObj->getProdSalesByMonth(idate("m"), $_GET['id']) ?></p>
+            </div>
+           
+           
+        </div>
     <div class="flex flex-col justify-start">
         <form action="" method="" class="flex flex-col">
-            <a href="view_product.php?modal=edit_product&id=<?= $id ?>" class="flex items-center self-end gap-2 text-green-600">Edit <i data-lucide="pencil-line" class=" size-5"></i></a>
+            <div class="flex items-center justify-end gap-2">
+                <a href="view_product.php?modal=edit_product&id=<?= $id ?>" class="flex items-center self-end gap-2 text-green-600">Edit <i data-lucide="pencil-line" class=" size-5"></i></a>
+                <a href="../product/delete_product.php?id=<?= $_GET['id'] ?>"
+                class="flex items-center self-end gap-2 text-red-600" onclick="return confirm('Are you sure you want to delete product <?= $product_name ?> ?')">Delete<i data-lucide="trash" class=" size-5"></i></a>
+            </div>
             <label for="product_name">Name:</label>
             <input type="text" name="product_name" value="<?= $product_name ?>" disabled>
             <label for="category" class=" mt-2 ">Category:</label>
             <input type="text" name="category_name" value="<?= $category_name ?>" disabled>
             <label for="description" class=" mt-2 ">Description:</label>
             <textarea type="text" name="description" rows="5" class=" resize-none" disabled> <?= $description ?></textarea>
-
+           
         </form>
 
         <div class="flex justify-between items-center">
@@ -236,6 +263,8 @@
                 <th>Size</th>
                 <th>Stock</th>
                 <th>Price</th>
+                <th>Sales (this month)</th>
+                <th>Total Sales</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -247,6 +276,8 @@
                         <td><?= $prodSize['size']?></td>
                         <td><?=$prodSize['stock'] ?></td>
                         <td>PHP <?= $prodSize['price'] ?></td>
+                        <td><?= $orderObj->getProdSizeSalesByMonth(idate("m"), $_GET['id'], $prodSize['size_id']) ?></td>
+                        <td><?= $orderObj->getProdSizeTotalSale( $_GET['id'], $prodSize['size_id']) ?></td>
                         <td><?php echo ($prodSize['stock'] == 0)? 'out of stock': ($prodSize['stock'] > 10 ? 'in stock': 'low on stock' ); ?></td>
                         <td>
                             <a href="view_product.php?id=<?= $id ?>&modal=edit_size&size_id=<?= $prodSize['size_id'] ?>">Edit</a>
