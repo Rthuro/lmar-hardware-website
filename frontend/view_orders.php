@@ -71,7 +71,7 @@
                         <?php
                         foreach($orderItems as $items){
                             ?>
-                            <div class="flex flex-col justify-between gap-1 w-full px-2">
+                            <div class="flex flex-col justify-between gap-1 w-full px-4">
                                 <div class="flex gap-2 items-center justify-between">
                                     <img src="/backend/product/<?= $items['product_img'] ?>" alt="" srcset="" class=" size-12">
                                     <a href="product.php?id=<?= $items['product_id'] ?>" class="text-wrap text-end text-sm flex-2"><?= $items['product_name'] ?> <?= $items['size'] ?></a>
