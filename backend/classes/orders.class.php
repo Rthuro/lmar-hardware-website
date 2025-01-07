@@ -454,6 +454,48 @@
             return $query->fetchColumn();
         }
 
+        function getProdSalesByMonth($currMonth, $id){
+            $sql = "SELECT COUNT(*) as total FROM orders o LEFT JOIN order_items oi ON o.id = oi.order_id LEFT JOIN products p ON oi.product_id = p.id WHERE MONTH(order_date) = :month AND oi.product_id = :prodId ";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':month', $currMonth, PDO::PARAM_INT);
+            $query->bindParam(':prodId', $id);
+
+            $query->execute();
+            return $query->fetchColumn();
+        }
+        function getProdTotalSale( $id){
+            $sql = "SELECT COUNT(*) as total FROM orders o LEFT JOIN order_items oi ON o.id = oi.order_id LEFT JOIN products p ON oi.product_id = p.id WHERE oi.product_id = :prodId ";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':prodId', $id);
+
+            $query->execute();
+            return $query->fetchColumn();
+        }
+
+        function getProdSizeSalesByMonth($currMonth, $id, $sizeId){
+            $sql = "SELECT COUNT(*) as total FROM orders o LEFT JOIN order_items oi ON o.id = oi.order_id LEFT JOIN products p ON oi.product_id = p.id LEFT JOIN product_size ps ON oi.size_id = ps.size_id WHERE MONTH(order_date) = :month AND oi.product_id = :prodId AND oi.size_id = :sizeId ";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':month', $currMonth, PDO::PARAM_INT);
+            $query->bindParam(':prodId', $id);
+            $query->bindParam(':sizeId', $sizeId);
+
+            $query->execute();
+            return $query->fetchColumn();
+        }
+        function getProdSizeTotalSale( $id, $sizeId){
+            $sql = "SELECT COUNT(*) as total FROM orders o LEFT JOIN order_items oi ON o.id = oi.order_id LEFT JOIN products p ON oi.product_id = p.id LEFT JOIN product_size ps ON oi.size_id = ps.size_id WHERE oi.product_id = :prodId AND oi.size_id = :sizeId ";
+
+            $query = $this->db->connect()->prepare($sql);
+            $query->bindParam(':prodId', $id);
+            $query->bindParam(':sizeId', $sizeId);
+
+            $query->execute();
+            return $query->fetchColumn();
+        }
+
         
     }
 
