@@ -164,7 +164,7 @@
                     <div class="flex flex-col">
                         <?php if($pickup){ ?>
                             <label for="pickup_date">Pickup Date:</label>
-                            <input type="date" name="pickup_date" id=""  value="<?= $pickup_date ?>">
+                            <input type="date" name="pickup_date" id=""  value="<?= $pickup_date ?>" readonly>
                         <?php }?>
                         <?php if($delivery){ ?>
                             <label for="delivery_date">Delivery Date:</label>
