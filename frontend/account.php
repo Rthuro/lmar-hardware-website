@@ -22,6 +22,11 @@
         $formattedOrderDate = $dateTime->format('F j, Y, g:i a');
         return $formattedOrderDate;
     }
+    function formatDateNoTime($order_date){
+        $dateTime = new DateTime($order_date);
+        $formattedOrderDate = $dateTime->format('F j, Y');
+        return $formattedOrderDate;
+    }
 
      if(isset($_SESSION['account'])){
         $username = $_SESSION['account']['username'];
@@ -99,7 +104,7 @@
                                 if(!empty($userOrder)){
                                     foreach($userOrder as $order){
                                             $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                            $date = formatDate($order['pickup_date']);
+                                            $date = formatDateNoTime($order['pickup_date']);
                                             
                                             ?>
                                             <div class="w-full py-3 px-3 border-b">
@@ -114,13 +119,16 @@
                                                             <p class="text-gray-600"><?= $items['quantity']?>X</p>
                                                             </div>
                             
-                                                        <p class="font-medium">Total: PHP
+                                                        <p class="font-medium"> PHP
                                                         <?= $items['price']*$items['quantity'] ?>
                                                         </p>
                                                         </div>
                                                         <?php
                                                     }
                                                     ?>
+                                                   <p class="font-medium text-end">Total: PHP
+                                                            <?= $order['payment'] ?>
+                                                    </p>
                                                     <div class="flex items-center justify-between">
                                                     <p class="font-medium text-gray-700">
                                                         Pick-up date: <?= $date ?>
@@ -151,7 +159,7 @@
                                 if(!empty($userOrder)){
                                     foreach($userOrder as $order){
                                             $orderItems = $orderObj->fetchOrderItems($order['id']);
-                                            $date = formatDate( $order['delivery_date']);
+                                            $date = formatDateNoTime( $order['delivery_date']);
                                             ?>
                                             <div class="w-full py-3 px-3 border-b">
                                                 <form action="" method="post" class=" flex-col flex gap-3">
@@ -166,13 +174,16 @@
                                                             <p class="text-gray-600"><?= $items['quantity']?>X</p>
                                                             </div>
 
-                                                        <p class="font-medium">Total: PHP
+                                                        <p class="font-medium"> PHP
                                                         <?= $items['price']*$items['quantity'] ?>
                                                         </p>
                                                         </div>
                                                         <?php
                                                     }
                                                     ?>
+                                                    <p class="font-medium text-end">Total: PHP
+                                                            <?= $order['payment'] ?>
+                                                    </p>
                                                     <div class="flex items-center justify-between">
                                                     <p class="font-medium text-gray-700">
                                                         Delivery date: <?= $date ?>
