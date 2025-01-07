@@ -2,11 +2,13 @@
 <?php
 
     require_once "../classes/orders.class.php";
+    require_once "../classes/product.class.php";
     include_once "../includes/header.php";
 
     $orderObj = new Order();
+    $productObj = new Product();
 
-  
+    $topProducts = $productObj->displayTopProd();
 
     function formatDate($order_date){
         $dateTime = new DateTime($order_date);
@@ -25,6 +27,12 @@
 
     .sidebar a.active {
         background-color: #e67e00; 
+    }
+    .product-img {
+    width: 60px; 
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px; 
     }
 
 </style>
@@ -74,6 +82,38 @@
                 <h3>Pickups</h3>
             </div>
         </div>
+        <p class="text-4xl my-6">Top Products</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (count($topProducts) > 0): ?>
+                <?php foreach ($topProducts as $product): 
+                    ?>
+                <tr>
+                    <td><img src="../product/<?= $product['product_img'] ?>" alt="Product Image" class="product-img"></td>
+                    <td><?= $product['product_name'] ?></td>
+                    <td><?= $product['category_name'] ?></td>
+                    <td>
+                        <a href="../product/view_product.php?id=<?= $product['id'] ?>">View</a>
+                        <a href="../product/delete_product.php?id=<?= $product['id'] ?>"
+                        onclick="return confirm('Are you sure you want to delete product <?=  $product['product_name'] ?> ?')">Delete</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php else: ?>  
+                <tr>
+                    <td colspan="6">No products found.</td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
          <p class="text-4xl my-6">Recent Orders</p>
              <div class="flex items-center gap-3 justify-between ">
                 <form action="" method="get" class="flex items-center m-0 p-0 bg-transparent shadow-none gap-3  flex-1">
