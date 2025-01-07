@@ -202,7 +202,7 @@
                     <td>
                         <a href="../product/view_product.php?id=<?= $product['id'] ?>">View</a>
                         <a href="../product/delete_product.php?id=<?= $product['id'] ?>"
-                            onclick="return confirm('Are you sure?')">Delete</a>
+                        onclick="return confirm('Are you sure you want to delete product <?=  $product['product_name'] ?> ?')" >Delete</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
